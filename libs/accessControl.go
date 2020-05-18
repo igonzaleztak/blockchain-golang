@@ -1,0 +1,176 @@
+package libs
+
+import (
+	"crypto/ecdsa"
+	"encoding/hex"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"regexp"
+
+	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/accounts/keystore"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
+
+	cipherlib "../cipherLibs"
+
+	accessControlContract "../contracts/accessContract"
+	dataContract "../contracts/dataContract"
+)
+
+/***************** Global variables *********************/
+
+// ADMINACCOUNT address of the admin account
+const ADMINACCOUNT string = "21A018606490C031A8c02Bb6b992D8AE44ADD37f"
+
+// ADMINPASSWORD Ethereum passoword of the admin account
+const ADMINPASSWORD string = "1"
+
+// FOLDER where the private keys of the accounts are stored
+const FOLDER string = "/home/ivan/Desktop/demoPOA2/new-node/keystore/"
+
+/******************** Functions ************************/
+
+//String2Bytes32 gets a string and converts it to [32]byte
+func String2Bytes32(str string) [32]byte {
+	aux := [32]byte{}
+	copy(aux[:], []byte(str))
+	return aux
+}
+
+// GetAddrAdminAccount returns the address of the admin account
+// so it can be used in othre packages
+func GetAddrAdminAccount() common.Address {
+	return common.HexToAddress("0x" + ADMINACCOUNT)
+}
+
+// UnlockAccount unlocks the account of the user in ethereum
+func UnlockAccount(address string, password string) (err error) {
+	// Check if an address was passed to the function
+	if address == "" {
+		address = ADMINACCOUNT
+	}
+
+	// Init keystore
+	ks := keystore.NewKeyStore(FOLDER, keystore.LightScryptN, keystore.LightScryptP)
+
+	// Create the account definition
+	accountDef := accounts.Account{
+		Address: common.HexToAddress("0x" + address),
+	}
+
+	// Find the account in the keystore
+	signAcc, err := ks.Find(accountDef)
+	if err != nil {
+		return errors.New("Could not find the account in the keystore")
+	}
+
+	// Unlock the account
+	errAcc := ks.Unlock(signAcc, password)
+	if errAcc != nil {
+		return errors.New("Wrong Password")
+	}
+
+	return nil
+}
+
+// GetUTCFile search the UTC file associated to the address
+func GetUTCFile(address string) (string, error) {
+	// Compile the regex expresion
+	libRegEx, err := regexp.Compile("(?i).*" + address)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Get all the files of the folder
+	files, err := ioutil.ReadDir(FOLDER)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Get the name of the file that matches the expression
+	for _, f := range files {
+		if libRegEx.MatchString(f.Name()) {
+			return FOLDER + f.Name(), nil
+		}
+	}
+
+	return "", errors.New("UTC File not found")
+}
+
+// GetPrivateKey gets the private key of the address
+func GetPrivateKey(address string) (*ecdsa.PrivateKey, error) {
+	// Check if an address was passed to the function
+	if address == "" {
+		address = ADMINACCOUNT
+	}
+
+	// Get the UTC folder that contains the private key
+	file, err := GetUTCFile(address)
+	if err != nil {
+		return nil, err
+	}
+
+	// Read the file
+	jsonBytes, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+
+	// Get the private key
+	keyWrapper, err := keystore.DecryptKey(jsonBytes, ADMINPASSWORD)
+	if err != nil {
+		return nil, err
+	}
+
+	return keyWrapper.PrivateKey, nil
+
+}
+
+// CheckAccess checks whether the sensor that produced
+// the event has access to the blockchain or not
+func CheckAccess(
+	client *ethclient.Client,
+	dataContract *dataContract.DataLedgerContract,
+	accessContract *accessControlContract.AccessControlContract,
+	producerID string,
+	cipherText string) (bool, *ecdsa.PrivateKey, error) {
+
+	// Get the address of the producer from the blockchain
+	address, err := accessContract.GetAddress(nil, String2Bytes32(producerID))
+	if err != nil {
+		return false, nil, err
+	}
+
+	// Convert the address to string
+	addressStr := address.Hex()
+
+	fmt.Printf("\nEvent received from: %s\n", addressStr)
+
+	// Get the private key of the producer
+	producerPrivKey, err := GetPrivateKey(addressStr[2:])
+	if err != nil {
+		return false, nil, err
+	}
+
+	// Decrypt the passphrase
+	cipherTextBytes, err := hex.DecodeString(cipherText[2:])
+	if err != nil {
+		return false, nil, err
+	}
+	passphraseBytes, err := cipherlib.DecryptWithPrivateKey(producerPrivKey, cipherTextBytes)
+	if err != nil {
+		return false, nil, err
+	}
+
+	// Login the producer in Ethereum
+	err = UnlockAccount(addressStr[2:], string(passphraseBytes))
+	if err != nil {
+		return false, nil, err
+	}
+
+	fmt.Printf("\nThe account %s logged in the blockchain and introduced the following data\n", addressStr)
+	return true, producerPrivKey, nil
+}
