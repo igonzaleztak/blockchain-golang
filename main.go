@@ -27,7 +27,7 @@ var dataContractAddress common.Address = common.HexToAddress("0x9E2E646CAa6B948E
 var accessControlContractAddress common.Address = common.HexToAddress("0xE3329BA616Dc4f9E37A64a5B834192FAB84ab41B")
 var balanceContractAddress common.Address = common.HexToAddress("0x7e8b560e144e966F445e0044f7F489E6fdB12E8A")
 
-// EthereumLocal is a struct that hodls the values attached to the blockchain
+// EthereumLocal is a struct that holds the values attached to the blockchain
 type EthereumLocal libs.Ethereum
 
 /******************** Functions ************************/
@@ -94,6 +94,30 @@ func Init() *EthereumLocal {
 	}
 
 	return myEthereumClient
+}
+
+// PurchaseData Handles the purchases of the client
+func (ethclient *EthereumLocal) PurchaseData(w http.ResponseWriter, req *http.Request) {
+	if req.URL.Path != "/buydata" {
+		http.Error(w, "404 not found", http.StatusNotFound)
+		return
+	}
+
+	switch req.Method {
+	case "POST":
+		// Read the body of the message
+		var body map[string]interface{}
+		err := json.NewDecoder(req.Body).Decode(&body)
+
+		if err != nil {
+			http.Error(w, "401 Could not process the purchase due to error: "+err.Error(), http.StatusBadRequest)
+		}
+
+	default:
+		http.Error(w, "401 Only POST methods are supported", http.StatusBadRequest)
+		fmt.Fprintf(w, "Only Post methods are supported")
+	}
+
 }
 
 //EventListener listens for new events on /notify and process them
@@ -181,6 +205,7 @@ func main() {
 
 	// Start the server
 	http.HandleFunc("/notify", myEthereumClient.EventListener)
+	http.HandleFunc("/buydata", myEthereumClient.PurchaseData)
 	err := http.ListenAndServe(":5051", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe ", err)
