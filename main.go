@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 
+	clientap "./clientAP"
 	accessControlContract "./contracts/accessContract"
 	balanceContract "./contracts/balanceContract"
 	dataContract "./contracts/dataContract"
@@ -21,11 +21,6 @@ import (
 
 // GethPath stores the path to the IPC port of the ethereum node
 const GethPath string = "/home/ivan/Desktop/demoPOA2/new-node/geth.ipc"
-
-// Contract Addresses
-var dataContractAddress common.Address = common.HexToAddress("0x9E2E646CAa6B948EA8246BA27464B326eb4A4F4c")
-var accessControlContractAddress common.Address = common.HexToAddress("0xE3329BA616Dc4f9E37A64a5B834192FAB84ab41B")
-var balanceContractAddress common.Address = common.HexToAddress("0x7e8b560e144e966F445e0044f7F489E6fdB12E8A")
 
 // EthereumLocal is a struct that holds the values attached to the blockchain
 type EthereumLocal libs.Ethereum
@@ -42,7 +37,7 @@ func Init() *EthereumLocal {
 	}
 
 	// Initialize the data contract
-	dataContract, err := dataContract.NewDataLedgerContract(dataContractAddress, client)
+	dataContract, err := dataContract.NewDataLedgerContract(libs.DataContractAddress, client)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -60,25 +55,29 @@ func Init() *EthereumLocal {
 	auth.GasPrice = big.NewInt(0)
 
 	// Set the address of the access control contract in the data contract
-	_, err = dataContract.SetAddress(auth, accessControlContractAddress)
+	_, err = dataContract.SetAddress(auth, libs.AccessControlContractAddress)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Deploy contract example
+	//address, _, accessContract, err := accessControlContract.DeployAccessControlContract(auth, client)
+	//fmt.Println(address.Hex())
+
 	// Initialize the accessControlContract
-	accessContract, err := accessControlContract.NewAccessControlContract(accessControlContractAddress, client)
+	accessContract, err := accessControlContract.NewAccessControlContract(libs.AccessControlContractAddress, client)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Initialize the balanceContract
-	balanceContract, err := balanceContract.NewBalanceContract(balanceContractAddress, client)
+	balanceContract, err := balanceContract.NewBalanceContract(libs.BalanceContractAddress, client)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Set the data contract address in the balance contract
-	_, err = balanceContract.SetAddress(auth, dataContractAddress)
+	_, err = balanceContract.SetAddress(auth, libs.DataContractAddress)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -108,10 +107,29 @@ func (ethclient *EthereumLocal) PurchaseData(w http.ResponseWriter, req *http.Re
 		// Read the body of the message
 		var body map[string]interface{}
 		err := json.NewDecoder(req.Body).Decode(&body)
-
 		if err != nil {
-			http.Error(w, "401 Could not process the purchase due to error: "+err.Error(), http.StatusBadRequest)
+			http.Error(w, "Could not parse the message", http.StatusBadRequest)
 		}
+
+		// Process the purchase
+		ethClientArg := &libs.Ethereum{
+			EthereumClient: ethclient.EthereumClient,
+			DataCon:        ethclient.DataCon,
+			AccessCon:      ethclient.AccessCon,
+			BalanceCon:     ethclient.BalanceCon,
+			AdminPrivKey:   ethclient.AdminPrivKey,
+		}
+		response, err := clientap.ProccessClientPurchase(ethClientArg, body)
+		if err != nil {
+			if err.Error() == "The measurement has already been given" {
+				http.Error(w, err.Error(), 415)
+			} else {
+				http.Error(w, "401 Could not process the purchase due to error: "+err.Error(), http.StatusBadRequest)
+			}
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(response)
 
 	default:
 		http.Error(w, "401 Only POST methods are supported", http.StatusBadRequest)
@@ -121,7 +139,7 @@ func (ethclient *EthereumLocal) PurchaseData(w http.ResponseWriter, req *http.Re
 }
 
 //EventListener listens for new events on /notify and process them
-func (ethClient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.Request) {
+func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.Request) {
 	if req.URL.Path != "/notify" {
 		http.Error(w, "404 not found", http.StatusNotFound)
 		return
@@ -140,6 +158,7 @@ func (ethClient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 		err := json.NewDecoder(req.Body).Decode(&body)
 		if err != nil {
 			fmt.Println(err)
+
 		}
 
 		// Get the ID of the producer from the body
@@ -150,9 +169,9 @@ func (ethClient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 
 		// Check if the producer of the event has access to the blockchain
 		hasAccess, producerPrivKey, err := libs.CheckAccess(
-			ethClient.EthereumClient,
-			ethClient.DataCon,
-			ethClient.AccessCon,
+			ethclient.EthereumClient,
+			ethclient.DataCon,
+			ethclient.AccessCon,
 			producerID,
 			cipherParams)
 
@@ -167,14 +186,18 @@ func (ethClient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 
 			// Prepare the data that will be sent to Orion
 			err = libs.SendDataOrion(header, body, dataBlockchain["hash"].(string))
+			if err != nil {
+				fmt.Println(err)
+				http.Error(w, "401 Could not introduce the event in the blockchain due to: "+err.Error(), http.StatusBadRequest)
+			}
 
 			// Introduce the data in the blockchain
 			ethClientArg := &libs.Ethereum{
-				EthereumClient: ethClient.EthereumClient,
-				DataCon:        ethClient.DataCon,
-				AccessCon:      ethClient.AccessCon,
-				BalanceCon:     ethClient.BalanceCon,
-				AdminPrivKey:   ethClient.AdminPrivKey,
+				EthereumClient: ethclient.EthereumClient,
+				DataCon:        ethclient.DataCon,
+				AccessCon:      ethclient.AccessCon,
+				BalanceCon:     ethclient.BalanceCon,
+				AdminPrivKey:   ethclient.AdminPrivKey,
 			}
 			err = libs.InteractBlockchain(dataBlockchain, producerPrivKey, ethClientArg)
 			fmt.Println("The event has been successfully stored in the blockchain")
