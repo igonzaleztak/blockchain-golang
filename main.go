@@ -229,8 +229,19 @@ func main() {
 	// Start the server
 	http.HandleFunc("/notify", myEthereumClient.EventListener)
 	http.HandleFunc("/buydata", myEthereumClient.PurchaseData)
-	err := http.ListenAndServe(":5051", nil)
+
+	// HTTP interface in a new subroutine
+	go func() {
+		err := http.ListenAndServe(":5051", nil)
+		if err != nil {
+			log.Fatal("ListenAndServe ", err)
+		}
+	}()
+
+	// HTTPS interface
+	err := http.ListenAndServeTLS(":8051", "./certs/public-cert.pem", "./certs/private-key.pem", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe ", err)
 	}
+
 }
