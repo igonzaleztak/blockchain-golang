@@ -224,7 +224,8 @@ func main() {
 	myEthereumClient := Init()
 
 	// Greeting line
-	fmt.Println("Starting server on port 5051")
+	fmt.Println("Starting HTTP server on port 5051")
+	fmt.Println("Starting HTTPS server on port 8051")
 
 	// Start the server
 	http.HandleFunc("/notify", myEthereumClient.EventListener)

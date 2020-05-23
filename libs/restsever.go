@@ -25,7 +25,6 @@ func GetDataFromRestServer(url string) ([]byte, error) {
 
 	// Get the authentication params in base 64
 	authParams := base64.StdEncoding.EncodeToString([]byte(user + ":" + pass))
-	fmt.Println(authParams)
 
 	// Create new Transport that ignores self-signed SSL
 	customTransport := http.DefaultTransport.(*http.Transport).Clone()
@@ -52,6 +51,7 @@ func GetDataFromRestServer(url string) ([]byte, error) {
 
 	// Decode the body
 	respBody, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println()
 	fmt.Println(string(respBody))
 
 	// Get the status code of the request
