@@ -27,13 +27,13 @@ import (
 /**************************** Contract Addresses *********************************/
 
 // DataContractAddress Address of the contract that holds the event
-var DataContractAddress common.Address = common.HexToAddress("0x3c7592697a284E3F9F06Cc1F85bf2216279E1d36")
+var DataContractAddress common.Address = common.HexToAddress("0x706a3fd0274610fb323cb450589879920b6dD49c")
 
 // AccessControlContractAddress address of the contract that controls the access to the blockchain
-var AccessControlContractAddress common.Address = common.HexToAddress("0x48c029C2896C0B3b27bCb714c55203294Db7AdA3")
+var AccessControlContractAddress common.Address = common.HexToAddress("0xfabAAEf355AE0f78A5eE7d957a79E8f944c93520")
 
 // BalanceContractAddress address of the contract that holds the purchases
-var BalanceContractAddress common.Address = common.HexToAddress("0xD2577E43bAd82FDB894012Fdf7Bf0caDe73e65Ef")
+var BalanceContractAddress common.Address = common.HexToAddress("0x2dF5C9A6242197e2D7534F8E3A2Fd3990664200c")
 
 /********************************************************************************/
 
@@ -149,59 +149,30 @@ func ReadEventsFromBalanceContract(ethclient *Ethereum, nameEvent string, filter
 		return nil, errors.New("Not match found")
 
 	case "responseNotify":
-	default:
-		return nil, errors.New("Wrong name of the event")
-	}
+		// Iterate through the log to obtain the events
+		for _, vLog := range logs {
 
-	/*
-		switch nameEvent {
-		case "purchaseNotify":
-			// Iterate through the log to obtain the events
-			for _, vLog := range logs {
-				// Declare the struct that will hold the fields of the event
-				var event PurchaseNotifyStruct
+			// Compare the index of the log with the one that it should be
+			if vLog.Topics[0].Hex() == logIndex.Hex() {
 
-				// Use the ABI decode the log
-				err := contractAbi.Unpack(&event, nameEvent, vLog.Data)
-				if err != nil {
-					fmt.Println("Failed to unpack")
-					return nil, nil, err
-				}
-
-				t := new(big.Int)
-				t.SetBytes(vLog.Data)
-				fmt.Printf("%d\n", t)
-
-				// Unpack will not parse indexed event types because those are stored under topics
-				// so they have to be unpacked manually
-				event.Addr = common.HexToAddress(vLog.Topics[1].Hex())
-				event.Hash = vLog.Topics[2]
-
-				// Store the transaction hash
-				event.TxHash = vLog.TxHash.Bytes()
-				event.Addr = common.BytesToAddress(vLog.Topics[1].Bytes())
+				// Get the elements of the event which are indexed.
+				// In this case there are to elements: _addr and _hash.
+				// The other elements are stored in vLog.Data.
+				addrLog := common.HexToAddress(vLog.Topics[1].Hex())
+				hashLog := vLog.Topics[2]
 
 				// Filter the events by Hash and address
 				hashToCompare, _ := HexStringToBytes32(filter["Hash"].(string))
-				if strings.ToLower(event.Addr.Hex()) == filter["Addr"] && event.Hash == hashToCompare {
-					fmt.Printf("TxHash: %x\n", event.TxHash)
-					fmt.Printf("Addr: %s\n", event.Addr.Hex())
-					fmt.Printf("Hash: %x\n", event.Hash[:])
-					fmt.Printf("Value: %d\n\n", event.Value)
-
-					return &event, nil, nil
+				if strings.ToLower(addrLog.Hex()) == filter["Addr"] && hashLog == hashToCompare {
+					return &vLog, nil
 				}
 			}
-			return nil, nil, errors.New("Not match found")
-
-		case "responseNotify":
-		default:
-			return nil, nil, errors.New("Wrong name of the event")
 		}
-	*/
+		return nil, errors.New("Not match found")
 
-	// Decode the logs importing the abi of the contract
-	return nil, nil
+	default:
+		return nil, errors.New("Wrong name of the event")
+	}
 }
 
 //InteractBlockchain stores the measurement in the blockchain

@@ -1,17 +1,14 @@
 package clientap
 
 import (
-	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 
 	cipher "../cipherLibs"
 	libs "../libs"
@@ -42,14 +39,36 @@ func getSignedMessage(account, hash string) ([]byte, error) {
 	return h.Sum(nil), nil
 }
 
+// notifyBlockchain notifies the blokchain that the payment has been accepted
+func notifyBlockchain(ethClient *libs.Ethereum, hash [32]byte, client common.Address) error {
+	// Set the parameters of the new transaction to set the price of the product
+	auth := bind.NewKeyedTransactor(ethClient.AdminPrivKey)
+	auth.Value = big.NewInt(0)
+	auth.GasLimit = uint64(400000)
+	auth.GasPrice = big.NewInt(0)
+
+	// Legacy value. It does not do anything. It might be use in the future.
+	var a [32]byte
+	copy(a[:], []byte("0"))
+
+	_, err := ethClient.BalanceCon.SendData(auth, client, hash, a)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // ProccessClientPurchase Processes the purchases of the client
 // and returns the measurements to him
 func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{}) ([]byte, error) {
+
 	// Get the hash that the client wants to purchase
 	var hash string = body["_hash"].(string)
 
 	// Get the account that made the purchase
 	var account string = body["_account"].(string)
+
+	fmt.Printf("\nThe client %s  wants to buy %s\n", account, hash)
 
 	// address formatted
 	addrFormatted := common.HexToAddress(account[2:])
@@ -84,130 +103,56 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 	// Verify the signature
 	var isProperlySigned bool = cipher.VerifySignature(clientPubKeyBytes, signedMessage, signatureBytes)
 
-	if isProperlySigned {
-		// Check if there is an event showing that the client
-		// has purchased the information.
-		filter := map[string]interface{}{"Addr": account, "Hash": hash[2:]}
-		_, err = libs.ReadEventsFromBalanceContract(ethClient, "purchaseNotify", filter)
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-
-		// error != nil means that there is at least one event that matched with the filter
-		// Check if the data has already been given to the client:
-		// 	- True:	 If the data has not been given to the client
-		// 	- False: If the data has already been given to the client
-		hashBytes32, _ := libs.HexStringToBytes32(hash[2:])
-		HasToBePaid, err := ethClient.BalanceCon.CheckHasPayed(nil, addrFormatted, hashBytes32)
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-
-		if HasToBePaid {
-			// Get the url where the data is stored
-			url, _, err := ethClient.DataCon.RetrieveInfo(nil, hashBytes32)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			// Get the data from the REST server
-			data, err := libs.GetDataFromRestServer(url)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			// Generate a new key that will be used in the symmetric encryption
-			randomKey := make([]byte, 32)
-			rand.Read(randomKey)
-
-			// Cipher the key with the public key of the admin
-			encryptedAdmin, err := cipher.EncryptWithPublicKey(ethClient.AdminPrivKey.PublicKey, randomKey)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			// Cipher with the public key of the client
-			// Convert the public key of the client to ECDSA format
-			clientPubKeyECDSA, err := crypto.UnmarshalPubkey(clientPubKeyBytes)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-			encryptedClient, err := cipher.EncryptWithPublicKey(*clientPubKeyECDSA, randomKey)
-
-			// Prepare the body of the transaction in JSON format
-			transactionKeysData := &SecretStruct{AdminSecret: encryptedAdmin, ClientSecret: encryptedClient}
-			transactionKeysDataJSON, err := json.Marshal(transactionKeysData)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			// Send the transaction with the secret
-			txSecretHash, err := libs.SendTransaction(common.HexToAddress(libs.ADMINACCOUNT),
-				addrFormatted,
-				ethClient.AdminPrivKey,
-				ethClient,
-				transactionKeysDataJSON)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			// Encrypt the measurement with the symmetric key
-			ciphertext, err := cipher.SymmetricEncryption(randomKey, data)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			// Check if the encryption works
-			//_ = cipher.DecryptSymmetricEncryption(randomKey, ciphertext)
-
-			// Send the transaction with the encrypted measurement
-			txCiphertextHash, err := libs.SendTransaction(common.HexToAddress(libs.ADMINACCOUNT),
-				addrFormatted,
-				ethClient.AdminPrivKey,
-				ethClient,
-				ciphertext)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			// Indicate in the contract balance that the data has been sent
-			// Set the parameters of the new transaction to set the price of the product
-			auth := bind.NewKeyedTransactor(ethClient.AdminPrivKey)
-			auth.Value = big.NewInt(0)
-			auth.GasLimit = uint64(400000)
-			auth.GasPrice = big.NewInt(0)
-
-			_, err = ethClient.BalanceCon.SendToClient(auth,
-				addrFormatted,
-				hashBytes32,
-				libs.ByteToByte32(txSecretHash),
-				libs.ByteToByte32(txCiphertextHash))
-
-			// Prepare the response that will be send to the client
-			response := &ResponseClient{TxSecretHash: txSecretHash, TxDataHash: txCiphertextHash}
-			responseJSON, err := json.Marshal(response)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			return responseJSON, nil
-
-		}
-
-		return nil, errors.New("The measurement has already been given")
-
+	if !isProperlySigned {
+		return nil, errors.New("The signature is not valid")
 	}
 
-	return nil, errors.New("Message is not properly signed")
+	// Check if there is an event showing that the client
+	// has purchased the information.
+	filter := map[string]interface{}{"Addr": account, "Hash": hash[2:]}
+	_, err = libs.ReadEventsFromBalanceContract(ethClient, "purchaseNotify", filter)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	// error == nil means that there is at least one event that matched with the filter
+	// Convert the hash (hex string) to [32]byte
+	hashBytes32, _ := libs.HexStringToBytes32(hash[2:])
+
+	// Check if the purchase has already been acknowledge in the blockcain
+	_, err = libs.ReadEventsFromBalanceContract(ethClient, "responseNotify", filter)
+
+	// error == nil means that there is at least one event that matched with the filter
+	// error != nil means that there is not any event that matched the filter.
+	// Therefore, the server has to notify the blockchain that the payment of the client
+	// has been accepted
+	if err != nil {
+		if err.Error() != "Not match found" {
+			fmt.Println(err)
+			return nil, err
+		}
+
+		// Notify the blockchain of the pruchase of the client
+		err = notifyBlockchain(ethClient, hashBytes32, addrFormatted)
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+	}
+
+	// Get the url where the data is stored
+	url, _, err := ethClient.DataCon.RetrieveInfo(nil, hashBytes32)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	// Get the data from the REST server
+	data, err := libs.GetDataFromRestServer(url)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	return data, nil
 }

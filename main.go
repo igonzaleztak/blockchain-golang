@@ -82,6 +82,12 @@ func Init() *EthereumLocal {
 		log.Fatal(err)
 	}
 
+	// Set the access contract address in the balance contract
+	_, err = balanceContract.SetAddress2(auth, libs.AccessControlContractAddress)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Declaration of the struct that stores
 	// the Ethereum client and the contracts
 	myEthereumClient := &EthereumLocal{
