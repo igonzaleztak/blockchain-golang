@@ -59,7 +59,6 @@ func randBytes(length int) []byte {
 
 // SymmetricEncryption ecnrypts some data with AES-256-gcm
 func SymmetricEncryption(key, data []byte) ([]byte, error) {
-
 	// Generate a new aes cipher using the 32 byte long key
 	c, err := aes.NewCipher(key)
 	if err != nil {

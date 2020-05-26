@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"sync"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -30,6 +31,12 @@ type ResponseClient struct {
 	TxDataHash   []byte
 }
 
+// ResponseSubroutine handles the responses of the goroutines
+type ResponseSubroutine struct {
+	txHash []byte
+	Error  error
+}
+
 // getSignedMessage Gets the message that was signed
 func getSignedMessage(account, hash string) ([]byte, error) {
 	// Make up the message that was signed
@@ -40,6 +47,110 @@ func getSignedMessage(account, hash string) ([]byte, error) {
 	h.Write([]byte(sigMsgStr))
 
 	return h.Sum(nil), nil
+}
+
+func sendTransactionSecretRoutine(response chan ResponseSubroutine,
+	ethClient *libs.Ethereum,
+	randomKey []byte,
+	clientPubKeyBytes []byte,
+	addrFormatted common.Address,
+	wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	// Cipher the key with the public key of the admin
+	encryptedAdmin, err := cipher.EncryptWithPublicKey(ethClient.AdminPrivKey.PublicKey, randomKey)
+	if err != nil {
+		fmt.Println(err)
+		response <- ResponseSubroutine{nil, err}
+		return
+	}
+
+	// Cipher with the public key of the client
+	// Convert the public key of the client to ECDSA format
+	clientPubKeyECDSA, err := crypto.UnmarshalPubkey(clientPubKeyBytes)
+	if err != nil {
+		fmt.Println(err)
+		response <- ResponseSubroutine{nil, err}
+		return
+	}
+	encryptedClient, err := cipher.EncryptWithPublicKey(*clientPubKeyECDSA, randomKey)
+
+	// Prepare the body of the transaction in JSON format
+	transactionKeysData := &SecretStruct{AdminSecret: encryptedAdmin, ClientSecret: encryptedClient}
+	transactionKeysDataJSON, err := json.Marshal(transactionKeysData)
+	if err != nil {
+		fmt.Println(err)
+		response <- ResponseSubroutine{nil, err}
+		return
+	}
+
+	// Send the transaction with the secret
+	txSecretHash, err := libs.SendTransaction(common.HexToAddress(libs.ADMINACCOUNT),
+		addrFormatted,
+		ethClient.AdminPrivKey,
+		ethClient,
+		transactionKeysDataJSON)
+	if err != nil {
+		fmt.Println(err)
+		response <- ResponseSubroutine{nil, err}
+		return
+	}
+
+	// Prepare the response
+	response <- ResponseSubroutine{txSecretHash, nil}
+}
+
+func sendTransactionDataRoutine(response chan ResponseSubroutine,
+	randomKey []byte,
+	addrFormatted common.Address,
+	ethClient *libs.Ethereum,
+	hashBytes32 [32]byte,
+	wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	// Get the url where the data is stored
+	url, _, err := ethClient.DataCon.RetrieveInfo(nil, hashBytes32)
+	if err != nil {
+		fmt.Println(err)
+		response <- ResponseSubroutine{nil, err}
+		return
+	}
+
+	// Get the data from the REST server
+	data, err := libs.GetDataFromRestServer(url)
+	if err != nil {
+		fmt.Println(err)
+		response <- ResponseSubroutine{nil, err}
+		return
+	}
+
+	// Encrypt the measurement with the symmetric key
+	ciphertext, err := cipher.SymmetricEncryption(randomKey, data)
+	if err != nil {
+		fmt.Println(err)
+		response <- ResponseSubroutine{nil, err}
+		return
+	}
+
+	// Check if the encryption works
+	//_ = cipher.DecryptSymmetricEncryption(randomKey, ciphertext)
+
+	// Send the transaction with the encrypted measurement
+	txCiphertextHash, err := libs.SendTransaction(common.HexToAddress(libs.ADMINACCOUNT),
+		addrFormatted,
+		ethClient.AdminPrivKey,
+		ethClient,
+		ciphertext)
+	if err != nil {
+		fmt.Println(err)
+		response <- ResponseSubroutine{nil, err}
+		return
+	}
+
+	// Prepare the response
+	response <- ResponseSubroutine{txCiphertextHash, nil}
 }
 
 // ProccessClientPurchase Processes the purchases of the client
@@ -106,79 +217,45 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 		}
 
 		if HasToBePaid {
-			// Get the url where the data is stored
-			url, _, err := ethClient.DataCon.RetrieveInfo(nil, hashBytes32)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			// Get the data from the REST server
-			data, err := libs.GetDataFromRestServer(url)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
 
 			// Generate a new key that will be used in the symmetric encryption
 			randomKey := make([]byte, 32)
 			rand.Read(randomKey)
 
-			// Cipher the key with the public key of the admin
-			encryptedAdmin, err := cipher.EncryptWithPublicKey(ethClient.AdminPrivKey.PublicKey, randomKey)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
+			// Declare the waitGroup to use the subroutines
+			var wg sync.WaitGroup
+
+			// Declare the channels used in the goroutines
+			chSecret := make(chan ResponseSubroutine)
+			chData := make(chan ResponseSubroutine)
+
+			// Init the two subroutines
+			wg.Add(1)
+			go sendTransactionSecretRoutine(chSecret, ethClient, randomKey, clientPubKeyBytes, addrFormatted, &wg)
+			wg.Add(1)
+			go sendTransactionDataRoutine(chData, randomKey, addrFormatted, ethClient, hashBytes32, &wg)
+
+			// Read the responses from the channels
+			responseSecret := <-chSecret
+			txSecretHash := responseSecret.txHash
+			if responseSecret.Error != nil {
+				fmt.Println(responseSecret.Error)
+				return nil, responseSecret.Error
 			}
 
-			// Cipher with the public key of the client
-			// Convert the public key of the client to ECDSA format
-			clientPubKeyECDSA, err := crypto.UnmarshalPubkey(clientPubKeyBytes)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-			encryptedClient, err := cipher.EncryptWithPublicKey(*clientPubKeyECDSA, randomKey)
-
-			// Prepare the body of the transaction in JSON format
-			transactionKeysData := &SecretStruct{AdminSecret: encryptedAdmin, ClientSecret: encryptedClient}
-			transactionKeysDataJSON, err := json.Marshal(transactionKeysData)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
+			responseData := <-chData
+			txCiphertextHash := responseData.txHash
+			if responseData.Error != nil {
+				fmt.Println(responseData.Error)
+				return nil, responseData.Error
 			}
 
-			// Send the transaction with the secret
-			txSecretHash, err := libs.SendTransaction(common.HexToAddress(libs.ADMINACCOUNT),
-				addrFormatted,
-				ethClient.AdminPrivKey,
-				ethClient,
-				transactionKeysDataJSON)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
+			// Wait for the goroutines to complete
+			wg.Wait()
 
-			// Encrypt the measurement with the symmetric key
-			ciphertext, err := cipher.SymmetricEncryption(randomKey, data)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			// Check if the encryption works
-			//_ = cipher.DecryptSymmetricEncryption(randomKey, ciphertext)
-
-			// Send the transaction with the encrypted measurement
-			txCiphertextHash, err := libs.SendTransaction(common.HexToAddress(libs.ADMINACCOUNT),
-				addrFormatted,
-				ethClient.AdminPrivKey,
-				ethClient,
-				ciphertext)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
+			// Close the channels
+			close(chSecret)
+			close(chData)
 
 			// Indicate in the contract balance that the data has been sent
 			// Set the parameters of the new transaction to set the price of the product
