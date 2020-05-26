@@ -48,6 +48,9 @@ func getSignedMessage(account, hash string) ([]byte, error) {
 	return h.Sum(nil), nil
 }
 
+// sendTransactionSecretRoutine ciphers  the secret with the public key of
+// the admin and the public key of the client. Then, it sends the
+// encrypted secret in a transaction
 func sendTransactionSecretRoutine(response chan ResponseSubroutine,
 	ethClient *libs.Ethereum,
 	randomKey []byte,
