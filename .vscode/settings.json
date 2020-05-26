@@ -1,0 +1,6 @@
+{
+    "go.addTags": {
+    "promptForTags": false
+    },
+    "go.gopath": "/home/ivan/go"
+}
