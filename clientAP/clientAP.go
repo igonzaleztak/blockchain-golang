@@ -215,7 +215,7 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 	// 	- True:	 If the data has not been given to the client
 	// 	- False: If the data has already been given to the client
 	hashBytes32, _ := libs.HexStringToBytes32(hash[2:])
-	HasToBePaid, err := ethClient.BalanceCon.CheckHasPayed(nil, addrFormatted, hashBytes32)
+	HasToBePaid, err := ethClient.BalanceCon.CheckHasPaid(nil, addrFormatted, hashBytes32)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
