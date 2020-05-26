@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
-	"sync"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -53,10 +52,7 @@ func sendTransactionSecretRoutine(response chan ResponseSubroutine,
 	ethClient *libs.Ethereum,
 	randomKey []byte,
 	clientPubKeyBytes []byte,
-	addrFormatted common.Address,
-	wg *sync.WaitGroup) {
-
-	defer wg.Done()
+	addrFormatted common.Address) {
 
 	// Cipher the key with the public key of the admin
 	encryptedAdmin, err := cipher.EncryptWithPublicKey(ethClient.AdminPrivKey.PublicKey, randomKey)
@@ -99,58 +95,6 @@ func sendTransactionSecretRoutine(response chan ResponseSubroutine,
 
 	// Prepare the response
 	response <- ResponseSubroutine{txSecretHash, nil}
-}
-
-func sendTransactionDataRoutine(response chan ResponseSubroutine,
-	randomKey []byte,
-	addrFormatted common.Address,
-	ethClient *libs.Ethereum,
-	hashBytes32 [32]byte,
-	wg *sync.WaitGroup) {
-
-	defer wg.Done()
-
-	// Get the url where the data is stored
-	url, _, err := ethClient.DataCon.RetrieveInfo(nil, hashBytes32)
-	if err != nil {
-		fmt.Println(err)
-		response <- ResponseSubroutine{nil, err}
-		return
-	}
-
-	// Get the data from the REST server
-	data, err := libs.GetDataFromRestServer(url)
-	if err != nil {
-		fmt.Println(err)
-		response <- ResponseSubroutine{nil, err}
-		return
-	}
-
-	// Encrypt the measurement with the symmetric key
-	ciphertext, err := cipher.SymmetricEncryption(randomKey, data)
-	if err != nil {
-		fmt.Println(err)
-		response <- ResponseSubroutine{nil, err}
-		return
-	}
-
-	// Check if the encryption works
-	//_ = cipher.DecryptSymmetricEncryption(randomKey, ciphertext)
-
-	// Send the transaction with the encrypted measurement
-	txCiphertextHash, err := libs.SendTransaction(common.HexToAddress(libs.ADMINACCOUNT),
-		addrFormatted,
-		ethClient.AdminPrivKey,
-		ethClient,
-		ciphertext)
-	if err != nil {
-		fmt.Println(err)
-		response <- ResponseSubroutine{nil, err}
-		return
-	}
-
-	// Prepare the response
-	response <- ResponseSubroutine{txCiphertextHash, nil}
 }
 
 // ProccessClientPurchase Processes the purchases of the client
@@ -229,18 +173,46 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 	randomKey := make([]byte, 32)
 	rand.Read(randomKey)
 
-	// Declare the waitGroup to use the subroutines
-	var wg sync.WaitGroup
-
 	// Declare the channels used in the goroutines
 	chSecret := make(chan ResponseSubroutine)
-	chData := make(chan ResponseSubroutine)
 
-	// Init the two subroutines
-	wg.Add(1)
-	go sendTransactionSecretRoutine(chSecret, ethClient, randomKey, clientPubKeyBytes, addrFormatted, &wg)
-	wg.Add(1)
-	go sendTransactionDataRoutine(chData, randomKey, addrFormatted, ethClient, hashBytes32, &wg)
+	// Init the the subroutine that ciphers the secret key
+	go sendTransactionSecretRoutine(chSecret, ethClient, randomKey, clientPubKeyBytes, addrFormatted)
+
+	// Get the url where the data is stored
+	url, _, err := ethClient.DataCon.RetrieveInfo(nil, hashBytes32)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	// Get the data from the REST server
+	data, err := libs.GetDataFromRestServer(url)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	// Encrypt the measurement with the symmetric key
+	ciphertext, err := cipher.SymmetricEncryption(randomKey, data)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	// Check if the encryption works
+	//_ = cipher.DecryptSymmetricEncryption(randomKey, ciphertext)
+
+	// Send the transaction with the encrypted measurement
+	txCiphertextHash, err := libs.SendTransaction(common.HexToAddress(libs.ADMINACCOUNT),
+		addrFormatted,
+		ethClient.AdminPrivKey,
+		ethClient,
+		ciphertext)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
 
 	// Read the responses from the channels
 	responseSecret := <-chSecret
@@ -250,19 +222,8 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 		return nil, responseSecret.Error
 	}
 
-	responseData := <-chData
-	txCiphertextHash := responseData.txHash
-	if responseData.Error != nil {
-		fmt.Println(responseData.Error)
-		return nil, responseData.Error
-	}
-
-	// Wait for the goroutines to complete
-	wg.Wait()
-
-	// Close the channels
+	// Close the channel
 	close(chSecret)
-	close(chData)
 
 	// Indicate in the contract balance that the data has been sent
 	// Set the parameters of the new transaction to set the price of the product
