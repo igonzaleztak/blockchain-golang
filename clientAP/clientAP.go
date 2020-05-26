@@ -171,120 +171,120 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 	// Get the hash that was signed
 	signedMessage, err := getSignedMessage(account, hash)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
 	// Convert the signature to bytes
 	signatureBytes, err := hex.DecodeString(signature[2:])
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
 	// Get the publicKey of the client
 	clientPubKey, err := ethClient.AccessCon.GetPubKey(nil, addrFormatted)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
 	// Convert the public key to []byte
 	clientPubKeyBytes, err := hex.DecodeString("04" + clientPubKey)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
 	// Verify the signature
 	var isProperlySigned bool = cipher.VerifySignature(clientPubKeyBytes, signedMessage, signatureBytes)
-
-	if isProperlySigned {
-		// Check if there is an event showing that the client
-		// has purchased the information.
-		filter := map[string]interface{}{"Addr": account, "Hash": hash[2:]}
-		_, err = libs.ReadEventsFromBalanceContract(ethClient, "purchaseNotify", filter)
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-
-		// error != nil means that there is at least one event that matched with the filter
-		// Check if the data has already been given to the client:
-		// 	- True:	 If the data has not been given to the client
-		// 	- False: If the data has already been given to the client
-		hashBytes32, _ := libs.HexStringToBytes32(hash[2:])
-		HasToBePaid, err := ethClient.BalanceCon.CheckHasPayed(nil, addrFormatted, hashBytes32)
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-
-		if HasToBePaid {
-
-			// Generate a new key that will be used in the symmetric encryption
-			randomKey := make([]byte, 32)
-			rand.Read(randomKey)
-
-			// Declare the waitGroup to use the subroutines
-			var wg sync.WaitGroup
-
-			// Declare the channels used in the goroutines
-			chSecret := make(chan ResponseSubroutine)
-			chData := make(chan ResponseSubroutine)
-
-			// Init the two subroutines
-			wg.Add(1)
-			go sendTransactionSecretRoutine(chSecret, ethClient, randomKey, clientPubKeyBytes, addrFormatted, &wg)
-			wg.Add(1)
-			go sendTransactionDataRoutine(chData, randomKey, addrFormatted, ethClient, hashBytes32, &wg)
-
-			// Read the responses from the channels
-			responseSecret := <-chSecret
-			txSecretHash := responseSecret.txHash
-			if responseSecret.Error != nil {
-				fmt.Println(responseSecret.Error)
-				return nil, responseSecret.Error
-			}
-
-			responseData := <-chData
-			txCiphertextHash := responseData.txHash
-			if responseData.Error != nil {
-				fmt.Println(responseData.Error)
-				return nil, responseData.Error
-			}
-
-			// Wait for the goroutines to complete
-			wg.Wait()
-
-			// Close the channels
-			close(chSecret)
-			close(chData)
-
-			// Indicate in the contract balance that the data has been sent
-			// Set the parameters of the new transaction to set the price of the product
-			auth := bind.NewKeyedTransactor(ethClient.AdminPrivKey)
-			auth.Value = big.NewInt(0)
-			auth.GasLimit = uint64(400000)
-			auth.GasPrice = big.NewInt(0)
-
-			_, err = ethClient.BalanceCon.SendToClient(auth,
-				addrFormatted,
-				hashBytes32,
-				libs.ByteToByte32(txSecretHash),
-				libs.ByteToByte32(txCiphertextHash))
-
-			// Prepare the response that will be send to the client
-			response := &ResponseClient{TxSecretHash: txSecretHash, TxDataHash: txCiphertextHash}
-			responseJSON, err := json.Marshal(response)
-			if err != nil {
-				fmt.Println(err)
-				return nil, err
-			}
-
-			return responseJSON, nil
-
-		}
-
-		return nil, errors.New("The measurement has already been given")
-
+	if !isProperlySigned {
+		return nil, errors.New("Message is not properly signed")
+	}
+	// Check if there is an event showing that the client
+	// has purchased the information.
+	filter := map[string]interface{}{"Addr": account, "Hash": hash[2:]}
+	_, err = libs.ReadEventsFromBalanceContract(ethClient, "purchaseNotify", filter)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
 	}
 
-	return nil, errors.New("Message is not properly signed")
+	// error != nil means that there is at least one event that matched with the filter
+	// Check if the data has already been given to the client:
+	// 	- True:	 If the data has not been given to the client
+	// 	- False: If the data has already been given to the client
+	hashBytes32, _ := libs.HexStringToBytes32(hash[2:])
+	HasToBePaid, err := ethClient.BalanceCon.CheckHasPayed(nil, addrFormatted, hashBytes32)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	if !HasToBePaid {
+		return nil, errors.New("The measurement has already been given")
+	}
+
+	// Generate a new key that will be used in the symmetric encryption
+	randomKey := make([]byte, 32)
+	rand.Read(randomKey)
+
+	// Declare the waitGroup to use the subroutines
+	var wg sync.WaitGroup
+
+	// Declare the channels used in the goroutines
+	chSecret := make(chan ResponseSubroutine)
+	chData := make(chan ResponseSubroutine)
+
+	// Init the two subroutines
+	wg.Add(1)
+	go sendTransactionSecretRoutine(chSecret, ethClient, randomKey, clientPubKeyBytes, addrFormatted, &wg)
+	wg.Add(1)
+	go sendTransactionDataRoutine(chData, randomKey, addrFormatted, ethClient, hashBytes32, &wg)
+
+	// Read the responses from the channels
+	responseSecret := <-chSecret
+	txSecretHash := responseSecret.txHash
+	if responseSecret.Error != nil {
+		fmt.Println(responseSecret.Error)
+		return nil, responseSecret.Error
+	}
+
+	responseData := <-chData
+	txCiphertextHash := responseData.txHash
+	if responseData.Error != nil {
+		fmt.Println(responseData.Error)
+		return nil, responseData.Error
+	}
+
+	// Wait for the goroutines to complete
+	wg.Wait()
+
+	// Close the channels
+	close(chSecret)
+	close(chData)
+
+	// Indicate in the contract balance that the data has been sent
+	// Set the parameters of the new transaction to set the price of the product
+	auth := bind.NewKeyedTransactor(ethClient.AdminPrivKey)
+	auth.Value = big.NewInt(0)
+	auth.GasLimit = uint64(400000)
+	auth.GasPrice = big.NewInt(0)
+
+	_, err = ethClient.BalanceCon.SendToClient(auth,
+		addrFormatted,
+		hashBytes32,
+		libs.ByteToByte32(txSecretHash),
+		libs.ByteToByte32(txCiphertextHash))
+
+	// Prepare the response that will be send to the client
+	response := &ResponseClient{TxSecretHash: txSecretHash, TxDataHash: txCiphertextHash}
+	responseJSON, err := json.Marshal(response)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	return responseJSON, nil
+
 }
