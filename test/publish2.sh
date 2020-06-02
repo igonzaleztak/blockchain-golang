@@ -6,7 +6,7 @@ curl localhost:5051/notify -s -S --header 'Content-Type: application/json' --hea
     "type": "Object",
     "value": {
       "temperature": {
-        "value": 17,
+        "value": 19,
         "type": "Number"
       },
       "sensorID": {
@@ -14,7 +14,7 @@ curl localhost:5051/notify -s -S --header 'Content-Type: application/json' --hea
         "type": "String"
       },
       "timestamp": {
-        "value": 1588050899899,
+        "value": 1588050810891,
         "type": "Number"
       }
     }
@@ -25,7 +25,7 @@ curl localhost:5051/notify -s -S --header 'Content-Type: application/json' --hea
   },
   "cipher": {
     "type": "String",
-		"value": "0x04f889334300f5f63bbd2233aabc5d4b40f823604073ac96ccd5b79e03da25cddd15c6f0e01b0f293980eaf22402bdcdad77a0b4512fc2ffea58494dfbf61303feb74fe0109d350d0e5c64503e212e22c9f2cda68accd08c98dd70ab28010596e4d6"
+		"value": "0x04596ed847c44a0d84d112f773fef57b1e71d0e2c410788b3554bd3aed2c432ff8e20545f41bfa7a540007fb20acfc8d3cc3d2068bbf5b901f0040612135f82a0742a049049209204701fcc7410c39c58faf88f5b5536239bf30c0f0a09f0f35ead1"
   }
 }
 EOF

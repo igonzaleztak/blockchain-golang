@@ -43,7 +43,7 @@ func Init() *EthereumLocal {
 	}
 
 	// Get the private key of the admin user to set information in the contracts
-	adminPrivateKey, err := libs.GetPrivateKey("")
+	adminPrivateKey, err := libs.GetPrivateKey("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
