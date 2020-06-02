@@ -135,14 +135,6 @@ func CheckAccess(
 		return false, nil, err
 	}
 
-	/*
-		// Login the producer in Ethereum
-		err = UnlockAccount(addressStr[2:], string(passphraseBytes))
-		if err != nil {
-			return false, nil, err
-		}
-	*/
-
 	// Get the private Key of the producer account
 	producerPrivKey, err := GetPrivateKey(addressStr[2:], string(passphraseBytes))
 
