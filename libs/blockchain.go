@@ -241,7 +241,6 @@ func InteractBlockchain(
 	// Set the price of the product
 	price := big.NewInt(2)
 	_, err = ethclient.BalanceCon.SetPriceData(auth, hash32Byte, price)
-
 	if err != nil {
 		return err
 	}

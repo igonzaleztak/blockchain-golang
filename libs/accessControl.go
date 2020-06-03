@@ -103,6 +103,7 @@ func GetPrivateKey(address, password string) (*ecdsa.PrivateKey, error) {
 // the event has access to the blockchain or not
 func CheckAccess(
 	client *ethclient.Client,
+	adminPrivKey *ecdsa.PrivateKey,
 	dataContract *dataContract.DataLedgerContract,
 	accessContract *accessControlContract.AccessControlContract,
 	producerID string,
@@ -119,13 +120,7 @@ func CheckAccess(
 
 	fmt.Printf("\nEvent received from: %s\n", addressStr)
 
-	// Get the private key of the admin
-	adminPrivKey, err := GetPrivateKey("", "")
-	if err != nil {
-		return false, nil, err
-	}
-
-	// Decrypt the passphrase
+	// Decrypt the passphrase using the private key of the admin
 	cipherTextBytes, err := hex.DecodeString(cipherText[2:])
 	if err != nil {
 		return false, nil, err

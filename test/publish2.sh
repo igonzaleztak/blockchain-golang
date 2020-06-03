@@ -6,7 +6,7 @@ curl localhost:5051/notify -s -S --header 'Content-Type: application/json' --hea
     "type": "Object",
     "value": {
       "temperature": {
-        "value": 19,
+        "value": 25,
         "type": "Number"
       },
       "sensorID": {
@@ -14,7 +14,7 @@ curl localhost:5051/notify -s -S --header 'Content-Type: application/json' --hea
         "type": "String"
       },
       "timestamp": {
-        "value": 1588050810891,
+        "value": 1588050810892,
         "type": "Number"
       }
     }
