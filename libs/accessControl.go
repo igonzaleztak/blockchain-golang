@@ -132,6 +132,9 @@ func CheckAccess(
 
 	// Get the private Key of the producer account
 	producerPrivKey, err := GetPrivateKey(addressStr[2:], string(passphraseBytes))
+	if err != nil {
+		return false, nil, err
+	}
 
 	fmt.Printf("\nThe account %s logged in the blockchain and introduced the following data\n", addressStr)
 	return true, producerPrivKey, nil
