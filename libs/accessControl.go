@@ -9,7 +9,6 @@ import (
 	"log"
 	"regexp"
 
-	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -46,36 +45,6 @@ func GetAddrAdminAccount() common.Address {
 	return common.HexToAddress("0x" + ADMINACCOUNT)
 }
 
-// UnlockAccount unlocks the account of the user in ethereum
-func UnlockAccount(address string, password string) (err error) {
-	// Check if an address was passed to the function
-	if address == "" {
-		address = ADMINACCOUNT
-	}
-
-	// Init keystore
-	ks := keystore.NewKeyStore(FOLDER, keystore.LightScryptN, keystore.LightScryptP)
-
-	// Create the account definition
-	accountDef := accounts.Account{
-		Address: common.HexToAddress("0x" + address),
-	}
-
-	// Find the account in the keystore
-	signAcc, err := ks.Find(accountDef)
-	if err != nil {
-		return errors.New("Could not find the account in the keystore")
-	}
-
-	// Unlock the account
-	errAcc := ks.Unlock(signAcc, password)
-	if errAcc != nil {
-		return errors.New("Wrong Password")
-	}
-
-	return nil
-}
-
 // GetUTCFile search the UTC file associated to the address
 func GetUTCFile(address string) (string, error) {
 	// Compile the regex expresion
@@ -101,9 +70,10 @@ func GetUTCFile(address string) (string, error) {
 }
 
 // GetPrivateKey gets the private key of the address
-func GetPrivateKey(address string) (*ecdsa.PrivateKey, error) {
+func GetPrivateKey(address, password string) (*ecdsa.PrivateKey, error) {
 	// Check if an address was passed to the function
 	if address == "" {
+		password = ADMINPASSWORD
 		address = ADMINACCOUNT
 	}
 
@@ -120,7 +90,7 @@ func GetPrivateKey(address string) (*ecdsa.PrivateKey, error) {
 	}
 
 	// Get the private key
-	keyWrapper, err := keystore.DecryptKey(jsonBytes, ADMINPASSWORD)
+	keyWrapper, err := keystore.DecryptKey(jsonBytes, password)
 	if err != nil {
 		return nil, err
 	}
@@ -133,6 +103,7 @@ func GetPrivateKey(address string) (*ecdsa.PrivateKey, error) {
 // the event has access to the blockchain or not
 func CheckAccess(
 	client *ethclient.Client,
+	adminPrivKey *ecdsa.PrivateKey,
 	dataContract *dataContract.DataLedgerContract,
 	accessContract *accessControlContract.AccessControlContract,
 	producerID string,
@@ -149,24 +120,18 @@ func CheckAccess(
 
 	fmt.Printf("\nEvent received from: %s\n", addressStr)
 
-	// Get the private key of the producer
-	producerPrivKey, err := GetPrivateKey(addressStr[2:])
-	if err != nil {
-		return false, nil, err
-	}
-
-	// Decrypt the passphrase
+	// Decrypt the passphrase using the private key of the admin
 	cipherTextBytes, err := hex.DecodeString(cipherText[2:])
 	if err != nil {
 		return false, nil, err
 	}
-	passphraseBytes, err := cipherlib.DecryptWithPrivateKey(producerPrivKey, cipherTextBytes)
+	passphraseBytes, err := cipherlib.DecryptWithPrivateKey(adminPrivKey, cipherTextBytes)
 	if err != nil {
 		return false, nil, err
 	}
 
-	// Login the producer in Ethereum
-	err = UnlockAccount(addressStr[2:], string(passphraseBytes))
+	// Get the private Key of the producer account
+	producerPrivKey, err := GetPrivateKey(addressStr[2:], string(passphraseBytes))
 	if err != nil {
 		return false, nil, err
 	}

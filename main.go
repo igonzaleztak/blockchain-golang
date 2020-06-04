@@ -43,7 +43,7 @@ func Init() *EthereumLocal {
 	}
 
 	// Get the private key of the admin user to set information in the contracts
-	adminPrivateKey, err := libs.GetPrivateKey("")
+	adminPrivateKey, err := libs.GetPrivateKey("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -176,6 +176,7 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 		// Check if the producer of the event has access to the blockchain
 		hasAccess, producerPrivKey, err := libs.CheckAccess(
 			ethclient.EthereumClient,
+			ethclient.AdminPrivKey,
 			ethclient.DataCon,
 			ethclient.AccessCon,
 			producerID,
