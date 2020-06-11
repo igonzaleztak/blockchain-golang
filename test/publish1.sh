@@ -14,7 +14,7 @@ curl localhost:5051/notify -s -S --header 'Content-Type: application/json' --hea
         "type": "String"
       },
       "timestamp": {
-        "value": 1588005722686,
+        "value": 1588005723790,
         "type": "Number"
       }
     }

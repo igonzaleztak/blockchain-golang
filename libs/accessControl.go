@@ -115,6 +115,11 @@ func CheckAccess(
 		return false, nil, err
 	}
 
+	// Check if the address is 0
+	if address == common.HexToAddress("0x0") {
+		return false, nil, errors.New("There is not a producer with that address")
+	}
+
 	// Convert the address to string
 	addressStr := address.Hex()
 
