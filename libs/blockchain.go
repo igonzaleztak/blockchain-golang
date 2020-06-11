@@ -153,54 +153,6 @@ func ReadEventsFromBalanceContract(ethclient *Ethereum, nameEvent string, filter
 		return nil, errors.New("Wrong name of the event")
 	}
 
-	/*
-		switch nameEvent {
-		case "purchaseNotify":
-			// Iterate through the log to obtain the events
-			for _, vLog := range logs {
-				// Declare the struct that will hold the fields of the event
-				var event PurchaseNotifyStruct
-
-				// Use the ABI decode the log
-				err := contractAbi.Unpack(&event, nameEvent, vLog.Data)
-				if err != nil {
-					fmt.Println("Failed to unpack")
-					return nil, nil, err
-				}
-
-				t := new(big.Int)
-				t.SetBytes(vLog.Data)
-				fmt.Printf("%d\n", t)
-
-				// Unpack will not parse indexed event types because those are stored under topics
-				// so they have to be unpacked manually
-				event.Addr = common.HexToAddress(vLog.Topics[1].Hex())
-				event.Hash = vLog.Topics[2]
-
-				// Store the transaction hash
-				event.TxHash = vLog.TxHash.Bytes()
-				event.Addr = common.BytesToAddress(vLog.Topics[1].Bytes())
-
-				// Filter the events by Hash and address
-				hashToCompare, _ := HexStringToBytes32(filter["Hash"].(string))
-				if strings.ToLower(event.Addr.Hex()) == filter["Addr"] && event.Hash == hashToCompare {
-					fmt.Printf("TxHash: %x\n", event.TxHash)
-					fmt.Printf("Addr: %s\n", event.Addr.Hex())
-					fmt.Printf("Hash: %x\n", event.Hash[:])
-					fmt.Printf("Value: %d\n\n", event.Value)
-
-					return &event, nil, nil
-				}
-			}
-			return nil, nil, errors.New("Not match found")
-
-		case "responseNotify":
-		default:
-			return nil, nil, errors.New("Wrong name of the event")
-		}
-	*/
-
-	// Decode the logs importing the abi of the contract
 	return nil, nil
 }
 
