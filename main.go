@@ -10,6 +10,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/ethclient"
 
+	adminap "./adminAP"
 	clientap "./clientAP"
 	accessControlContract "./contracts/accessContract"
 	balanceContract "./contracts/balanceContract"
@@ -226,6 +227,49 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 
 }
 
+// AdminAP is an access point that the admin user has to introduce new producers
+// in the blockchain
+func (ethclient *EthereumLocal) AdminAP(w http.ResponseWriter, req *http.Request) {
+	if req.URL.Path != "/adminap" {
+		http.Error(w, "404 not found", http.StatusNotFound)
+		return
+	}
+
+	switch req.Method {
+	case "POST":
+		// check the authentication header value
+		username, password, ok := req.BasicAuth()
+		if !ok {
+			http.Error(w, "There is no authentication header in the request", http.StatusBadRequest)
+			fmt.Println("Something is wrong with the authentication header")
+			return
+		}
+		if username != libs.ADMINACCOUNT || password != libs.ADMINPASSWORD {
+			http.Error(w, "Wrong password or user", http.StatusBadRequest)
+		}
+
+		// Process the request of the admin user
+		ethClientArg := &libs.Ethereum{
+			EthereumClient: ethclient.EthereumClient,
+			DataCon:        ethclient.DataCon,
+			AccessCon:      ethclient.AccessCon,
+			BalanceCon:     ethclient.BalanceCon,
+			AdminPrivKey:   ethclient.AdminPrivKey,
+		}
+		err := adminap.ProcessRequest(req, ethClientArg)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		http.Error(w, "200 ok", http.StatusOK)
+
+	default:
+		http.Error(w, "401 Only POST methods are supported", http.StatusBadRequest)
+		fmt.Fprintf(w, "Only Post methods are supported")
+	}
+}
+
+/*************************** MAIN ***************************************/
 func main() {
 	// Initialize the Ethreum client and its contracts
 	myEthereumClient := Init()
@@ -237,6 +281,7 @@ func main() {
 	// Start the server
 	http.HandleFunc("/notify", myEthereumClient.EventListener)
 	http.HandleFunc("/buydata", myEthereumClient.PurchaseData)
+	http.HandleFunc("/adminap", myEthereumClient.AdminAP)
 
 	// HTTP interface in a new subroutine
 	go func() {
