@@ -27,13 +27,13 @@ import (
 /**************************** Contract Addresses *********************************/
 
 // DataContractAddress Address of the contract that holds the event
-var DataContractAddress common.Address = common.HexToAddress("0x4b48bB7a81b5c01Df95F58B7C8504251eb04B670")
+var DataContractAddress common.Address = common.HexToAddress("0xD2577E43bAd82FDB894012Fdf7Bf0caDe73e65Ef")
 
 // AccessControlContractAddress address of the contract that controls the access to the blockchain
-var AccessControlContractAddress common.Address = common.HexToAddress("0x5650D534eeC3A621b271DF1126E40772E4313cC4")
+var AccessControlContractAddress common.Address = common.HexToAddress("0x3c7592697a284E3F9F06Cc1F85bf2216279E1d36")
 
 // BalanceContractAddress address of the contract that holds the purchases
-var BalanceContractAddress common.Address = common.HexToAddress("0xB3Fd3051feA7caa87d400E29ba47e1218A0Ac19A")
+var BalanceContractAddress common.Address = common.HexToAddress("0x48c029C2896C0B3b27bCb714c55203294Db7AdA3")
 
 /********************************************************************************/
 
