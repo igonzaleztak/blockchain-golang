@@ -27,6 +27,7 @@ contract balanceContract
     struct clientVariables 
     {
         mapping(bytes32 => hashVariables) purchases;
+        uint256 purchasesWithoutConfirmation; 
     }
     
     struct hashVariables
@@ -36,12 +37,17 @@ contract balanceContract
         
         // True if the client has already bought an item, false otherwise
         bool alreadyBought;
+        
+        // True if the client confirms the purchase, false otherwise
+        bool confirmation;
     }
     
     
     // User Purchases
     mapping(address => clientVariables) userPurchases;
     
+    // Max number of purchased without confirmation allowed
+    uint256 MAX_PURCHASES = 1; 
     
     // Balance of the owner
     uint256 balance;
@@ -55,6 +61,9 @@ contract balanceContract
     // Event to store the info sent by the owner of the data to the clients 
     // in the blockchain
     event responseNotify(address indexed _addr, bytes32 indexed _hash, bytes32 _txHashOTP);
+    
+    // Indicates that the client has received the confirmation
+    event ackPurchase(address indexed _addr, bytes32 indexed _hash);
     
     
     /************************* Functions **********************************************/
@@ -96,8 +105,15 @@ contract balanceContract
         require(userPurchases[msg.sender].purchases[hash].purchaseInProcess == false
         , "The proccess of this purchase is still on going");
         
+        // Check whether the user is allowed to buy more purchases
+        require(userPurchases[msg.sender].purchasesWithoutConfirmation < MAX_PURCHASES
+        , "There are measurements that has not been confirmed yet");
+        
         // Indicates that the process of the purchase has started
         userPurchases[msg.sender].purchases[hash].purchaseInProcess = true;
+        
+        // Add one to the counter
+        userPurchases[msg.sender].purchasesWithoutConfirmation += 1;
         
         // Emit event indicating that the client has bought a measurement
         emit purchaseNotify(msg.sender, hash, getPriceData(hash));
@@ -124,6 +140,20 @@ contract balanceContract
         
         // Emit event indicating that the admin has sent the OTP to the client
         emit responseNotify(client, hash, txHashOTP);
+    }
+    
+    
+    function confirmData(bytes32 hash) public 
+    {
+        // Check whether the client has bought the measurement or not        
+        require(userPurchases[msg.sender].purchases[hash].alreadyBought == true
+        , "The client has not bought the measurement yet");
+        
+        // Substract one from the purchase counter of the client
+        userPurchases[msg.sender].purchasesWithoutConfirmation -= 1;
+        
+        // Emit event indicating the acknowledge of the measurement
+        emit ackPurchase(msg.sender, hash);
     }
     
     
