@@ -2,21 +2,13 @@ package libs
 
 import (
 	"crypto/ecdsa"
-	"encoding/hex"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"regexp"
 
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
-
-	cipherlib "../cipherLibs"
-
-	accessControlContract "../contracts/accessContract"
-	dataContract "../contracts/dataContract"
 )
 
 /***************** Global variables *********************/
@@ -31,13 +23,6 @@ const ADMINPASSWORD string = "1"
 const FOLDER string = "/home/ivan/Desktop/demoPOA2/new-node/keystore/"
 
 /******************** Functions ************************/
-
-//String2Bytes32 gets a string and converts it to [32]byte
-func String2Bytes32(str string) [32]byte {
-	aux := [32]byte{}
-	copy(aux[:], []byte(str))
-	return aux
-}
 
 // GetAddrAdminAccount returns the address of the admin account
 // so it can be used in othre packages
@@ -97,50 +82,4 @@ func GetPrivateKey(address, password string) (*ecdsa.PrivateKey, error) {
 
 	return keyWrapper.PrivateKey, nil
 
-}
-
-// CheckAccess checks whether the sensor that produced
-// the event has access to the blockchain or not
-func CheckAccess(
-	client *ethclient.Client,
-	adminPrivKey *ecdsa.PrivateKey,
-	dataContract *dataContract.DataLedgerContract,
-	accessContract *accessControlContract.AccessControlContract,
-	producerID string,
-	cipherText string) (bool, *ecdsa.PrivateKey, error) {
-
-	// Get the address of the producer from the blockchain
-	address, err := accessContract.GetAddress(nil, String2Bytes32(producerID))
-	if err != nil {
-		return false, nil, err
-	}
-
-	// Check if the address is 0
-	if address == common.HexToAddress("0x0") {
-		return false, nil, errors.New("There is not a producer with that address")
-	}
-
-	// Convert the address to string
-	addressStr := address.Hex()
-
-	fmt.Printf("\nEvent received from: %s\n", addressStr)
-
-	// Decrypt the passphrase using the private key of the admin
-	cipherTextBytes, err := hex.DecodeString(cipherText[2:])
-	if err != nil {
-		return false, nil, err
-	}
-	passphraseBytes, err := cipherlib.DecryptWithPrivateKey(adminPrivKey, cipherTextBytes)
-	if err != nil {
-		return false, nil, err
-	}
-
-	// Get the private Key of the producer account
-	producerPrivKey, err := GetPrivateKey(addressStr[2:], string(passphraseBytes))
-	if err != nil {
-		return false, nil, err
-	}
-
-	fmt.Printf("\nThe account %s logged in the blockchain and introduced the following data\n", addressStr)
-	return true, producerPrivKey, nil
 }
