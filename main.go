@@ -20,9 +20,6 @@ import (
 
 /***************** Global variables *********************/
 
-// GethPath stores the path to the IPC port of the ethereum node
-const GethPath string = "/home/ivan/Desktop/demoPOA2/new-node/geth.ipc"
-
 // EthereumLocal is a struct that holds the values attached to the blockchain
 type EthereumLocal libs.Ethereum
 
@@ -32,7 +29,7 @@ type EthereumLocal libs.Ethereum
 func Init() *EthereumLocal {
 
 	// Connect to the IPC endpoint of the Ethereum node
-	client, err := ethclient.Dial(GethPath)
+	client, err := ethclient.Dial(libs.GethPath)
 	if err != nil {
 		log.Fatal(err)
 	}

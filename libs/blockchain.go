@@ -18,6 +18,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 
+	config "../config"
 	accessControlContract "../contracts/accessContract"
 	balanceContract "../contracts/balanceContract"
 	dataContract "../contracts/dataContract"
@@ -26,14 +27,17 @@ import (
 
 /**************************** Contract Addresses *********************************/
 
+// GethPath stores the path to the IPC port of the ethereum node
+var GethPath string = config.ReadConfiguration().EthereumPath
+
 // DataContractAddress Address of the contract that holds the event
-var DataContractAddress common.Address = common.HexToAddress("0xD2577E43bAd82FDB894012Fdf7Bf0caDe73e65Ef")
+var DataContractAddress common.Address = config.ReadConfiguration().DataContractAddress
 
 // AccessControlContractAddress address of the contract that controls the access to the blockchain
-var AccessControlContractAddress common.Address = common.HexToAddress("0x3c7592697a284E3F9F06Cc1F85bf2216279E1d36")
+var AccessControlContractAddress common.Address = config.ReadConfiguration().AccessContractAddress
 
 // BalanceContractAddress address of the contract that holds the purchases
-var BalanceContractAddress common.Address = common.HexToAddress("0x48c029C2896C0B3b27bCb714c55203294Db7AdA3")
+var BalanceContractAddress common.Address = config.ReadConfiguration().BalanceContractAddress
 
 /********************************************************************************/
 
@@ -149,11 +153,30 @@ func ReadEventsFromBalanceContract(ethclient *Ethereum, nameEvent string, filter
 		return nil, errors.New("Not match found")
 
 	case "responseNotify":
+		// Iterate through the log to obtain the events
+		for _, vLog := range logs {
+
+			// Compare the index of the log with the one that it should be
+			if vLog.Topics[0].Hex() == logIndex.Hex() {
+
+				// Get the elements of the event which are indexed.
+				// In this case there are to elements: _addr and _hash.
+				// The other elements are stored in vLog.Data.
+				addrLog := common.HexToAddress(vLog.Topics[1].Hex())
+				hashLog := vLog.Topics[2]
+
+				// Filter the events by Hash and address
+				hashToCompare, _ := HexStringToBytes32(filter["Hash"].(string))
+				if strings.ToLower(addrLog.Hex()) == filter["Addr"] && hashLog == hashToCompare {
+					return &vLog, nil
+				}
+			}
+		}
+		return nil, errors.New("Not match found")
+
 	default:
 		return nil, errors.New("Wrong name of the event")
 	}
-
-	return nil, nil
 }
 
 //InteractBlockchain stores the measurement in the blockchain
@@ -193,6 +216,7 @@ func InteractBlockchain(
 	// Set the price of the product
 	price := big.NewInt(2)
 	_, err = ethclient.BalanceCon.SetPriceData(auth, hash32Byte, price)
+
 	if err != nil {
 		return err
 	}
