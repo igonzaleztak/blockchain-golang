@@ -29,7 +29,7 @@ type EthereumLocal libs.Ethereum
 func Init() *EthereumLocal {
 
 	// Connect to the IPC endpoint of the Ethereum node
-	client, err := ethclient.Dial(libs.GethPath)
+	client, err := ethclient.Dial(libs.GethPathIPC)
 	if err != nil {
 		log.Fatal(err)
 	}
