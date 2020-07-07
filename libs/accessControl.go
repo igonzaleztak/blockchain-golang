@@ -17,7 +17,7 @@ import (
 
 	accessControlContract "../contracts/accessContract"
 	dataContract "../contracts/dataContract"
-	libs "./libs"
+	libs "../libs"
 )
 
 /***************** Global variables *********************/
