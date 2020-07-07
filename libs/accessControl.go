@@ -28,7 +28,7 @@ const ADMINACCOUNT string = "21A018606490C031A8c02Bb6b992D8AE44ADD37f"
 const ADMINPASSWORD string = "1"
 
 // FOLDER where the private keys of the accounts are stored
-var FOLDER string = GethPath
+var FOLDER string = GethPath + "keystore"
 
 /******************** Functions ************************/
 

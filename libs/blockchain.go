@@ -28,7 +28,7 @@ import (
 /**************************** Contract Addresses *********************************/
 
 // GethPath stores the path to the IPC port of the ethereum node
-var GethPath string = config.ReadConfiguration().EthereumPath
+var GethPath string = config.ReadConfiguration().EthereumPath + "geth.ipc"
 
 // DataContractAddress Address of the contract that holds the event
 var DataContractAddress common.Address = config.ReadConfiguration().DataContractAddress
