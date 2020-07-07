@@ -17,6 +17,7 @@ import (
 
 	accessControlContract "../contracts/accessContract"
 	dataContract "../contracts/dataContract"
+	libs "./libs"
 )
 
 /***************** Global variables *********************/
@@ -28,7 +29,7 @@ const ADMINACCOUNT string = "21A018606490C031A8c02Bb6b992D8AE44ADD37f"
 const ADMINPASSWORD string = "1"
 
 // FOLDER where the private keys of the accounts are stored
-const FOLDER string = "/home/ivan/Desktop/demoPOA2/new-node/keystore/"
+const FOLDER string = libs.GethPath
 
 /******************** Functions ************************/
 
