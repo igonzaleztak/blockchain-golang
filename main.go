@@ -150,17 +150,20 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 	case "POST":
 
 		// Create a map with body of the message
-		var body map[string]interface{}
+		var auxBody map[string]interface{}
 
 		// Create a map with the header of the message
 		header := req.Header
 
 		// Read the body of the message
-		err := json.NewDecoder(req.Body).Decode(&body)
+		err := json.NewDecoder(req.Body).Decode(&auxBody)
 		if err != nil {
 			fmt.Println(err)
-
 		}
+
+		// Insert all the measurements into a field
+		// called "attributes"
+		body := libs.PrepareInputData(auxBody)
 
 		// Get the ID of the producer from the body
 		producerID := body["attributes"].(map[string]interface{})["value"].(map[string]interface{})["sensorID"].(map[string]interface{})["value"].(string)
@@ -181,7 +184,7 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 			fmt.Println(err)
 		}
 
-		if hasAccess {
+		if hasAccess && err == nil {
 			// Prepare the data that will be stored in the blockchain
 			dataBlockchain := libs.PrepareData(header, body)
 			libs.PrettyPint(dataBlockchain)

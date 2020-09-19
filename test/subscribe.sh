@@ -8,8 +8,8 @@ curl -v localhost:1026/v2/subscriptions -s -S --header 'Content-type: applicatio
   "subject": {
     "entities": [
       {
-        "id": "Room1",
-        "type": "Room"
+        "id": "urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:1001",
+        "type": "TrafficFlowObserved"
       }
     ],
     "condition": {

@@ -125,6 +125,8 @@ func CheckAccess(
 
 	fmt.Printf("\nEvent received from: %s\n", addressStr)
 
+	fmt.Println(cipherText)
+
 	// Decrypt the passphrase using the private key of the admin
 	cipherTextBytes, err := hex.DecodeString(cipherText[2:])
 	if err != nil {
