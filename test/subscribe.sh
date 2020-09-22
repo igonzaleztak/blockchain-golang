@@ -2,13 +2,13 @@
 #consumer="http://192.168.163.108:5050/notify"
 #"192.168.163.115"#
 
-curl -v localhost:1026/v2/subscriptions -s -S --header 'Content-type: application/json' --header 'Accept: application/json' --header 'Fiware-Service:RoomsControl' --header 'Fiware-ServicePath:/house1' -d @- <<EOF
+curl -v localhost:1026/v2/subscriptions -s -S --header 'Content-type: application/json' --header 'Accept: application/json' --header 'Fiware-Service:SmartSantander' --header 'Fiware-ServicePath:/TrafficFlowObserved' -d @- <<EOF
 {
   "description": "A subscription to get the temperature info about Room1",
   "subject": {
     "entities": [
       {
-        "id": "urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:1001",
+        "idPattern": ".*",
         "type": "TrafficFlowObserved"
       }
     ],
