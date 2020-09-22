@@ -68,8 +68,6 @@ func PostData(header http.Header, bodyOrion map[string]interface{}) error {
 		return err
 	}
 
-	fmt.Println(statusCode)
-
 	// 422 status code indicates that the entity has already been created.
 	// Therefore, the url and the method must change to append the new measurement
 	if statusCode == 422 {
