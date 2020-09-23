@@ -9,6 +9,7 @@ import (
 	"log"
 	"math/big"
 	"strings"
+	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -27,13 +28,13 @@ import (
 /**************************** Contract Addresses *********************************/
 
 // DataContractAddress Address of the contract that holds the event
-var DataContractAddress common.Address = common.HexToAddress("0xD2577E43bAd82FDB894012Fdf7Bf0caDe73e65Ef")
+var DataContractAddress common.Address = common.HexToAddress("0xD39bcC1050e6865F78f6236A46b451f4537D18Af")
 
 // AccessControlContractAddress address of the contract that controls the access to the blockchain
-var AccessControlContractAddress common.Address = common.HexToAddress("0x3c7592697a284E3F9F06Cc1F85bf2216279E1d36")
+var AccessControlContractAddress common.Address = common.HexToAddress("0x31552aA24bbF55DDD5D786df4cf18d60B482f265")
 
 // BalanceContractAddress address of the contract that holds the purchases
-var BalanceContractAddress common.Address = common.HexToAddress("0x48c029C2896C0B3b27bCb714c55203294Db7AdA3")
+var BalanceContractAddress common.Address = common.HexToAddress("0x20Fc8257396E9889a349e8B307713a24f01DcA1D")
 
 /********************************************************************************/
 
@@ -129,7 +130,6 @@ func ReadEventsFromBalanceContract(ethclient *Ethereum, nameEvent string, filter
 	case "purchaseNotify":
 		// Iterate through the log to obtain the events
 		for _, vLog := range logs {
-
 			// Compare the index of the log with the one that it should be
 			if vLog.Topics[0].Hex() == logIndex.Hex() {
 
@@ -169,11 +169,13 @@ func InteractBlockchain(
 	auth.GasLimit = uint64(400000)
 	auth.GasPrice = big.NewInt(0)
 
-	// Send the transaction
+	// Convert the hash to [32]byte
 	hash32Byte, err := HexStringToBytes32(dataBlockchain["hash"].(string))
 	if err != nil {
 		return err
 	}
+
+	// Store the info of the measurement in the Blockchain
 	_, err = ethclient.DataCon.StoreInfo(auth,
 		hash32Byte,
 		dataBlockchain["url"].(string),
@@ -184,18 +186,72 @@ func InteractBlockchain(
 		return err
 	}
 
-	// Set the parameters of the new transaction to set the price of the product
+	// Check if the data has been stored in the contract
+	// Wait until the value is received or the loop
+	// works for more than 15 seconds
+	currentTime := time.Now()
+	for {
+		var data1, data2 string
+		data1, data2, err := ethclient.DataCon.RetrieveInfo(nil, hash32Byte)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+
+		if data1 != "" {
+			fmt.Println()
+			fmt.Println(data1)
+			fmt.Println(data2)
+			fmt.Println()
+			break
+		}
+
+		secondsPassed := time.Now().Sub(currentTime)
+		if secondsPassed > 15*time.Second {
+			fmt.Println("Could not check whether the data was introduced in the Blockchain")
+			return errors.New("Could not check whether the data was introduced in the Blockchain")
+		}
+	}
+
+	// Set the parameters of the transaction to set the price of the event
 	auth = bind.NewKeyedTransactor(ethclient.AdminPrivKey)
 	auth.Value = big.NewInt(0)
 	auth.GasLimit = uint64(400000)
 	auth.GasPrice = big.NewInt(0)
 
-	// Set the price of the product
+	// Send the transaction with the price of the product
 	price := big.NewInt(2)
 	_, err = ethclient.BalanceCon.SetPriceData(auth, hash32Byte, price)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
+
+	// Check whether the price has been set properly or the funciton has been in the
+	// loop for more than 15 seconds
+	currentTime = time.Now()
+	for {
+		var priceObtained *big.Int
+		priceObtained, err = ethclient.BalanceCon.GetPriceData(nil, hash32Byte)
+		if err != nil {
+			return err
+		}
+
+		if priceObtained.Int64() != 0 {
+			if priceObtained.Int64() != price.Int64() {
+				return errors.New("Price not set poperly")
+			}
+			fmt.Printf("\nPrice set to %d\n\n", price)
+			break
+		}
+
+		secondsPassed := time.Now().Sub(currentTime)
+		if secondsPassed > 15*time.Second {
+			fmt.Println("Could not check whether the price was set properly")
+			return errors.New("Could not check whether the price was set properly")
+		}
+	}
+
 	return nil
 }
 

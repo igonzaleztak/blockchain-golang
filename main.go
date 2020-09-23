@@ -205,6 +205,13 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 				AdminPrivKey:   ethclient.AdminPrivKey,
 			}
 			err = libs.InteractBlockchain(dataBlockchain, producerPrivKey, ethClientArg)
+			if err != nil {
+				fmt.Printf("\n")
+				fmt.Println(err)
+				fmt.Printf("\n")
+				http.Error(w, "401 Could not introduce the event in the blockchain due to: "+err.Error(), http.StatusBadRequest)
+				return
+			}
 			fmt.Println("The event has been successfully stored in the blockchain")
 		}
 

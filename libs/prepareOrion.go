@@ -93,7 +93,7 @@ func PostData(header http.Header, bodyOrion map[string]interface{}) error {
 
 	if float32(statusCode)/200 < 1 && float32(statusCode)/200 >= 1.5 {
 		fmt.Println(statusCode)
-		return errors.New("The status code received is not the expected one: " + string(statusCode))
+		return errors.New("The status code received is not the expected one: " + fmt.Sprintf("%d", statusCode))
 	}
 
 	return nil

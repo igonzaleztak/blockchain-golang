@@ -2,7 +2,7 @@
 #consumer="http://192.168.163.108:5050/notify"
 #"192.168.163.115"#
 
-curl -v localhost:1026/v2/subscriptions -s -S --header 'Content-type: application/json' --header 'Accept: application/json' --header 'Fiware-Service:SmartSantander' --header 'Fiware-ServicePath:/TrafficFlowObserved' -d @- <<EOF
+curl -v localhost:1026/v2/subscriptions -s -S --header 'Content-type: application/json' --header 'Accept: application/json' --header 'Fiware-Service:smartsantander' --header 'Fiware-ServicePath:/trafficflowobserved' -d @- <<EOF
 {
   "description": "A subscription to get the temperature info about Room1",
   "subject": {
