@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"math/big"
 	"net/http"
 
@@ -16,6 +15,7 @@ import (
 	balanceContract "./contracts/balanceContract"
 	dataContract "./contracts/dataContract"
 	libs "./libs"
+	logger "./logger"
 )
 
 /***************** Global variables *********************/
@@ -34,19 +34,19 @@ func Init() *EthereumLocal {
 	// Connect to the IPC endpoint of the Ethereum node
 	client, err := ethclient.Dial(GethPath)
 	if err != nil {
-		log.Fatal(err)
+		logger.Log.Fatal(err)
 	}
 
 	// Initialize the data contract
 	dataContract, err := dataContract.NewDataLedgerContract(libs.DataContractAddress, client)
 	if err != nil {
-		log.Fatal(err)
+		logger.Log.Fatal(err)
 	}
 
 	// Get the private key of the admin user to set information in the contracts
 	adminPrivateKey, err := libs.GetPrivateKey("", "")
 	if err != nil {
-		log.Fatal(err)
+		logger.Log.Fatal(err)
 	}
 
 	// Set the parameters of the transaction
@@ -58,29 +58,25 @@ func Init() *EthereumLocal {
 	// Set the address of the access control contract in the data contract
 	_, err = dataContract.SetAddress(auth, libs.AccessControlContractAddress)
 	if err != nil {
-		log.Fatal(err)
+		logger.Log.Fatal(err)
 	}
-
-	// Deploy contract example
-	//address, _, accessContract, err := accessControlContract.DeployAccessControlContract(auth, client)
-	//fmt.Println(address.Hex())
 
 	// Initialize the accessControlContract
 	accessContract, err := accessControlContract.NewAccessControlContract(libs.AccessControlContractAddress, client)
 	if err != nil {
-		log.Fatal(err)
+		logger.Log.Fatal(err)
 	}
 
 	// Initialize the balanceContract
 	balanceContract, err := balanceContract.NewBalanceContract(libs.BalanceContractAddress, client)
 	if err != nil {
-		log.Fatal(err)
+		logger.Log.Fatal(err)
 	}
 
 	// Set the data contract address in the balance contract
 	_, err = balanceContract.SetAddress(auth, libs.DataContractAddress)
 	if err != nil {
-		log.Fatal(err)
+		logger.Log.Fatal(err)
 	}
 
 	// Declaration of the struct that stores
@@ -149,6 +145,8 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 	switch req.Method {
 	case "POST":
 
+		logger.Log.Printf("Request received from %s\n", req.Host)
+
 		// Create a map with body of the message
 		var auxBody map[string]interface{}
 
@@ -161,9 +159,14 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 			fmt.Println(err)
 		}
 
+		logger.Log.Printf("Header of the request: \n%s \n", fmt.Sprintln(header))
+		logger.Log.Printf("Body of the request: \n%s \n", fmt.Sprintln(auxBody))
+
 		// Insert all the measurements into a field
 		// called "attributes"
 		body := libs.PrepareInputData(auxBody)
+
+		logger.Log.Printf("Formatted Body:\n%s \n", fmt.Sprintln(body))
 
 		// Get the ID of the producer from the body
 		producerID := body["attributes"].(map[string]interface{})["value"].(map[string]interface{})["sensorID"].(map[string]interface{})["value"].(string)
@@ -188,11 +191,11 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 			// Prepare the data that will be stored in the blockchain
 			dataBlockchain := libs.PrepareData(header, body)
 			libs.PrettyPint(dataBlockchain)
-
+			logger.Log.Printf("Data that will be stored in the Blockchain: \n%s\n", fmt.Sprintln(dataBlockchain))
 			// Prepare the data that will be sent to Orion
 			err = libs.SendDataOrion(header, body, dataBlockchain["hash"].(string))
 			if err != nil {
-				fmt.Println(err)
+				logger.Log.Printf("%s\n", fmt.Sprintln(err))
 				http.Error(w, "401 Could not introduce the event in the blockchain due to: "+err.Error(), http.StatusBadRequest)
 			}
 
@@ -241,14 +244,18 @@ func (ethclient *EthereumLocal) AdminAP(w http.ResponseWriter, req *http.Request
 
 	switch req.Method {
 	case "POST":
+
+		logger.Log.Printf("Request received from %s\n", req.Host)
+
 		// check the authentication header value
 		username, password, ok := req.BasicAuth()
 		if !ok {
 			http.Error(w, "There is no authentication header in the request", http.StatusBadRequest)
-			fmt.Println("Something is wrong with the authentication header")
+			logger.Log.Printf("Could not read the authentication header of the request\n")
 			return
 		}
 		if username != libs.ADMINACCOUNT || password != libs.ADMINPASSWORD {
+			logger.Log.Printf("Wrong user or pasword")
 			http.Error(w, "Wrong password or user", http.StatusBadRequest)
 		}
 
@@ -281,6 +288,11 @@ func main() {
 	fmt.Println("Starting HTTP server on port 5051")
 	fmt.Println("Starting HTTPS server on port 8051")
 
+	// Log
+	logger.Log.Printf("Starting HTTP server on port 5051\n")
+	logger.Log.Printf("Starting HTTP server on port 8051\n")
+	logger.Log.Printf("---------------------------------\n\n")
+
 	// Start the server
 	http.HandleFunc("/notify", myEthereumClient.EventListener)
 	http.HandleFunc("/buydata", myEthereumClient.PurchaseData)
@@ -290,14 +302,14 @@ func main() {
 	go func() {
 		err := http.ListenAndServe(":5051", nil)
 		if err != nil {
-			log.Fatal("ListenAndServe ", err)
+			logger.Log.Fatal(err)
 		}
 	}()
 
 	// HTTPS interface
 	err := http.ListenAndServeTLS(":8051", "./certs/public-cert.pem", "./certs/private-key.pem", nil)
 	if err != nil {
-		log.Fatal("ListenAndServe ", err)
+		logger.Log.Fatal(err)
 	}
 
 }

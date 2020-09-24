@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	logs "../logger"
 )
 
 /***************** Global variables *********************/
@@ -48,6 +50,9 @@ func DoRequestOrion(url string, method string, body []byte, header http.Header) 
 
 	defer resp.Body.Close()
 
+	logs.Log.Printf("Request sent to Orion\n%s\n", fmt.Sprintln(body))
+	logs.Log.Printf("Orion Response\n%s\n", fmt.Sprintln(resp.StatusCode))
+
 	// Get the status code of the request
 	return resp.StatusCode, nil
 
@@ -61,10 +66,13 @@ func PostData(header http.Header, bodyOrion map[string]interface{}) error {
 		return errors.New("Could not parse the request to JSON")
 	}
 
+	fmt.Printf("\n\n %s \n\n", jsonBody)
+
 	// Do the request to
 	var statusCode int
 	statusCode, err = DoRequestOrion(OrionHost, "POST", jsonBody, header)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 
@@ -87,6 +95,7 @@ func PostData(header http.Header, bodyOrion map[string]interface{}) error {
 		// Send the PATCH method that updates the value of the measurement
 		statusCode, err = DoRequestOrion(url, "PATCH", jsonBody, header)
 		if err != nil {
+			fmt.Println(err)
 			return err
 		}
 	}

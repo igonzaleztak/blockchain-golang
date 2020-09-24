@@ -26,7 +26,7 @@ func HashData(body map[string]interface{}, fiwareService []string, fiwareService
 
 	// Delete the fields cipher and description from this structure
 	delete(bodyAux, "cipher")
-	delete(bodyAux, "Description")
+	delete(bodyAux, "description")
 
 	// Include the heades Fiware-Service and Fiware-Servicepath
 	bodyAux["Fiware-Service"] = ConvertStringArrayToString(fiwareService)

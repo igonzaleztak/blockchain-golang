@@ -21,7 +21,7 @@ func PrepareInputData(body map[string]interface{}) map[string]interface{} {
 	delete(body, "id")
 	delete(body, "type")
 	delete(body, "description")
-	delete(body, "ciper")
+	delete(body, "cipher")
 
 	// Group the rest of the fields into a new field called
 	// attributes.
