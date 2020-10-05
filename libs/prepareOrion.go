@@ -50,9 +50,6 @@ func DoRequestOrion(url string, method string, body []byte, header http.Header) 
 
 	defer resp.Body.Close()
 
-	logs.Log.Printf("Request sent to Orion\n%s\n", fmt.Sprintln(body))
-	logs.Log.Printf("Orion Response\n%s\n", fmt.Sprintln(resp.StatusCode))
-
 	// Get the status code of the request
 	return resp.StatusCode, nil
 
@@ -100,8 +97,12 @@ func PostData(header http.Header, bodyOrion map[string]interface{}) error {
 		}
 	}
 
+	h := bodyOrion["attributes"].(map[string]interface{})["metadata"].(map[string]interface{})["hash"].(map[string]interface{})["value"].(string)
+	logs.Log.Printf("Orion Response(%s)\n%s\n", h, fmt.Sprintln(statusCode))
+
 	if float32(statusCode)/200 < 1 && float32(statusCode)/200 >= 1.5 {
 		fmt.Println(statusCode)
+		logs.Log.Printf("\nThe status code received is not the expected one: %d\n", statusCode)
 		return errors.New("The status code received is not the expected one: " + fmt.Sprintf("%d", statusCode))
 	}
 
@@ -128,6 +129,8 @@ func SendDataOrion(header http.Header, body map[string]interface{}, hashString s
 	delete(bodyOrion, "description")
 	delete(bodyOrion, "Fiware-Service")
 	delete(bodyOrion, "Fiware-Servicepath")
+
+	logs.Log.Printf("Request sent to Orion\n%s\n", fmt.Sprintln(bodyOrion))
 
 	// Post the data to Orion
 	var err = PostData(header, bodyOrion)

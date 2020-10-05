@@ -8,7 +8,7 @@ curl -v localhost:1026/v2/subscriptions -s -S --header 'Content-type: applicatio
   "subject": {
     "entities": [
       {
-        "idPattern": ".*",
+        "id": "urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:1022",
         "type": "TrafficFlowObserved"
       }
     ],
@@ -20,7 +20,7 @@ curl -v localhost:1026/v2/subscriptions -s -S --header 'Content-type: applicatio
     "http": {
       "url": "http://localhost:5050/notify"
     },
-    "attrs": ["attributes"],
+    "attrs" : ["attributes"],
     "metadata": ["hash"]
   },
   "expires": "2040-01-01T14:00:00.00Z",
