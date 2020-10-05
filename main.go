@@ -92,6 +92,7 @@ func Init() *EthereumLocal {
 	return myEthereumClient
 }
 
+/*
 // PurchaseData Handles the purchases of the client
 func (ethclient *EthereumLocal) PurchaseData(w http.ResponseWriter, req *http.Request) {
 	if req.URL.Path != "/buydata" {
@@ -134,6 +135,7 @@ func (ethclient *EthereumLocal) PurchaseData(w http.ResponseWriter, req *http.Re
 	}
 
 }
+*/
 
 //EventListener listens for new events on /notify and process them
 func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.Request) {
@@ -295,8 +297,18 @@ func main() {
 
 	// Start the server
 	http.HandleFunc("/notify", myEthereumClient.EventListener)
-	http.HandleFunc("/buydata", myEthereumClient.PurchaseData)
+	//http.HandleFunc("/buydata", myEthereumClient.PurchaseData)
 	http.HandleFunc("/adminap", myEthereumClient.AdminAP)
+
+	// Event listener
+	ethClientArg := &libs.Ethereum{
+		EthereumClient: myEthereumClient.EthereumClient,
+		DataCon:        myEthereumClient.DataCon,
+		AccessCon:      myEthereumClient.AccessCon,
+		BalanceCon:     myEthereumClient.BalanceCon,
+		AdminPrivKey:   myEthereumClient.AdminPrivKey,
+	}
+	go clientap.ListenToCustomerPurchases(ethClientArg)
 
 	// HTTP interface in a new subroutine
 	go func() {

@@ -1,16 +1,20 @@
 package clientap
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"math/big"
 
+	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 
 	cipher "../cipherLibs"
@@ -102,74 +106,34 @@ func sendTransactionSecretRoutine(response chan ResponseSubroutine,
 
 // ProccessClientPurchase Processes the purchases of the client
 // and returns the measurements to him
-func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{}) ([]byte, error) {
-	// Get the hash that the client wants to purchase
-	var hash string = body["_hash"].(string)
-
-	// Get the account that made the purchase
-	var account string = body["_account"].(string)
-
-	// address formatted
-	addrFormatted := common.HexToAddress(account[2:])
-
-	// Get the signature
-	var signature string = body["_signature"].(string)
-
-	// Get the hash that was signed
-	signedMessage, err := getSignedMessage(account, hash)
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-
-	// Convert the signature to bytes
-	signatureBytes, err := hex.DecodeString(signature[2:])
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
+func ProccessClientPurchase(ethClient *libs.Ethereum, addrFormatted common.Address, hashBytes32 common.Hash) error {
 
 	// Get the publicKey of the client
 	clientPubKey, err := ethClient.AccessCon.GetPubKey(nil, addrFormatted)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return err
 	}
 
 	// Convert the public key to []byte
 	clientPubKeyBytes, err := hex.DecodeString("04" + clientPubKey)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
-	}
-
-	// Verify the signature
-	var isProperlySigned bool = cipher.VerifySignature(clientPubKeyBytes, signedMessage, signatureBytes)
-	if !isProperlySigned {
-		return nil, errors.New("Message is not properly signed")
-	}
-	// Check if there is an event showing that the client
-	// has purchased the information.
-	filter := map[string]interface{}{"Addr": account, "Hash": hash[2:]}
-	_, err = libs.ReadEventsFromBalanceContract(ethClient, "purchaseNotify", filter)
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return err
 	}
 
 	// error != nil means that there is at least one event that matched with the filter
 	// Check if the data has already been given to the client:
 	// 	- True:	 If the data has not been given to the client
 	// 	- False: If the data has already been given to the client
-	hashBytes32, _ := libs.HexStringToBytes32(hash[2:])
 	HasToBePaid, err := ethClient.BalanceCon.CheckHasPaid(nil, addrFormatted, hashBytes32)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return err
 	}
 
 	if !HasToBePaid {
-		return nil, errors.New("The measurement has already been given")
+		return errors.New("The measurement has already been given")
 	}
 
 	// Generate a new key that will be used in the symmetric encryption
@@ -186,21 +150,21 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 	url, _, err := ethClient.DataCon.RetrieveInfo(nil, hashBytes32)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return err
 	}
 
 	// Get the data from the REST server
 	data, err := libs.GetDataFromRestServer(url)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return err
 	}
 
 	// Encrypt the measurement with the symmetric key
 	ciphertext, err := cipher.SymmetricEncryption(randomKey, data)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return err
 	}
 
 	// Check if the encryption works
@@ -214,7 +178,7 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 		ciphertext)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return err
 	}
 
 	// Read the responses from the channels
@@ -222,7 +186,7 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 	txSecretHash := responseSecret.txHash
 	if responseSecret.Error != nil {
 		fmt.Println(responseSecret.Error)
-		return nil, responseSecret.Error
+		return responseSecret.Error
 	}
 
 	// Close the channel
@@ -241,14 +205,58 @@ func ProccessClientPurchase(ethClient *libs.Ethereum, body map[string]interface{
 		libs.ByteToByte32(txSecretHash),
 		libs.ByteToByte32(txCiphertextHash))
 
-	// Prepare the response that will be send to the client
-	response := &ResponseClient{TxSecretHash: txSecretHash, TxDataHash: txCiphertextHash}
-	responseJSON, err := json.Marshal(response)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return err
 	}
 
-	return responseJSON, nil
+	fmt.Printf("\nMeasurement with Hash: %s sent to %s\n", fmt.Sprintln(hashBytes32.Hex()), fmt.Sprintln(addrFormatted.Hex()))
 
+	return nil
+
+}
+
+// ListenToCustomerPurchases listens the purchases of the clients and process them
+func ListenToCustomerPurchases(ethereumClient *libs.Ethereum) {
+	// Create query for filtering
+	query := ethereum.FilterQuery{
+		Addresses: []common.Address{
+			libs.BalanceContractAddress,
+		},
+	}
+
+	logs := make(chan types.Log)
+	sub, err := ethereumClient.EthereumClient.SubscribeFilterLogs(context.Background(), query, logs)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Get the index associated to 'purchaseNotify'
+	logPurchaseNotify := []byte("purchaseNotify(address,bytes32,uint256)")
+	logIndex := crypto.Keccak256Hash(logPurchaseNotify)
+
+	// Listen the new events produced in the Balance contract
+	for {
+		select {
+		case err := <-sub.Err():
+			log.Fatal(err)
+		case vLog := <-logs:
+			// Check if the name of the event is "pruchaseNotify"
+			if logIndex == vLog.Topics[0] {
+				// Read the Ethereum adddress and the hash of the event
+				addrLog := common.HexToAddress(vLog.Topics[1].Hex())
+				hashLog := vLog.Topics[2]
+
+				fmt.Printf("\nEvent produced by: %s at %s\n", fmt.Sprintln(addrLog.Hex()), fmt.Sprintln(hashLog.Hex()))
+
+				// Process purchase
+				go func() {
+					err := ProccessClientPurchase(ethereumClient, addrLog, hashLog)
+					if err != nil {
+						fmt.Println(err)
+					}
+				}()
+			}
+		}
+	}
 }
