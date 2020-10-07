@@ -28,13 +28,13 @@ import (
 /**************************** Contract Addresses *********************************/
 
 // DataContractAddress Address of the contract that holds the event
-var DataContractAddress common.Address = common.HexToAddress("0xD39bcC1050e6865F78f6236A46b451f4537D18Af")
+var DataContractAddress common.Address = common.HexToAddress("0x3c7592697a284E3F9F06Cc1F85bf2216279E1d36")
 
 // AccessControlContractAddress address of the contract that controls the access to the blockchain
-var AccessControlContractAddress common.Address = common.HexToAddress("0x31552aA24bbF55DDD5D786df4cf18d60B482f265")
+var AccessControlContractAddress common.Address = common.HexToAddress("0xD2577E43bAd82FDB894012Fdf7Bf0caDe73e65Ef")
 
 // BalanceContractAddress address of the contract that holds the purchases
-var BalanceContractAddress common.Address = common.HexToAddress("0x20Fc8257396E9889a349e8B307713a24f01DcA1D")
+var BalanceContractAddress common.Address = common.HexToAddress("0x48c029C2896C0B3b27bCb714c55203294Db7AdA3")
 
 /********************************************************************************/
 
@@ -218,39 +218,6 @@ func InteractBlockchain(
 	auth.Value = big.NewInt(0)
 	auth.GasLimit = uint64(400000)
 	auth.GasPrice = big.NewInt(0)
-
-	// Send the transaction with the price of the product
-	price := big.NewInt(2)
-	_, err = ethclient.BalanceCon.SetPriceData(auth, hash32Byte, price)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	// Check whether the price has been set properly or the funciton has been in the
-	// loop for more than 15 seconds
-	currentTime = time.Now()
-	for {
-		var priceObtained *big.Int
-		priceObtained, err = ethclient.BalanceCon.GetPriceData(nil, hash32Byte)
-		if err != nil {
-			return err
-		}
-
-		if priceObtained.Int64() != 0 {
-			if priceObtained.Int64() != price.Int64() {
-				return errors.New("Price not set poperly")
-			}
-			fmt.Printf("\nPrice set to %d\n\n", price)
-			break
-		}
-
-		secondsPassed := time.Now().Sub(currentTime)
-		if secondsPassed > 15*time.Second {
-			fmt.Println("Could not check whether the price was set properly")
-			return errors.New("Could not check whether the price was set properly")
-		}
-	}
 
 	return nil
 }

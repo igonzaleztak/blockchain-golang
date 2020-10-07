@@ -2,3 +2,13 @@ Starting HTTP server on port 5051
 Starting HTTP server on port 8051
 ---------------------------------
 
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x044e4d79ca30bf1a2219f49dacf8c9a1e56490697444a0f4a4c5fa9bc649d1c32bc07f1d2fdd3adfa1d61657137ab78cc5f40b4996a77fb32453be1c17c90fa9aa060a43a74b9885fdee9dfcc1f59a6fcc0d7d4b71e3edd40218b47847e94af9257a] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[cipher:map[type:String value:0x044e4d79ca30bf1a2219f49dacf8c9a1e56490697444a0f4a4c5fa9bc649d1c32bc07f1d2fdd3adfa1d61657137ab78cc5f40b4996a77fb32453be1c17c90fa9aa060a43a74b9885fdee9dfcc1f59a6fcc0d7d4b71e3edd40218b47847e94af9257a] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 

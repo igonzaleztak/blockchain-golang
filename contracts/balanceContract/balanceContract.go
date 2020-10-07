@@ -27,21 +27,21 @@ var (
 )
 
 // BalanceContractABI is the input ABI used to generate the binding from.
-const BalanceContractABI = "[{\"constant\":false,\"inputs\":[{\"name\":\"hash\",\"type\":\"bytes32\"},{\"name\":\"tokens\",\"type\":\"uint256\"}],\"name\":\"payData\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"hash\",\"type\":\"bytes32\"}],\"name\":\"getPriceData\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"clientAccount\",\"type\":\"address\"},{\"name\":\"hash\",\"type\":\"bytes32\"},{\"name\":\"txHashExchange\",\"type\":\"bytes32\"},{\"name\":\"txHashData\",\"type\":\"bytes32\"}],\"name\":\"sendToClient\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"clientAccount\",\"type\":\"address\"},{\"name\":\"hash\",\"type\":\"bytes32\"}],\"name\":\"checkHasPaid\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"hash\",\"type\":\"bytes32\"},{\"name\":\"price\",\"type\":\"uint256\"}],\"name\":\"setPriceData\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"checkBalance\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_address\",\"type\":\"address\"}],\"name\":\"setAddress\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_hash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"purchaseNotify\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_hash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"_txHashExchange\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"_txHashData\",\"type\":\"bytes32\"}],\"name\":\"responseNotify\",\"type\":\"event\"}]"
+const BalanceContractABI = "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"_subID\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_endTime\",\"type\":\"uint256\"}],\"name\":\"notifyNew\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"_name\",\"type\":\"bytes32\"}],\"name\":\"notifyNewCategory\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"_subID\",\"type\":\"bytes32\"}],\"name\":\"notifyRemove\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"_name\",\"type\":\"bytes32\"}],\"name\":\"notifyRemoveCategory\",\"type\":\"event\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"addNewType\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"deleteSub\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"deleteType\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getAllSubscriptions\",\"outputs\":[{\"internalType\":\"bytes32[]\",\"name\":\"\",\"type\":\"bytes32[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getAllTopics\",\"outputs\":[{\"internalType\":\"bytes32[]\",\"name\":\"\",\"type\":\"bytes32[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"greet\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"subName\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"subscribeTo\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
 
 // BalanceContractFuncSigs maps the 4-byte function signature to its string representation.
 var BalanceContractFuncSigs = map[string]string{
-	"c71daccb": "checkBalance()",
-	"633d4c31": "checkHasPaid(address,bytes32)",
-	"43fa6211": "getPriceData(bytes32)",
-	"30d87a57": "payData(bytes32,uint256)",
-	"4e635503": "sendToClient(address,bytes32,bytes32,bytes32)",
-	"e30081a0": "setAddress(address)",
-	"63c6c2ef": "setPriceData(bytes32,uint256)",
+	"149cde75": "addNewType(bytes32)",
+	"f356cc79": "deleteSub(bytes32)",
+	"1d9de32c": "deleteType(bytes32)",
+	"56eb00a1": "getAllSubscriptions()",
+	"86416f14": "getAllTopics()",
+	"cfae3217": "greet()",
+	"c990824d": "subscribeTo(bytes32,uint256)",
 }
 
 // BalanceContractBin is the compiled bytecode used for deploying new contracts.
-var BalanceContractBin = "0x608060405260048054600160a060020a0319167321a018606490c031a8c02bb6b992d8ae44add37f17905534801561003657600080fd5b5061085d806100466000396000f3006080604052600436106100825763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166330d87a57811461008757806343fa6211146100a45780634e635503146100ce578063633d4c31146100f857806363c6c2ef14610130578063c71daccb1461014b578063e30081a014610160575b600080fd5b34801561009357600080fd5b506100a2600435602435610181565b005b3480156100b057600080fd5b506100bc600435610461565b60408051918252519081900360200190f35b3480156100da57600080fd5b506100a2600160a060020a0360043516602435604435606435610473565b34801561010457600080fd5b5061011c600160a060020a03600435166024356104f1565b604080519115158252519081900360200190f35b34801561013c57600080fd5b5061011c60043560243561051c565b34801561015757600080fd5b506100bc6107d0565b34801561016c57600080fd5b506100a2600160a060020a03600435166107ee565b60008281526003602052604090205460609081908310156101ec576040805160e560020a62461bcd02815260206004820152601160248201527f4e6f7420656e6f75676820746f6b656e73000000000000000000000000000000604482015290519081900360640190fd5b3360009081526001602081815260408084208885529091529091205460ff1615151415610289576040805160e560020a62461bcd02815260206004820152602360248201527f436c69656e7420697320616c726561647920627579696e67207468697320657660448201527f656e740000000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008054604080517fc9776a6d000000000000000000000000000000000000000000000000000000008152600481018890529051600160a060020a039092169263c9776a6d9260248084019382900301818387803b1580156102ea57600080fd5b505af11580156102fe573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604090815281101561032757600080fd5b81019080805164010000000081111561033f57600080fd5b8201602081018481111561035257600080fd5b815164010000000081118282018710171561036c57600080fd5b5050929190602001805164010000000081111561038857600080fd5b8201602081018481111561039b57600080fd5b81516401000000008111828201871017156103b557600080fd5b505080519496509450505090151590506103cb57fe5b815115156103d557fe5b6103de84610461565b15156103e657fe5b600084815260036020818152604080842080546002805490910190553380865260018085528387208b8852855295839020805460ff19169096179095559282529154825190815291518793927f58d967c9a9a54b98c710c372cfe363bb9466f443b58def6976bd0e2dc77af84192908290030190a350505050565b60009081526003602052604090205490565b600454600160a060020a0316331461048757fe5b600160a060020a0384166000818152600160209081526040808320878452825291829020805460ff19169055815185815290810184905281518693927f5561f506afbfc9a46c0e3398234971c86c54a89b00fca057c93dde013fb63198928290030190a350505050565b600160a060020a03919091166000908152600160209081526040808320938352929052205460ff1690565b6004546000906060908190600160a060020a03163314610586576040805160e560020a62461bcd02815260206004820152601360248201527f41646d696e207573657220726571756972656400000000000000000000000000604482015290519081900360640190fd5b60008054604080517fc9776a6d000000000000000000000000000000000000000000000000000000008152600481018990529051600160a060020a039092169263c9776a6d9260248084019382900301818387803b1580156105e757600080fd5b505af11580156105fb573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604090815281101561062457600080fd5b81019080805164010000000081111561063c57600080fd5b8201602081018481111561064f57600080fd5b815164010000000081118282018710171561066957600080fd5b5050929190602001805164010000000081111561068557600080fd5b8201602081018481111561069857600080fd5b81516401000000008111828201871017156106b257600080fd5b5050805194965094505050901515905061073b576040805160e560020a62461bcd028152602060048201526024808201527f48617368206973206e6f742073746f72656420696e2074686520426c6f636b6360448201527f6861696e00000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b815115156107b8576040805160e560020a62461bcd028152602060048201526024808201527f48617368206973206e6f742073746f72656420696e2074686520426c6f636b6360448201527f6861696e00000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b50505060009182526003602052604090912055600190565b600454600090600160a060020a031633146107e757fe5b5060025490565b600454600160a060020a0316331461080257fe5b6000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820b23de40b4315527f80dca22ac4bd1d979b6be320c80f08dbde802d6ef2dcaec90029"
+var BalanceContractBin = "0x6080604052600080546001600160a01b0319167321a018606490c031a8c02bb6b992d8ae44add37f17905534801561003657600080fd5b5061086f806100466000396000f3fe608060405234801561001057600080fd5b506004361061007d5760003560e01c806386416f141161005b57806386416f1414610116578063c990824d1461011e578063cfae321714610141578063f356cc79146101be5761007d565b8063149cde75146100825780631d9de32c146100a157806356eb00a1146100be575b600080fd5b61009f6004803603602081101561009857600080fd5b50356101db565b005b61009f600480360360208110156100b757600080fd5b50356102fa565b6100c66103b1565b60408051602080825283518183015283519192839290830191858101910280838360005b838110156101025781810151838201526020016100ea565b505050509050019250505060405180910390f35b6100c6610415565b61009f6004803603604081101561013457600080fd5b508035906020013561046e565b6101496105c1565b6040805160208082528351818301528351919283929083019185019080838360005b8381101561018357818101518382015260200161016b565b50505050905090810190601f1680156101b05780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b61009f600480360360208110156101d457600080fd5b50356105e1565b6000546001600160a01b031633146102245760405162461bcd60e51b81526004018080602001828103825260248152602001806108176024913960400191505060405180910390fd5b60008181526002602052604090205460ff16156102725760405162461bcd60e51b81526004018080602001828103825260248152602001806107f36024913960400191505060405180910390fd5b6000818152600260209081526040808320805460ff191660019081179091556003805491820181557fc2575a0e9e593c00f959f8c92f12db2869c3395a3b0502d05e2516446f71f85b9091018590555460049092528083209190915551829133917fde3cd713f10754ba21eabefe59d58e9251b68f9ff9016fc20324b4e261f1d5989190a350565b6000546001600160a01b031633146103435760405162461bcd60e51b81526004018080602001828103825260248152602001806108176024913960400191505060405180910390fd5b60008181526002602052604090205460ff1615156001146103955760405162461bcd60e51b81526004018080602001828103825260258152602001806107716025913960400191505060405180910390fd5b6000818152600260205260409020805460ff1916905560038054fe5b3360009081526001602090815260409182902060020180548351818402810184019094528084526060939283018282801561040b57602002820191906000526020600020905b8154815260200190600101908083116103f7575b5050505050905090565b6060600260010180548060200260200160405190810160405280929190818152602001828054801561040b57602002820191906000526020600020908154815260200190600101908083116103f7575050505050905090565b60008281526002602052604090205460ff1615156001146104c05760405162461bcd60e51b81526004018080602001828103825260258152602001806107716025913960400191505060405180910390fd5b33600090815260016020908152604080832085845290915290205460ff161561051a5760405162461bcd60e51b815260040180806020018281038252602a8152602001806107c9602a913960400191505060405180910390fd5b336000818152600160208181526040808420878552808352818520805460ff199081168617909155818501845282862042890190819055600280840180548089018255818a52878a20018c9055548b89526003909401865284882093909355918452948290208054909516909317909355825191825291518593927fc7c18d7fd8f2b08630c0d4f0bcf252583ff50a5cf2c5d8811f8a4347191679d4928290030190a35050565b606060405180606001604052806033815260200161079660339139905090565b3360009081526001602081815260408084208585529091529091205460ff1615151461063e5760405162461bcd60e51b815260040180806020018281038252602e815260200180610743602e913960400191505060405180910390fd5b336000908152600160208181526040808420858552909201905290205442106106ae576040805162461bcd60e51b815260206004820152601a60248201527f537562736372697074696f6e206973206e6f7420616374697665000000000000604482015290519081900360640190fd5b33600081815260016020818152604080842086855260038101835281852054818452918520805460ff19169055949093525260029091018054829081106106f157fe5b60009182526020808320909101829055838252600290526040808220805460ff1916905551839133917fab7ba7d234105b15e41e97f548ae644ed346089e33e01f8f03a862bfaebacb919190a3505056fe5468652075736572206973206e6f742073757363726962656420746f207468652072657175657374652074797065546865207265717565737465642063617465676f727920646f6573206e6f7420657869737448656c6c6f20796f7520686176652063616c6c65642074686520636f6e74726163742062616c616e63652d737562732e736f6c546865207573657220697320616c72656164792073756273637269626520746f20746861742074797065546865207265717565737465642063617465676f727920616c72616479206578697374735573657220646f6573206e6f74206861766520656e6f7567682070726976696c65676573a265627a7a7231582023a2062e4b7787f79dc73da5f311fe6dd3f50f84ddebdd0c21314e9bd7cbc99f64736f6c63430005100032"
 
 // DeployBalanceContract deploys a new Ethereum contract, binding an instance of BalanceContract to it.
 func DeployBalanceContract(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *BalanceContract, error) {
@@ -199,171 +199,171 @@ func (_BalanceContract *BalanceContractTransactorRaw) Transact(opts *bind.Transa
 	return _BalanceContract.Contract.contract.Transact(opts, method, params...)
 }
 
-// CheckBalance is a free data retrieval call binding the contract method 0xc71daccb.
+// GetAllSubscriptions is a free data retrieval call binding the contract method 0x56eb00a1.
 //
-// Solidity: function checkBalance() view returns(uint256)
-func (_BalanceContract *BalanceContractCaller) CheckBalance(opts *bind.CallOpts) (*big.Int, error) {
+// Solidity: function getAllSubscriptions() view returns(bytes32[])
+func (_BalanceContract *BalanceContractCaller) GetAllSubscriptions(opts *bind.CallOpts) ([][32]byte, error) {
 	var (
-		ret0 = new(*big.Int)
+		ret0 = new([][32]byte)
 	)
 	out := ret0
-	err := _BalanceContract.contract.Call(opts, out, "checkBalance")
+	err := _BalanceContract.contract.Call(opts, out, "getAllSubscriptions")
 	return *ret0, err
 }
 
-// CheckBalance is a free data retrieval call binding the contract method 0xc71daccb.
+// GetAllSubscriptions is a free data retrieval call binding the contract method 0x56eb00a1.
 //
-// Solidity: function checkBalance() view returns(uint256)
-func (_BalanceContract *BalanceContractSession) CheckBalance() (*big.Int, error) {
-	return _BalanceContract.Contract.CheckBalance(&_BalanceContract.CallOpts)
+// Solidity: function getAllSubscriptions() view returns(bytes32[])
+func (_BalanceContract *BalanceContractSession) GetAllSubscriptions() ([][32]byte, error) {
+	return _BalanceContract.Contract.GetAllSubscriptions(&_BalanceContract.CallOpts)
 }
 
-// CheckBalance is a free data retrieval call binding the contract method 0xc71daccb.
+// GetAllSubscriptions is a free data retrieval call binding the contract method 0x56eb00a1.
 //
-// Solidity: function checkBalance() view returns(uint256)
-func (_BalanceContract *BalanceContractCallerSession) CheckBalance() (*big.Int, error) {
-	return _BalanceContract.Contract.CheckBalance(&_BalanceContract.CallOpts)
+// Solidity: function getAllSubscriptions() view returns(bytes32[])
+func (_BalanceContract *BalanceContractCallerSession) GetAllSubscriptions() ([][32]byte, error) {
+	return _BalanceContract.Contract.GetAllSubscriptions(&_BalanceContract.CallOpts)
 }
 
-// CheckHasPaid is a free data retrieval call binding the contract method 0x633d4c31.
+// GetAllTopics is a free data retrieval call binding the contract method 0x86416f14.
 //
-// Solidity: function checkHasPaid(address clientAccount, bytes32 hash) view returns(bool)
-func (_BalanceContract *BalanceContractCaller) CheckHasPaid(opts *bind.CallOpts, clientAccount common.Address, hash [32]byte) (bool, error) {
+// Solidity: function getAllTopics() view returns(bytes32[])
+func (_BalanceContract *BalanceContractCaller) GetAllTopics(opts *bind.CallOpts) ([][32]byte, error) {
 	var (
-		ret0 = new(bool)
+		ret0 = new([][32]byte)
 	)
 	out := ret0
-	err := _BalanceContract.contract.Call(opts, out, "checkHasPaid", clientAccount, hash)
+	err := _BalanceContract.contract.Call(opts, out, "getAllTopics")
 	return *ret0, err
 }
 
-// CheckHasPaid is a free data retrieval call binding the contract method 0x633d4c31.
+// GetAllTopics is a free data retrieval call binding the contract method 0x86416f14.
 //
-// Solidity: function checkHasPaid(address clientAccount, bytes32 hash) view returns(bool)
-func (_BalanceContract *BalanceContractSession) CheckHasPaid(clientAccount common.Address, hash [32]byte) (bool, error) {
-	return _BalanceContract.Contract.CheckHasPaid(&_BalanceContract.CallOpts, clientAccount, hash)
+// Solidity: function getAllTopics() view returns(bytes32[])
+func (_BalanceContract *BalanceContractSession) GetAllTopics() ([][32]byte, error) {
+	return _BalanceContract.Contract.GetAllTopics(&_BalanceContract.CallOpts)
 }
 
-// CheckHasPaid is a free data retrieval call binding the contract method 0x633d4c31.
+// GetAllTopics is a free data retrieval call binding the contract method 0x86416f14.
 //
-// Solidity: function checkHasPaid(address clientAccount, bytes32 hash) view returns(bool)
-func (_BalanceContract *BalanceContractCallerSession) CheckHasPaid(clientAccount common.Address, hash [32]byte) (bool, error) {
-	return _BalanceContract.Contract.CheckHasPaid(&_BalanceContract.CallOpts, clientAccount, hash)
+// Solidity: function getAllTopics() view returns(bytes32[])
+func (_BalanceContract *BalanceContractCallerSession) GetAllTopics() ([][32]byte, error) {
+	return _BalanceContract.Contract.GetAllTopics(&_BalanceContract.CallOpts)
 }
 
-// GetPriceData is a free data retrieval call binding the contract method 0x43fa6211.
+// Greet is a free data retrieval call binding the contract method 0xcfae3217.
 //
-// Solidity: function getPriceData(bytes32 hash) view returns(uint256)
-func (_BalanceContract *BalanceContractCaller) GetPriceData(opts *bind.CallOpts, hash [32]byte) (*big.Int, error) {
+// Solidity: function greet() pure returns(string)
+func (_BalanceContract *BalanceContractCaller) Greet(opts *bind.CallOpts) (string, error) {
 	var (
-		ret0 = new(*big.Int)
+		ret0 = new(string)
 	)
 	out := ret0
-	err := _BalanceContract.contract.Call(opts, out, "getPriceData", hash)
+	err := _BalanceContract.contract.Call(opts, out, "greet")
 	return *ret0, err
 }
 
-// GetPriceData is a free data retrieval call binding the contract method 0x43fa6211.
+// Greet is a free data retrieval call binding the contract method 0xcfae3217.
 //
-// Solidity: function getPriceData(bytes32 hash) view returns(uint256)
-func (_BalanceContract *BalanceContractSession) GetPriceData(hash [32]byte) (*big.Int, error) {
-	return _BalanceContract.Contract.GetPriceData(&_BalanceContract.CallOpts, hash)
+// Solidity: function greet() pure returns(string)
+func (_BalanceContract *BalanceContractSession) Greet() (string, error) {
+	return _BalanceContract.Contract.Greet(&_BalanceContract.CallOpts)
 }
 
-// GetPriceData is a free data retrieval call binding the contract method 0x43fa6211.
+// Greet is a free data retrieval call binding the contract method 0xcfae3217.
 //
-// Solidity: function getPriceData(bytes32 hash) view returns(uint256)
-func (_BalanceContract *BalanceContractCallerSession) GetPriceData(hash [32]byte) (*big.Int, error) {
-	return _BalanceContract.Contract.GetPriceData(&_BalanceContract.CallOpts, hash)
+// Solidity: function greet() pure returns(string)
+func (_BalanceContract *BalanceContractCallerSession) Greet() (string, error) {
+	return _BalanceContract.Contract.Greet(&_BalanceContract.CallOpts)
 }
 
-// PayData is a paid mutator transaction binding the contract method 0x30d87a57.
+// AddNewType is a paid mutator transaction binding the contract method 0x149cde75.
 //
-// Solidity: function payData(bytes32 hash, uint256 tokens) returns()
-func (_BalanceContract *BalanceContractTransactor) PayData(opts *bind.TransactOpts, hash [32]byte, tokens *big.Int) (*types.Transaction, error) {
-	return _BalanceContract.contract.Transact(opts, "payData", hash, tokens)
+// Solidity: function addNewType(bytes32 subName) returns()
+func (_BalanceContract *BalanceContractTransactor) AddNewType(opts *bind.TransactOpts, subName [32]byte) (*types.Transaction, error) {
+	return _BalanceContract.contract.Transact(opts, "addNewType", subName)
 }
 
-// PayData is a paid mutator transaction binding the contract method 0x30d87a57.
+// AddNewType is a paid mutator transaction binding the contract method 0x149cde75.
 //
-// Solidity: function payData(bytes32 hash, uint256 tokens) returns()
-func (_BalanceContract *BalanceContractSession) PayData(hash [32]byte, tokens *big.Int) (*types.Transaction, error) {
-	return _BalanceContract.Contract.PayData(&_BalanceContract.TransactOpts, hash, tokens)
+// Solidity: function addNewType(bytes32 subName) returns()
+func (_BalanceContract *BalanceContractSession) AddNewType(subName [32]byte) (*types.Transaction, error) {
+	return _BalanceContract.Contract.AddNewType(&_BalanceContract.TransactOpts, subName)
 }
 
-// PayData is a paid mutator transaction binding the contract method 0x30d87a57.
+// AddNewType is a paid mutator transaction binding the contract method 0x149cde75.
 //
-// Solidity: function payData(bytes32 hash, uint256 tokens) returns()
-func (_BalanceContract *BalanceContractTransactorSession) PayData(hash [32]byte, tokens *big.Int) (*types.Transaction, error) {
-	return _BalanceContract.Contract.PayData(&_BalanceContract.TransactOpts, hash, tokens)
+// Solidity: function addNewType(bytes32 subName) returns()
+func (_BalanceContract *BalanceContractTransactorSession) AddNewType(subName [32]byte) (*types.Transaction, error) {
+	return _BalanceContract.Contract.AddNewType(&_BalanceContract.TransactOpts, subName)
 }
 
-// SendToClient is a paid mutator transaction binding the contract method 0x4e635503.
+// DeleteSub is a paid mutator transaction binding the contract method 0xf356cc79.
 //
-// Solidity: function sendToClient(address clientAccount, bytes32 hash, bytes32 txHashExchange, bytes32 txHashData) returns()
-func (_BalanceContract *BalanceContractTransactor) SendToClient(opts *bind.TransactOpts, clientAccount common.Address, hash [32]byte, txHashExchange [32]byte, txHashData [32]byte) (*types.Transaction, error) {
-	return _BalanceContract.contract.Transact(opts, "sendToClient", clientAccount, hash, txHashExchange, txHashData)
+// Solidity: function deleteSub(bytes32 subName) returns()
+func (_BalanceContract *BalanceContractTransactor) DeleteSub(opts *bind.TransactOpts, subName [32]byte) (*types.Transaction, error) {
+	return _BalanceContract.contract.Transact(opts, "deleteSub", subName)
 }
 
-// SendToClient is a paid mutator transaction binding the contract method 0x4e635503.
+// DeleteSub is a paid mutator transaction binding the contract method 0xf356cc79.
 //
-// Solidity: function sendToClient(address clientAccount, bytes32 hash, bytes32 txHashExchange, bytes32 txHashData) returns()
-func (_BalanceContract *BalanceContractSession) SendToClient(clientAccount common.Address, hash [32]byte, txHashExchange [32]byte, txHashData [32]byte) (*types.Transaction, error) {
-	return _BalanceContract.Contract.SendToClient(&_BalanceContract.TransactOpts, clientAccount, hash, txHashExchange, txHashData)
+// Solidity: function deleteSub(bytes32 subName) returns()
+func (_BalanceContract *BalanceContractSession) DeleteSub(subName [32]byte) (*types.Transaction, error) {
+	return _BalanceContract.Contract.DeleteSub(&_BalanceContract.TransactOpts, subName)
 }
 
-// SendToClient is a paid mutator transaction binding the contract method 0x4e635503.
+// DeleteSub is a paid mutator transaction binding the contract method 0xf356cc79.
 //
-// Solidity: function sendToClient(address clientAccount, bytes32 hash, bytes32 txHashExchange, bytes32 txHashData) returns()
-func (_BalanceContract *BalanceContractTransactorSession) SendToClient(clientAccount common.Address, hash [32]byte, txHashExchange [32]byte, txHashData [32]byte) (*types.Transaction, error) {
-	return _BalanceContract.Contract.SendToClient(&_BalanceContract.TransactOpts, clientAccount, hash, txHashExchange, txHashData)
+// Solidity: function deleteSub(bytes32 subName) returns()
+func (_BalanceContract *BalanceContractTransactorSession) DeleteSub(subName [32]byte) (*types.Transaction, error) {
+	return _BalanceContract.Contract.DeleteSub(&_BalanceContract.TransactOpts, subName)
 }
 
-// SetAddress is a paid mutator transaction binding the contract method 0xe30081a0.
+// DeleteType is a paid mutator transaction binding the contract method 0x1d9de32c.
 //
-// Solidity: function setAddress(address _address) returns()
-func (_BalanceContract *BalanceContractTransactor) SetAddress(opts *bind.TransactOpts, _address common.Address) (*types.Transaction, error) {
-	return _BalanceContract.contract.Transact(opts, "setAddress", _address)
+// Solidity: function deleteType(bytes32 subName) returns()
+func (_BalanceContract *BalanceContractTransactor) DeleteType(opts *bind.TransactOpts, subName [32]byte) (*types.Transaction, error) {
+	return _BalanceContract.contract.Transact(opts, "deleteType", subName)
 }
 
-// SetAddress is a paid mutator transaction binding the contract method 0xe30081a0.
+// DeleteType is a paid mutator transaction binding the contract method 0x1d9de32c.
 //
-// Solidity: function setAddress(address _address) returns()
-func (_BalanceContract *BalanceContractSession) SetAddress(_address common.Address) (*types.Transaction, error) {
-	return _BalanceContract.Contract.SetAddress(&_BalanceContract.TransactOpts, _address)
+// Solidity: function deleteType(bytes32 subName) returns()
+func (_BalanceContract *BalanceContractSession) DeleteType(subName [32]byte) (*types.Transaction, error) {
+	return _BalanceContract.Contract.DeleteType(&_BalanceContract.TransactOpts, subName)
 }
 
-// SetAddress is a paid mutator transaction binding the contract method 0xe30081a0.
+// DeleteType is a paid mutator transaction binding the contract method 0x1d9de32c.
 //
-// Solidity: function setAddress(address _address) returns()
-func (_BalanceContract *BalanceContractTransactorSession) SetAddress(_address common.Address) (*types.Transaction, error) {
-	return _BalanceContract.Contract.SetAddress(&_BalanceContract.TransactOpts, _address)
+// Solidity: function deleteType(bytes32 subName) returns()
+func (_BalanceContract *BalanceContractTransactorSession) DeleteType(subName [32]byte) (*types.Transaction, error) {
+	return _BalanceContract.Contract.DeleteType(&_BalanceContract.TransactOpts, subName)
 }
 
-// SetPriceData is a paid mutator transaction binding the contract method 0x63c6c2ef.
+// SubscribeTo is a paid mutator transaction binding the contract method 0xc990824d.
 //
-// Solidity: function setPriceData(bytes32 hash, uint256 price) returns(bool)
-func (_BalanceContract *BalanceContractTransactor) SetPriceData(opts *bind.TransactOpts, hash [32]byte, price *big.Int) (*types.Transaction, error) {
-	return _BalanceContract.contract.Transact(opts, "setPriceData", hash, price)
+// Solidity: function subscribeTo(bytes32 subName, uint256 time) returns()
+func (_BalanceContract *BalanceContractTransactor) SubscribeTo(opts *bind.TransactOpts, subName [32]byte, time *big.Int) (*types.Transaction, error) {
+	return _BalanceContract.contract.Transact(opts, "subscribeTo", subName, time)
 }
 
-// SetPriceData is a paid mutator transaction binding the contract method 0x63c6c2ef.
+// SubscribeTo is a paid mutator transaction binding the contract method 0xc990824d.
 //
-// Solidity: function setPriceData(bytes32 hash, uint256 price) returns(bool)
-func (_BalanceContract *BalanceContractSession) SetPriceData(hash [32]byte, price *big.Int) (*types.Transaction, error) {
-	return _BalanceContract.Contract.SetPriceData(&_BalanceContract.TransactOpts, hash, price)
+// Solidity: function subscribeTo(bytes32 subName, uint256 time) returns()
+func (_BalanceContract *BalanceContractSession) SubscribeTo(subName [32]byte, time *big.Int) (*types.Transaction, error) {
+	return _BalanceContract.Contract.SubscribeTo(&_BalanceContract.TransactOpts, subName, time)
 }
 
-// SetPriceData is a paid mutator transaction binding the contract method 0x63c6c2ef.
+// SubscribeTo is a paid mutator transaction binding the contract method 0xc990824d.
 //
-// Solidity: function setPriceData(bytes32 hash, uint256 price) returns(bool)
-func (_BalanceContract *BalanceContractTransactorSession) SetPriceData(hash [32]byte, price *big.Int) (*types.Transaction, error) {
-	return _BalanceContract.Contract.SetPriceData(&_BalanceContract.TransactOpts, hash, price)
+// Solidity: function subscribeTo(bytes32 subName, uint256 time) returns()
+func (_BalanceContract *BalanceContractTransactorSession) SubscribeTo(subName [32]byte, time *big.Int) (*types.Transaction, error) {
+	return _BalanceContract.Contract.SubscribeTo(&_BalanceContract.TransactOpts, subName, time)
 }
 
-// BalanceContractPurchaseNotifyIterator is returned from FilterPurchaseNotify and is used to iterate over the raw logs and unpacked data for PurchaseNotify events raised by the BalanceContract contract.
-type BalanceContractPurchaseNotifyIterator struct {
-	Event *BalanceContractPurchaseNotify // Event containing the contract specifics and raw log
+// BalanceContractNotifyNewIterator is returned from FilterNotifyNew and is used to iterate over the raw logs and unpacked data for NotifyNew events raised by the BalanceContract contract.
+type BalanceContractNotifyNewIterator struct {
+	Event *BalanceContractNotifyNew // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -377,7 +377,7 @@ type BalanceContractPurchaseNotifyIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *BalanceContractPurchaseNotifyIterator) Next() bool {
+func (it *BalanceContractNotifyNewIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -386,7 +386,7 @@ func (it *BalanceContractPurchaseNotifyIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(BalanceContractPurchaseNotify)
+			it.Event = new(BalanceContractNotifyNew)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -401,7 +401,7 @@ func (it *BalanceContractPurchaseNotifyIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(BalanceContractPurchaseNotify)
+		it.Event = new(BalanceContractNotifyNew)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -417,61 +417,365 @@ func (it *BalanceContractPurchaseNotifyIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *BalanceContractPurchaseNotifyIterator) Error() error {
+func (it *BalanceContractNotifyNewIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *BalanceContractPurchaseNotifyIterator) Close() error {
+func (it *BalanceContractNotifyNewIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// BalanceContractPurchaseNotify represents a PurchaseNotify event raised by the BalanceContract contract.
-type BalanceContractPurchaseNotify struct {
+// BalanceContractNotifyNew represents a NotifyNew event raised by the BalanceContract contract.
+type BalanceContractNotifyNew struct {
+	Addr    common.Address
+	SubID   [32]byte
+	EndTime *big.Int
+	Raw     types.Log // Blockchain specific contextual infos
+}
+
+// FilterNotifyNew is a free log retrieval operation binding the contract event 0xc7c18d7fd8f2b08630c0d4f0bcf252583ff50a5cf2c5d8811f8a4347191679d4.
+//
+// Solidity: event notifyNew(address indexed _addr, bytes32 indexed _subID, uint256 _endTime)
+func (_BalanceContract *BalanceContractFilterer) FilterNotifyNew(opts *bind.FilterOpts, _addr []common.Address, _subID [][32]byte) (*BalanceContractNotifyNewIterator, error) {
+
+	var _addrRule []interface{}
+	for _, _addrItem := range _addr {
+		_addrRule = append(_addrRule, _addrItem)
+	}
+	var _subIDRule []interface{}
+	for _, _subIDItem := range _subID {
+		_subIDRule = append(_subIDRule, _subIDItem)
+	}
+
+	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "notifyNew", _addrRule, _subIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return &BalanceContractNotifyNewIterator{contract: _BalanceContract.contract, event: "notifyNew", logs: logs, sub: sub}, nil
+}
+
+// WatchNotifyNew is a free log subscription operation binding the contract event 0xc7c18d7fd8f2b08630c0d4f0bcf252583ff50a5cf2c5d8811f8a4347191679d4.
+//
+// Solidity: event notifyNew(address indexed _addr, bytes32 indexed _subID, uint256 _endTime)
+func (_BalanceContract *BalanceContractFilterer) WatchNotifyNew(opts *bind.WatchOpts, sink chan<- *BalanceContractNotifyNew, _addr []common.Address, _subID [][32]byte) (event.Subscription, error) {
+
+	var _addrRule []interface{}
+	for _, _addrItem := range _addr {
+		_addrRule = append(_addrRule, _addrItem)
+	}
+	var _subIDRule []interface{}
+	for _, _subIDItem := range _subID {
+		_subIDRule = append(_subIDRule, _subIDItem)
+	}
+
+	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "notifyNew", _addrRule, _subIDRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(BalanceContractNotifyNew)
+				if err := _BalanceContract.contract.UnpackLog(event, "notifyNew", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseNotifyNew is a log parse operation binding the contract event 0xc7c18d7fd8f2b08630c0d4f0bcf252583ff50a5cf2c5d8811f8a4347191679d4.
+//
+// Solidity: event notifyNew(address indexed _addr, bytes32 indexed _subID, uint256 _endTime)
+func (_BalanceContract *BalanceContractFilterer) ParseNotifyNew(log types.Log) (*BalanceContractNotifyNew, error) {
+	event := new(BalanceContractNotifyNew)
+	if err := _BalanceContract.contract.UnpackLog(event, "notifyNew", log); err != nil {
+		return nil, err
+	}
+	return event, nil
+}
+
+// BalanceContractNotifyNewCategoryIterator is returned from FilterNotifyNewCategory and is used to iterate over the raw logs and unpacked data for NotifyNewCategory events raised by the BalanceContract contract.
+type BalanceContractNotifyNewCategoryIterator struct {
+	Event *BalanceContractNotifyNewCategory // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *BalanceContractNotifyNewCategoryIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(BalanceContractNotifyNewCategory)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(BalanceContractNotifyNewCategory)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *BalanceContractNotifyNewCategoryIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *BalanceContractNotifyNewCategoryIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// BalanceContractNotifyNewCategory represents a NotifyNewCategory event raised by the BalanceContract contract.
+type BalanceContractNotifyNewCategory struct {
+	Addr common.Address
+	Name [32]byte
+	Raw  types.Log // Blockchain specific contextual infos
+}
+
+// FilterNotifyNewCategory is a free log retrieval operation binding the contract event 0xde3cd713f10754ba21eabefe59d58e9251b68f9ff9016fc20324b4e261f1d598.
+//
+// Solidity: event notifyNewCategory(address indexed _addr, bytes32 indexed _name)
+func (_BalanceContract *BalanceContractFilterer) FilterNotifyNewCategory(opts *bind.FilterOpts, _addr []common.Address, _name [][32]byte) (*BalanceContractNotifyNewCategoryIterator, error) {
+
+	var _addrRule []interface{}
+	for _, _addrItem := range _addr {
+		_addrRule = append(_addrRule, _addrItem)
+	}
+	var _nameRule []interface{}
+	for _, _nameItem := range _name {
+		_nameRule = append(_nameRule, _nameItem)
+	}
+
+	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "notifyNewCategory", _addrRule, _nameRule)
+	if err != nil {
+		return nil, err
+	}
+	return &BalanceContractNotifyNewCategoryIterator{contract: _BalanceContract.contract, event: "notifyNewCategory", logs: logs, sub: sub}, nil
+}
+
+// WatchNotifyNewCategory is a free log subscription operation binding the contract event 0xde3cd713f10754ba21eabefe59d58e9251b68f9ff9016fc20324b4e261f1d598.
+//
+// Solidity: event notifyNewCategory(address indexed _addr, bytes32 indexed _name)
+func (_BalanceContract *BalanceContractFilterer) WatchNotifyNewCategory(opts *bind.WatchOpts, sink chan<- *BalanceContractNotifyNewCategory, _addr []common.Address, _name [][32]byte) (event.Subscription, error) {
+
+	var _addrRule []interface{}
+	for _, _addrItem := range _addr {
+		_addrRule = append(_addrRule, _addrItem)
+	}
+	var _nameRule []interface{}
+	for _, _nameItem := range _name {
+		_nameRule = append(_nameRule, _nameItem)
+	}
+
+	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "notifyNewCategory", _addrRule, _nameRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(BalanceContractNotifyNewCategory)
+				if err := _BalanceContract.contract.UnpackLog(event, "notifyNewCategory", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseNotifyNewCategory is a log parse operation binding the contract event 0xde3cd713f10754ba21eabefe59d58e9251b68f9ff9016fc20324b4e261f1d598.
+//
+// Solidity: event notifyNewCategory(address indexed _addr, bytes32 indexed _name)
+func (_BalanceContract *BalanceContractFilterer) ParseNotifyNewCategory(log types.Log) (*BalanceContractNotifyNewCategory, error) {
+	event := new(BalanceContractNotifyNewCategory)
+	if err := _BalanceContract.contract.UnpackLog(event, "notifyNewCategory", log); err != nil {
+		return nil, err
+	}
+	return event, nil
+}
+
+// BalanceContractNotifyRemoveIterator is returned from FilterNotifyRemove and is used to iterate over the raw logs and unpacked data for NotifyRemove events raised by the BalanceContract contract.
+type BalanceContractNotifyRemoveIterator struct {
+	Event *BalanceContractNotifyRemove // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *BalanceContractNotifyRemoveIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(BalanceContractNotifyRemove)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(BalanceContractNotifyRemove)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *BalanceContractNotifyRemoveIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *BalanceContractNotifyRemoveIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// BalanceContractNotifyRemove represents a NotifyRemove event raised by the BalanceContract contract.
+type BalanceContractNotifyRemove struct {
 	Addr  common.Address
-	Hash  [32]byte
-	Value *big.Int
+	SubID [32]byte
 	Raw   types.Log // Blockchain specific contextual infos
 }
 
-// FilterPurchaseNotify is a free log retrieval operation binding the contract event 0x58d967c9a9a54b98c710c372cfe363bb9466f443b58def6976bd0e2dc77af841.
+// FilterNotifyRemove is a free log retrieval operation binding the contract event 0xab7ba7d234105b15e41e97f548ae644ed346089e33e01f8f03a862bfaebacb91.
 //
-// Solidity: event purchaseNotify(address indexed _addr, bytes32 indexed _hash, uint256 _value)
-func (_BalanceContract *BalanceContractFilterer) FilterPurchaseNotify(opts *bind.FilterOpts, _addr []common.Address, _hash [][32]byte) (*BalanceContractPurchaseNotifyIterator, error) {
+// Solidity: event notifyRemove(address indexed _addr, bytes32 indexed _subID)
+func (_BalanceContract *BalanceContractFilterer) FilterNotifyRemove(opts *bind.FilterOpts, _addr []common.Address, _subID [][32]byte) (*BalanceContractNotifyRemoveIterator, error) {
 
 	var _addrRule []interface{}
 	for _, _addrItem := range _addr {
 		_addrRule = append(_addrRule, _addrItem)
 	}
-	var _hashRule []interface{}
-	for _, _hashItem := range _hash {
-		_hashRule = append(_hashRule, _hashItem)
+	var _subIDRule []interface{}
+	for _, _subIDItem := range _subID {
+		_subIDRule = append(_subIDRule, _subIDItem)
 	}
 
-	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "purchaseNotify", _addrRule, _hashRule)
+	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "notifyRemove", _addrRule, _subIDRule)
 	if err != nil {
 		return nil, err
 	}
-	return &BalanceContractPurchaseNotifyIterator{contract: _BalanceContract.contract, event: "purchaseNotify", logs: logs, sub: sub}, nil
+	return &BalanceContractNotifyRemoveIterator{contract: _BalanceContract.contract, event: "notifyRemove", logs: logs, sub: sub}, nil
 }
 
-// WatchPurchaseNotify is a free log subscription operation binding the contract event 0x58d967c9a9a54b98c710c372cfe363bb9466f443b58def6976bd0e2dc77af841.
+// WatchNotifyRemove is a free log subscription operation binding the contract event 0xab7ba7d234105b15e41e97f548ae644ed346089e33e01f8f03a862bfaebacb91.
 //
-// Solidity: event purchaseNotify(address indexed _addr, bytes32 indexed _hash, uint256 _value)
-func (_BalanceContract *BalanceContractFilterer) WatchPurchaseNotify(opts *bind.WatchOpts, sink chan<- *BalanceContractPurchaseNotify, _addr []common.Address, _hash [][32]byte) (event.Subscription, error) {
+// Solidity: event notifyRemove(address indexed _addr, bytes32 indexed _subID)
+func (_BalanceContract *BalanceContractFilterer) WatchNotifyRemove(opts *bind.WatchOpts, sink chan<- *BalanceContractNotifyRemove, _addr []common.Address, _subID [][32]byte) (event.Subscription, error) {
 
 	var _addrRule []interface{}
 	for _, _addrItem := range _addr {
 		_addrRule = append(_addrRule, _addrItem)
 	}
-	var _hashRule []interface{}
-	for _, _hashItem := range _hash {
-		_hashRule = append(_hashRule, _hashItem)
+	var _subIDRule []interface{}
+	for _, _subIDItem := range _subID {
+		_subIDRule = append(_subIDRule, _subIDItem)
 	}
 
-	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "purchaseNotify", _addrRule, _hashRule)
+	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "notifyRemove", _addrRule, _subIDRule)
 	if err != nil {
 		return nil, err
 	}
@@ -481,8 +785,8 @@ func (_BalanceContract *BalanceContractFilterer) WatchPurchaseNotify(opts *bind.
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(BalanceContractPurchaseNotify)
-				if err := _BalanceContract.contract.UnpackLog(event, "purchaseNotify", log); err != nil {
+				event := new(BalanceContractNotifyRemove)
+				if err := _BalanceContract.contract.UnpackLog(event, "notifyRemove", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -503,20 +807,20 @@ func (_BalanceContract *BalanceContractFilterer) WatchPurchaseNotify(opts *bind.
 	}), nil
 }
 
-// ParsePurchaseNotify is a log parse operation binding the contract event 0x58d967c9a9a54b98c710c372cfe363bb9466f443b58def6976bd0e2dc77af841.
+// ParseNotifyRemove is a log parse operation binding the contract event 0xab7ba7d234105b15e41e97f548ae644ed346089e33e01f8f03a862bfaebacb91.
 //
-// Solidity: event purchaseNotify(address indexed _addr, bytes32 indexed _hash, uint256 _value)
-func (_BalanceContract *BalanceContractFilterer) ParsePurchaseNotify(log types.Log) (*BalanceContractPurchaseNotify, error) {
-	event := new(BalanceContractPurchaseNotify)
-	if err := _BalanceContract.contract.UnpackLog(event, "purchaseNotify", log); err != nil {
+// Solidity: event notifyRemove(address indexed _addr, bytes32 indexed _subID)
+func (_BalanceContract *BalanceContractFilterer) ParseNotifyRemove(log types.Log) (*BalanceContractNotifyRemove, error) {
+	event := new(BalanceContractNotifyRemove)
+	if err := _BalanceContract.contract.UnpackLog(event, "notifyRemove", log); err != nil {
 		return nil, err
 	}
 	return event, nil
 }
 
-// BalanceContractResponseNotifyIterator is returned from FilterResponseNotify and is used to iterate over the raw logs and unpacked data for ResponseNotify events raised by the BalanceContract contract.
-type BalanceContractResponseNotifyIterator struct {
-	Event *BalanceContractResponseNotify // Event containing the contract specifics and raw log
+// BalanceContractNotifyRemoveCategoryIterator is returned from FilterNotifyRemoveCategory and is used to iterate over the raw logs and unpacked data for NotifyRemoveCategory events raised by the BalanceContract contract.
+type BalanceContractNotifyRemoveCategoryIterator struct {
+	Event *BalanceContractNotifyRemoveCategory // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -530,7 +834,7 @@ type BalanceContractResponseNotifyIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *BalanceContractResponseNotifyIterator) Next() bool {
+func (it *BalanceContractNotifyRemoveCategoryIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -539,7 +843,7 @@ func (it *BalanceContractResponseNotifyIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(BalanceContractResponseNotify)
+			it.Event = new(BalanceContractNotifyRemoveCategory)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -554,7 +858,7 @@ func (it *BalanceContractResponseNotifyIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(BalanceContractResponseNotify)
+		it.Event = new(BalanceContractNotifyRemoveCategory)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -570,62 +874,60 @@ func (it *BalanceContractResponseNotifyIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *BalanceContractResponseNotifyIterator) Error() error {
+func (it *BalanceContractNotifyRemoveCategoryIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *BalanceContractResponseNotifyIterator) Close() error {
+func (it *BalanceContractNotifyRemoveCategoryIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// BalanceContractResponseNotify represents a ResponseNotify event raised by the BalanceContract contract.
-type BalanceContractResponseNotify struct {
-	Addr           common.Address
-	Hash           [32]byte
-	TxHashExchange [32]byte
-	TxHashData     [32]byte
-	Raw            types.Log // Blockchain specific contextual infos
+// BalanceContractNotifyRemoveCategory represents a NotifyRemoveCategory event raised by the BalanceContract contract.
+type BalanceContractNotifyRemoveCategory struct {
+	Addr common.Address
+	Name [32]byte
+	Raw  types.Log // Blockchain specific contextual infos
 }
 
-// FilterResponseNotify is a free log retrieval operation binding the contract event 0x5561f506afbfc9a46c0e3398234971c86c54a89b00fca057c93dde013fb63198.
+// FilterNotifyRemoveCategory is a free log retrieval operation binding the contract event 0xf4d63e41754a74d0227558f224c4d7d0beb73170d73b23db38f9317e650da562.
 //
-// Solidity: event responseNotify(address indexed _addr, bytes32 indexed _hash, bytes32 _txHashExchange, bytes32 _txHashData)
-func (_BalanceContract *BalanceContractFilterer) FilterResponseNotify(opts *bind.FilterOpts, _addr []common.Address, _hash [][32]byte) (*BalanceContractResponseNotifyIterator, error) {
+// Solidity: event notifyRemoveCategory(address indexed _addr, bytes32 indexed _name)
+func (_BalanceContract *BalanceContractFilterer) FilterNotifyRemoveCategory(opts *bind.FilterOpts, _addr []common.Address, _name [][32]byte) (*BalanceContractNotifyRemoveCategoryIterator, error) {
 
 	var _addrRule []interface{}
 	for _, _addrItem := range _addr {
 		_addrRule = append(_addrRule, _addrItem)
 	}
-	var _hashRule []interface{}
-	for _, _hashItem := range _hash {
-		_hashRule = append(_hashRule, _hashItem)
+	var _nameRule []interface{}
+	for _, _nameItem := range _name {
+		_nameRule = append(_nameRule, _nameItem)
 	}
 
-	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "responseNotify", _addrRule, _hashRule)
+	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "notifyRemoveCategory", _addrRule, _nameRule)
 	if err != nil {
 		return nil, err
 	}
-	return &BalanceContractResponseNotifyIterator{contract: _BalanceContract.contract, event: "responseNotify", logs: logs, sub: sub}, nil
+	return &BalanceContractNotifyRemoveCategoryIterator{contract: _BalanceContract.contract, event: "notifyRemoveCategory", logs: logs, sub: sub}, nil
 }
 
-// WatchResponseNotify is a free log subscription operation binding the contract event 0x5561f506afbfc9a46c0e3398234971c86c54a89b00fca057c93dde013fb63198.
+// WatchNotifyRemoveCategory is a free log subscription operation binding the contract event 0xf4d63e41754a74d0227558f224c4d7d0beb73170d73b23db38f9317e650da562.
 //
-// Solidity: event responseNotify(address indexed _addr, bytes32 indexed _hash, bytes32 _txHashExchange, bytes32 _txHashData)
-func (_BalanceContract *BalanceContractFilterer) WatchResponseNotify(opts *bind.WatchOpts, sink chan<- *BalanceContractResponseNotify, _addr []common.Address, _hash [][32]byte) (event.Subscription, error) {
+// Solidity: event notifyRemoveCategory(address indexed _addr, bytes32 indexed _name)
+func (_BalanceContract *BalanceContractFilterer) WatchNotifyRemoveCategory(opts *bind.WatchOpts, sink chan<- *BalanceContractNotifyRemoveCategory, _addr []common.Address, _name [][32]byte) (event.Subscription, error) {
 
 	var _addrRule []interface{}
 	for _, _addrItem := range _addr {
 		_addrRule = append(_addrRule, _addrItem)
 	}
-	var _hashRule []interface{}
-	for _, _hashItem := range _hash {
-		_hashRule = append(_hashRule, _hashItem)
+	var _nameRule []interface{}
+	for _, _nameItem := range _name {
+		_nameRule = append(_nameRule, _nameItem)
 	}
 
-	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "responseNotify", _addrRule, _hashRule)
+	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "notifyRemoveCategory", _addrRule, _nameRule)
 	if err != nil {
 		return nil, err
 	}
@@ -635,8 +937,8 @@ func (_BalanceContract *BalanceContractFilterer) WatchResponseNotify(opts *bind.
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(BalanceContractResponseNotify)
-				if err := _BalanceContract.contract.UnpackLog(event, "responseNotify", log); err != nil {
+				event := new(BalanceContractNotifyRemoveCategory)
+				if err := _BalanceContract.contract.UnpackLog(event, "notifyRemoveCategory", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -657,210 +959,13 @@ func (_BalanceContract *BalanceContractFilterer) WatchResponseNotify(opts *bind.
 	}), nil
 }
 
-// ParseResponseNotify is a log parse operation binding the contract event 0x5561f506afbfc9a46c0e3398234971c86c54a89b00fca057c93dde013fb63198.
+// ParseNotifyRemoveCategory is a log parse operation binding the contract event 0xf4d63e41754a74d0227558f224c4d7d0beb73170d73b23db38f9317e650da562.
 //
-// Solidity: event responseNotify(address indexed _addr, bytes32 indexed _hash, bytes32 _txHashExchange, bytes32 _txHashData)
-func (_BalanceContract *BalanceContractFilterer) ParseResponseNotify(log types.Log) (*BalanceContractResponseNotify, error) {
-	event := new(BalanceContractResponseNotify)
-	if err := _BalanceContract.contract.UnpackLog(event, "responseNotify", log); err != nil {
+// Solidity: event notifyRemoveCategory(address indexed _addr, bytes32 indexed _name)
+func (_BalanceContract *BalanceContractFilterer) ParseNotifyRemoveCategory(log types.Log) (*BalanceContractNotifyRemoveCategory, error) {
+	event := new(BalanceContractNotifyRemoveCategory)
+	if err := _BalanceContract.contract.UnpackLog(event, "notifyRemoveCategory", log); err != nil {
 		return nil, err
 	}
 	return event, nil
-}
-
-// DataLedgerContractABI is the input ABI used to generate the binding from.
-const DataLedgerContractABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"retrieveInfo\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"},{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}]"
-
-// DataLedgerContractFuncSigs maps the 4-byte function signature to its string representation.
-var DataLedgerContractFuncSigs = map[string]string{
-	"c9776a6d": "retrieveInfo(bytes32)",
-}
-
-// DataLedgerContractBin is the compiled bytecode used for deploying new contracts.
-var DataLedgerContractBin = "0x608060405234801561001057600080fd5b5061016f806100206000396000f3006080604052600436106100405763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663c9776a6d8114610045575b600080fd5b34801561005157600080fd5b5061005d60043561013b565b604051808060200180602001838103835285818151815260200191508051906020019080838360005b8381101561009e578181015183820152602001610086565b50505050905090810190601f1680156100cb5780820380516001836020036101000a031916815260200191505b50838103825284518152845160209182019186019080838360005b838110156100fe5781810151838201526020016100e6565b50505050905090810190601f16801561012b5780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b6060809150915600a165627a7a72305820590dcad1c71568ec69928ac0d9ff260a39375f0e80dbbc0e574a0a4d7991882c0029"
-
-// DeployDataLedgerContract deploys a new Ethereum contract, binding an instance of DataLedgerContract to it.
-func DeployDataLedgerContract(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *DataLedgerContract, error) {
-	parsed, err := abi.JSON(strings.NewReader(DataLedgerContractABI))
-	if err != nil {
-		return common.Address{}, nil, nil, err
-	}
-
-	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(DataLedgerContractBin), backend)
-	if err != nil {
-		return common.Address{}, nil, nil, err
-	}
-	return address, tx, &DataLedgerContract{DataLedgerContractCaller: DataLedgerContractCaller{contract: contract}, DataLedgerContractTransactor: DataLedgerContractTransactor{contract: contract}, DataLedgerContractFilterer: DataLedgerContractFilterer{contract: contract}}, nil
-}
-
-// DataLedgerContract is an auto generated Go binding around an Ethereum contract.
-type DataLedgerContract struct {
-	DataLedgerContractCaller     // Read-only binding to the contract
-	DataLedgerContractTransactor // Write-only binding to the contract
-	DataLedgerContractFilterer   // Log filterer for contract events
-}
-
-// DataLedgerContractCaller is an auto generated read-only Go binding around an Ethereum contract.
-type DataLedgerContractCaller struct {
-	contract *bind.BoundContract // Generic contract wrapper for the low level calls
-}
-
-// DataLedgerContractTransactor is an auto generated write-only Go binding around an Ethereum contract.
-type DataLedgerContractTransactor struct {
-	contract *bind.BoundContract // Generic contract wrapper for the low level calls
-}
-
-// DataLedgerContractFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
-type DataLedgerContractFilterer struct {
-	contract *bind.BoundContract // Generic contract wrapper for the low level calls
-}
-
-// DataLedgerContractSession is an auto generated Go binding around an Ethereum contract,
-// with pre-set call and transact options.
-type DataLedgerContractSession struct {
-	Contract     *DataLedgerContract // Generic contract binding to set the session for
-	CallOpts     bind.CallOpts       // Call options to use throughout this session
-	TransactOpts bind.TransactOpts   // Transaction auth options to use throughout this session
-}
-
-// DataLedgerContractCallerSession is an auto generated read-only Go binding around an Ethereum contract,
-// with pre-set call options.
-type DataLedgerContractCallerSession struct {
-	Contract *DataLedgerContractCaller // Generic contract caller binding to set the session for
-	CallOpts bind.CallOpts             // Call options to use throughout this session
-}
-
-// DataLedgerContractTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
-// with pre-set transact options.
-type DataLedgerContractTransactorSession struct {
-	Contract     *DataLedgerContractTransactor // Generic contract transactor binding to set the session for
-	TransactOpts bind.TransactOpts             // Transaction auth options to use throughout this session
-}
-
-// DataLedgerContractRaw is an auto generated low-level Go binding around an Ethereum contract.
-type DataLedgerContractRaw struct {
-	Contract *DataLedgerContract // Generic contract binding to access the raw methods on
-}
-
-// DataLedgerContractCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
-type DataLedgerContractCallerRaw struct {
-	Contract *DataLedgerContractCaller // Generic read-only contract binding to access the raw methods on
-}
-
-// DataLedgerContractTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
-type DataLedgerContractTransactorRaw struct {
-	Contract *DataLedgerContractTransactor // Generic write-only contract binding to access the raw methods on
-}
-
-// NewDataLedgerContract creates a new instance of DataLedgerContract, bound to a specific deployed contract.
-func NewDataLedgerContract(address common.Address, backend bind.ContractBackend) (*DataLedgerContract, error) {
-	contract, err := bindDataLedgerContract(address, backend, backend, backend)
-	if err != nil {
-		return nil, err
-	}
-	return &DataLedgerContract{DataLedgerContractCaller: DataLedgerContractCaller{contract: contract}, DataLedgerContractTransactor: DataLedgerContractTransactor{contract: contract}, DataLedgerContractFilterer: DataLedgerContractFilterer{contract: contract}}, nil
-}
-
-// NewDataLedgerContractCaller creates a new read-only instance of DataLedgerContract, bound to a specific deployed contract.
-func NewDataLedgerContractCaller(address common.Address, caller bind.ContractCaller) (*DataLedgerContractCaller, error) {
-	contract, err := bindDataLedgerContract(address, caller, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &DataLedgerContractCaller{contract: contract}, nil
-}
-
-// NewDataLedgerContractTransactor creates a new write-only instance of DataLedgerContract, bound to a specific deployed contract.
-func NewDataLedgerContractTransactor(address common.Address, transactor bind.ContractTransactor) (*DataLedgerContractTransactor, error) {
-	contract, err := bindDataLedgerContract(address, nil, transactor, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &DataLedgerContractTransactor{contract: contract}, nil
-}
-
-// NewDataLedgerContractFilterer creates a new log filterer instance of DataLedgerContract, bound to a specific deployed contract.
-func NewDataLedgerContractFilterer(address common.Address, filterer bind.ContractFilterer) (*DataLedgerContractFilterer, error) {
-	contract, err := bindDataLedgerContract(address, nil, nil, filterer)
-	if err != nil {
-		return nil, err
-	}
-	return &DataLedgerContractFilterer{contract: contract}, nil
-}
-
-// bindDataLedgerContract binds a generic wrapper to an already deployed contract.
-func bindDataLedgerContract(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := abi.JSON(strings.NewReader(DataLedgerContractABI))
-	if err != nil {
-		return nil, err
-	}
-	return bind.NewBoundContract(address, parsed, caller, transactor, filterer), nil
-}
-
-// Call invokes the (constant) contract method with params as input values and
-// sets the output to result. The result type might be a single field for simple
-// returns, a slice of interfaces for anonymous returns and a struct for named
-// returns.
-func (_DataLedgerContract *DataLedgerContractRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
-	return _DataLedgerContract.Contract.DataLedgerContractCaller.contract.Call(opts, result, method, params...)
-}
-
-// Transfer initiates a plain transaction to move funds to the contract, calling
-// its default method if one is available.
-func (_DataLedgerContract *DataLedgerContractRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _DataLedgerContract.Contract.DataLedgerContractTransactor.contract.Transfer(opts)
-}
-
-// Transact invokes the (paid) contract method with params as input values.
-func (_DataLedgerContract *DataLedgerContractRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _DataLedgerContract.Contract.DataLedgerContractTransactor.contract.Transact(opts, method, params...)
-}
-
-// Call invokes the (constant) contract method with params as input values and
-// sets the output to result. The result type might be a single field for simple
-// returns, a slice of interfaces for anonymous returns and a struct for named
-// returns.
-func (_DataLedgerContract *DataLedgerContractCallerRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
-	return _DataLedgerContract.Contract.contract.Call(opts, result, method, params...)
-}
-
-// Transfer initiates a plain transaction to move funds to the contract, calling
-// its default method if one is available.
-func (_DataLedgerContract *DataLedgerContractTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _DataLedgerContract.Contract.contract.Transfer(opts)
-}
-
-// Transact invokes the (paid) contract method with params as input values.
-func (_DataLedgerContract *DataLedgerContractTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _DataLedgerContract.Contract.contract.Transact(opts, method, params...)
-}
-
-// RetrieveInfo is a free data retrieval call binding the contract method 0xc9776a6d.
-//
-// Solidity: function retrieveInfo(bytes32 ) view returns(string, string)
-func (_DataLedgerContract *DataLedgerContractCaller) RetrieveInfo(opts *bind.CallOpts, arg0 [32]byte) (string, string, error) {
-	var (
-		ret0 = new(string)
-		ret1 = new(string)
-	)
-	out := &[]interface{}{
-		ret0,
-		ret1,
-	}
-	err := _DataLedgerContract.contract.Call(opts, out, "retrieveInfo", arg0)
-	return *ret0, *ret1, err
-}
-
-// RetrieveInfo is a free data retrieval call binding the contract method 0xc9776a6d.
-//
-// Solidity: function retrieveInfo(bytes32 ) view returns(string, string)
-func (_DataLedgerContract *DataLedgerContractSession) RetrieveInfo(arg0 [32]byte) (string, string, error) {
-	return _DataLedgerContract.Contract.RetrieveInfo(&_DataLedgerContract.CallOpts, arg0)
-}
-
-// RetrieveInfo is a free data retrieval call binding the contract method 0xc9776a6d.
-//
-// Solidity: function retrieveInfo(bytes32 ) view returns(string, string)
-func (_DataLedgerContract *DataLedgerContractCallerSession) RetrieveInfo(arg0 [32]byte) (string, string, error) {
-	return _DataLedgerContract.Contract.RetrieveInfo(&_DataLedgerContract.CallOpts, arg0)
 }

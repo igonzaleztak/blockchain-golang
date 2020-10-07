@@ -1,3 +1,3 @@
-curl localhost:5053/notify -s -S --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'Fiware-ServicePath:/' -X POST -d @- <<EOF
+curl localhost:5053/notify -s -S --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'Fiware-Service:smartsantander' --header 'Fiware-ServicePath:/trafficflowobserved' -X POST -d @- <<EOF
 {"subscriptionId":"5f6b1df556b05ef88d791d1a","data":[{"id":"urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901","type":"TrafficFlowObserved","dateModified":"2020-09-23T10:22:00.00Z","dateObserved":"2020-09-23T10:22:00.00Z","intensity":1080,"laneId":0,"location":{"type":"Point","coordinates":[-3.8270564,43.4559892]},"occupancy":0.1,"roadLoad":51,"dateModified":"2020-09-23T10:14:55.00Z"}]}
 EOF

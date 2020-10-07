@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
+	"os"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/ethclient"
 
 	adminap "./adminAP"
-	clientap "./clientAP"
 	accessControlContract "./contracts/accessContract"
 	balanceContract "./contracts/balanceContract"
 	dataContract "./contracts/dataContract"
@@ -73,12 +73,6 @@ func Init() *EthereumLocal {
 		logger.Log.Fatal(err)
 	}
 
-	// Set the data contract address in the balance contract
-	_, err = balanceContract.SetAddress(auth, libs.DataContractAddress)
-	if err != nil {
-		logger.Log.Fatal(err)
-	}
-
 	// Declaration of the struct that stores
 	// the Ethereum client and the contracts
 	myEthereumClient := &EthereumLocal{
@@ -91,51 +85,6 @@ func Init() *EthereumLocal {
 
 	return myEthereumClient
 }
-
-/*
-// PurchaseData Handles the purchases of the client
-func (ethclient *EthereumLocal) PurchaseData(w http.ResponseWriter, req *http.Request) {
-	if req.URL.Path != "/buydata" {
-		http.Error(w, "404 not found", http.StatusNotFound)
-		return
-	}
-
-	switch req.Method {
-	case "POST":
-		// Read the body of the message
-		var body map[string]interface{}
-		err := json.NewDecoder(req.Body).Decode(&body)
-		if err != nil {
-			http.Error(w, "Could not parse the message", http.StatusBadRequest)
-		}
-
-		// Process the purchase
-		ethClientArg := &libs.Ethereum{
-			EthereumClient: ethclient.EthereumClient,
-			DataCon:        ethclient.DataCon,
-			AccessCon:      ethclient.AccessCon,
-			BalanceCon:     ethclient.BalanceCon,
-			AdminPrivKey:   ethclient.AdminPrivKey,
-		}
-		response, err := clientap.ProccessClientPurchase(ethClientArg, body)
-		if err != nil {
-			if err.Error() == "The measurement has already been given" {
-				http.Error(w, err.Error(), 415)
-			} else {
-				http.Error(w, "401 Could not process the purchase due to error: "+err.Error(), http.StatusBadRequest)
-			}
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(response)
-
-	default:
-		http.Error(w, "401 Only POST methods are supported", http.StatusBadRequest)
-		fmt.Fprintf(w, "Only Post methods are supported")
-	}
-
-}
-*/
 
 //EventListener listens for new events on /notify and process them
 func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.Request) {
@@ -150,25 +99,27 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 		logger.Log.Printf("Request received from %s\n", req.Host)
 
 		// Create a map with body of the message
-		var auxBody map[string]interface{}
+		var body map[string]interface{}
 
 		// Create a map with the header of the message
 		header := req.Header
 
 		// Read the body of the message
-		err := json.NewDecoder(req.Body).Decode(&auxBody)
+		err := json.NewDecoder(req.Body).Decode(&body)
 		if err != nil {
 			fmt.Println(err)
 		}
 
 		logger.Log.Printf("Header of the request: \n%s \n", fmt.Sprintln(header))
-		logger.Log.Printf("Body of the request: \n%s \n", fmt.Sprintln(auxBody))
+		logger.Log.Printf("Body of the request: \n%s \n", fmt.Sprintln(body))
 
 		// Insert all the measurements into a field
 		// called "attributes"
-		body := libs.PrepareInputData(auxBody)
+		//	body := libs.PrepareInputData(auxBody)
 
 		logger.Log.Printf("Formatted Body:\n%s \n", fmt.Sprintln(body))
+		libs.PrettyPint(body)
+		os.Exit(0)
 
 		// Get the ID of the producer from the body
 		producerID := body["attributes"].(map[string]interface{})["value"].(map[string]interface{})["sensorID"].(map[string]interface{})["value"].(string)
@@ -194,6 +145,7 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 			dataBlockchain := libs.PrepareData(header, body)
 			libs.PrettyPint(dataBlockchain)
 			logger.Log.Printf("Data that will be stored in the Blockchain: \n%s\n", fmt.Sprintln(dataBlockchain))
+
 			// Prepare the data that will be sent to Orion
 			err = libs.SendDataOrion(header, body, dataBlockchain["hash"].(string))
 			if err != nil {
@@ -308,7 +260,8 @@ func main() {
 		BalanceCon:     myEthereumClient.BalanceCon,
 		AdminPrivKey:   myEthereumClient.AdminPrivKey,
 	}
-	go clientap.ListenToCustomerPurchases(ethClientArg)
+	_ = ethClientArg
+	//	go clientap.ListenToCustomerPurchases(ethClientArg)
 
 	// HTTP interface in a new subroutine
 	go func() {
