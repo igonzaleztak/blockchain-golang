@@ -1,13 +1,6 @@
 pragma solidity >=0.4.0 <= 0.6.1;
 
 
-// Definition of the functions of the other contract that are going to be required
-// in this contract
-contract dataLedgerContract 
-{
-    function retrieveInfo(bytes32) public view returns (string memory, string memory) {}
-}
-
 contract balanceContract 
 {
     address admin = 0x21A018606490C031A8c02Bb6b992D8AE44ADD37f;
@@ -148,4 +141,19 @@ contract balanceContract
         delete subs.indexAvailableTypes[subName];
         emit notifyRemoveCategory(msg.sender, subName);
     }
+    
+    
+    //getAllSubscriptions shows all the suscriptions that the user is subscribed to
+    function getAllSubscriptions() public view returns (bytes32[] memory)
+    {
+        return usersSubs[msg.sender].arraySubs;
+    }
+    
+    
+    // getAllTopics gets all the topics available in the platform
+    function getAllTopics() public view returns (bytes32[] memory) 
+    {
+        return subs.availableTypes;
+    }
+    
 }
