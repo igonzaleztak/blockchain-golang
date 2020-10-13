@@ -24,8 +24,11 @@ contract balanceContract
         // Array that stores all the subscriptions
         bytes32[] arraySubs;
     
-        // mappin byte32 to index array
+        // mapping byte32 to index array
         mapping(bytes32 => uint) indexArraySubs;
+    
+        // Array with the free indexes
+        uint[] arrayIndexes;
     }
     
     // Struct that holds the available Subscriptions
@@ -34,8 +37,20 @@ contract balanceContract
         // Map that holds all the suscriptions
         mapping(bytes32 => bool) allSubs;
         
+        // Map that stores all the subscribers
+        mapping(bytes32 => address[]) userSubscriptions;
+        
+        // Map that stores the index of the previous Array
+        mapping(bytes32 => mapping(address => uint)) userSubscriptionsIndex;
+        
+        // Array that stores free indexes
+        mapping(bytes32 => uint[]) freeIndexes;
+        
         // Array that holds the ids available
         bytes32[] availableTypes;
+        
+        // Array that holds the free indexes of the previous Array
+        uint[] availableTypesIndexes;
         
         // mappin byte32 to index array
         mapping(bytes32 => uint) indexAvailableTypes;
@@ -61,6 +76,13 @@ contract balanceContract
     // Event to notify the removal of categories
     event notifyRemoveCategory(address indexed _addr, bytes32 indexed _name);
     
+    // Event to notify the sending of the tokens
+    event sendTokenEvent(address indexed _addr, bytes32 indexed _hash, bytes32 indexed _txhahs);
+    
+    // Event to awnser the token sent by the platform
+    event anwserTokenEvent(bytes32 indexed _hash, bytes32 indexed _txhash);
+    
+    
     /****************** Greeting ****************************/
     function greet() pure public returns(string memory)
     {
@@ -81,11 +103,45 @@ contract balanceContract
         // Create the suscription in the user struct
         usersSubs[msg.sender].allSubs[subName] = true;
         usersSubs[msg.sender].subscriptions[subName] = now + time;
-        usersSubs[msg.sender].arraySubs.push(subName);
-        usersSubs[msg.sender].indexArraySubs[subName] = usersSubs[msg.sender].arraySubs.length;
+        
+        // Check whether there is a free index
+        if (usersSubs[msg.sender].arrayIndexes.length == 0) 
+        {
+            usersSubs[msg.sender].arraySubs.push(subName);
+            usersSubs[msg.sender].indexArraySubs[subName] = usersSubs[msg.sender].arraySubs.length;
+        }
+        else 
+        {
+            uint newIndex = usersSubs[msg.sender].arrayIndexes[usersSubs[msg.sender].arrayIndexes.length];
+            usersSubs[msg.sender].arraySubs[newIndex] = subName;
+            usersSubs[msg.sender].indexArraySubs[subName] = newIndex;
+            
+            // The index is no longer free. Therefore, it must be removed from the 
+            // the array that holds the free indexes.
+            delete usersSubs[msg.sender].arrayIndexes[usersSubs[msg.sender].arrayIndexes.length];
+        }
+
         
         // Add the values of the suscription in the subsStruct
         subs.allSubs[subName] = true;
+        
+        // Check whether there is a free index in the array
+        if (subs.freeIndexes[subName].length == 0)
+        {
+            subs.userSubscriptions[subName].push(msg.sender);
+            subs.userSubscriptionsIndex[subName][msg.sender] = subs.userSubscriptions[subName].length;
+        }
+        else 
+        {
+            uint newIndex2 = subs.freeIndexes[subName][subs.freeIndexes[subName].length];
+            subs.userSubscriptions[subName][newIndex2] = msg.sender;
+            subs.userSubscriptionsIndex[subName][msg.sender] = newIndex2;
+            
+            // The index is no longer free. Therefore, it must be removed from the 
+            // the array that holds the free indexes.
+            delete subs.freeIndexes[subName][subs.freeIndexes[subName].length];
+        }
+        
         
         // Emit event
         emit notifyNew(msg.sender, subName, now + time);
@@ -110,6 +166,10 @@ contract balanceContract
         
         // Remove sub from subs
         delete subs.allSubs[subName];
+        uint _indexSub = subs.userSubscriptionsIndex[subName][msg.sender];
+        subs.freeIndexes[subName].push(_indexSub);
+        delete subs.userSubscriptions[subName][_indexSub];
+        delete subs.userSubscriptionsIndex[subName][msg.sender];
         
         // emit event
         emit notifyRemove(msg.sender, subName);
@@ -127,8 +187,23 @@ contract balanceContract
         
         // Add the category
         subs.allSubs[subName] = true;
-        subs.availableTypes.push(subName);
-        subs.indexAvailableTypes[subName] = subs.availableTypes.length;
+        
+        // Check whether there is a free index available
+        if (subs.availableTypesIndexes.length == 0) 
+        {
+            subs.availableTypes.push(subName);
+            subs.indexAvailableTypes[subName] = subs.availableTypes.length;
+        }
+        else 
+        {
+            uint _index = subs.availableTypesIndexes[subs.availableTypesIndexes.length];
+            subs.availableTypes[_index] = subName;
+            subs.indexAvailableTypes[subName] = _index;
+            
+            delete subs.availableTypesIndexes[subs.availableTypesIndexes.length];
+        }
+        
+
         emit notifyNewCategory(msg.sender, subName);
     }
     
@@ -148,4 +223,56 @@ contract balanceContract
         delete subs.indexAvailableTypes[subName];
         emit notifyRemoveCategory(msg.sender, subName);
     }
+    
+    
+    // Check subscription status
+    function checkSubStatus(bytes32 subName, address clientAddr) public view returns (bool, uint)
+    {
+        // Only admin user and the customer who originated the subscription can see its status
+        if (msg.sender == admin)
+        {
+            return (usersSubs[clientAddr].allSubs[subName], usersSubs[clientAddr].subscriptions[subName]);
+        }
+        return (usersSubs[msg.sender].allSubs[subName], usersSubs[msg.sender].subscriptions[subName]);
+    }
+    
+    // Get all available types 
+    function getAllTypes() public view returns (bytes32[] memory)
+    {
+        return subs.availableTypes;
+    }
+    
+    
+    // Checks type status
+    function checkType(bytes32 typeName) public view returns (bool)
+    {
+        return subs.allSubs[typeName];
+    }
+    
+    
+    // Gets all the accounts subsribed to a type
+    function getSubsToType(bytes32 subName) public view returns (address[] memory)
+    {
+        require(msg.sender == admin, "You do not have enough privileges to do this action");
+        return subs.userSubscriptions[subName];
+    }
+    
+    
+    // Send token to client. 
+    // Admin uses this function to send tokens to the client.
+    function sendToken(bytes32 txHash, address to, bytes32 hash) public 
+    {
+        // Only the admin address can create tokens
+        require(msg.sender == admin, "You do not have enough privileges to do this action");
+        emit sendTokenEvent(to, hash, txHash);
+    }
+    
+    
+    // Anwser to token. 
+    // Customers use this function to anwser back with the signed token.
+    function anwserToken(bytes32 hash, bytes32 txHash) public 
+    {
+        emit anwserTokenEvent(hash, txHash);
+    }
+    
 }

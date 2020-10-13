@@ -4,20 +4,16 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"math/big"
-	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-
-	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 
 	accessControlContract "../contracts/accessContract"
 	balanceContract "../contracts/balanceContract"
@@ -28,13 +24,13 @@ import (
 /**************************** Contract Addresses *********************************/
 
 // DataContractAddress Address of the contract that holds the event
-var DataContractAddress common.Address = common.HexToAddress("0xD39bcC1050e6865F78f6236A46b451f4537D18Af")
+var DataContractAddress common.Address = common.HexToAddress("0x0bC69772b9E98B17a14f72C9c05fA9F843087dA5")
 
 // AccessControlContractAddress address of the contract that controls the access to the blockchain
-var AccessControlContractAddress common.Address = common.HexToAddress("0x31552aA24bbF55DDD5D786df4cf18d60B482f265")
+var AccessControlContractAddress common.Address = common.HexToAddress("0x167c455924ceD648fd94CCfcFBDb706FbdC21616")
 
 // BalanceContractAddress address of the contract that holds the purchases
-var BalanceContractAddress common.Address = common.HexToAddress("0x20Fc8257396E9889a349e8B307713a24f01DcA1D")
+var BalanceContractAddress common.Address = common.HexToAddress("0x31cc58564958508f834DAF6a09444d81e72f7B81")
 
 /********************************************************************************/
 
@@ -86,74 +82,148 @@ func ByteToByte32(bytes []byte) [32]byte {
 	return b
 }
 
-// ReadEventsFromBalanceContract reads the events associated to the balanceContract
-func ReadEventsFromBalanceContract(ethclient *Ethereum, nameEvent string, filter map[string]interface{}) (*types.Log, error) {
-	// Prepare the query to look for events
-	query := ethereum.FilterQuery{
-		FromBlock: nil,
-		ToBlock:   nil,
-		Addresses: []common.Address{
-			BalanceContractAddress,
-		},
-	}
+// prepareTokenClient creates a token to those clients subscribed to it
+// The token has the following fields:
+// 		- SubscriptionTopic
+//		- Client address
+// 		- Expiration date
+func sendTokenToClient(dataBlockchain map[string]interface{},
+	ethclient *Ethereum, clientAddr common.Address,
+) error {
+	var token map[string]interface{}
 
-	// Get the logs that hold the events
-	logs, err := ethclient.EthereumClient.FilterLogs(context.Background(), query)
+	// Get the expiration date stored in the Balance Contract
+	_, expirationDate, err := ethclient.BalanceCon.CheckSubStatus(&bind.CallOpts{From: common.HexToAddress(ADMINACCOUNT)},
+		String2Bytes32(dataBlockchain["id"].(string)),
+		clientAddr)
 	if err != nil {
-		fmt.Println("Error while creating the filter")
-		return nil, err
+		fmt.Println(err)
+		return err
 	}
 
-	// Get the appropiate interface of the contract to decode the logs
-	contractAbi, err := abi.JSON(strings.NewReader(string(balanceContract.BalanceContractABI)))
+	// Fill the fields of the Token
+	token["topic"] = dataBlockchain["id"]
+	token["address"] = clientAddr
+	token["expiration"] = expirationDate
+	token["url"] = dataBlockchain["url"]
+
+	// Create JSON token
+	tokenJSON, err := json.Marshal(token)
 	if err != nil {
-		fmt.Println("Error while generating the abi")
-		return nil, err
+		fmt.Println(err)
+		return err
 	}
 
-	_ = contractAbi
+	// Send a transaction to the client with the token
+	auth := bind.NewKeyedTransactor(ethclient.AdminPrivKey)
+	auth.Value = big.NewInt(0)
+	auth.GasLimit = uint64(400000)
+	auth.GasPrice = big.NewInt(0)
 
-	var logIndex common.Hash
-	switch nameEvent {
-	case "purchaseNotify":
-		// Get the index associated to 'purchaseNotify'
-		logPurchaseNotify := []byte("purchaseNotify(address,bytes32,uint256)")
-		logIndex = crypto.Keccak256Hash(logPurchaseNotify)
-	case "responseNotify":
-		logResponseNotify := []byte("purchaseNotify(address,bytes32,bytes32,bytes32)")
-		logIndex = crypto.Keccak256Hash(logResponseNotify)
-	default:
-		return nil, errors.New("Wrong name of the event")
+	txHash, err := SendTransaction(common.HexToAddress(ADMINACCOUNT),
+		clientAddr,
+		ethclient.AdminPrivKey,
+		ethclient,
+		tokenJSON,
+	)
+	if err != nil {
+		fmt.Println(err)
+		return err
 	}
 
-	switch nameEvent {
-	case "purchaseNotify":
-		// Iterate through the log to obtain the events
-		for _, vLog := range logs {
-			// Compare the index of the log with the one that it should be
-			if vLog.Topics[0].Hex() == logIndex.Hex() {
+	// Emit event in the balance contract so client can anwser it
+	_, err = ethclient.BalanceCon.SendToken(auth,
+		ByteToByte32(txHash),
+		clientAddr,
+		String2Bytes32(dataBlockchain["id"].(string)))
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
 
-				// Get the elements of the event which are indexed.
-				// In this case there are to elements: _addr and _hash.
-				// The other elements are stored in vLog.Data.
-				addrLog := common.HexToAddress(vLog.Topics[1].Hex())
-				hashLog := vLog.Topics[2]
+	return nil
+}
 
-				// Filter the events by Hash and address
-				hashToCompare, _ := HexStringToBytes32(filter["Hash"].(string))
-				if strings.ToLower(addrLog.Hex()) == filter["Addr"] && hashLog == hashToCompare {
-					return &vLog, nil
-				}
+// MangeSubscriptions checks if a subscription exists and
+// who is subscribed to it.
+func MangeSubscriptions(
+	dataBlockchain map[string]interface{},
+	ethclient *Ethereum,
+) error {
+
+	// Check whether the subscription exists
+	isThere, err := ethclient.BalanceCon.CheckType(nil, String2Bytes32(dataBlockchain["id"].(string)))
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	// Set the parameters of the transaction to set the type as available
+	// in the Balance SC in the Blockchain
+	auth := bind.NewKeyedTransactor(ethclient.AdminPrivKey)
+	auth.Value = big.NewInt(0)
+	auth.GasLimit = uint64(400000)
+	auth.GasPrice = big.NewInt(0)
+
+	// If it does not exist, create it
+	if !isThere {
+		_, err = ethclient.BalanceCon.AddNewType(auth, String2Bytes32(dataBlockchain["id"].(string)))
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+
+		// Check whether the type was stored successfully in the Blockchain
+		// Wait until the value is received or the loop
+		// is working for more than 15 seconds
+		currentTime := time.Now()
+		for {
+			checkType, err := ethclient.BalanceCon.CheckType(nil, String2Bytes32(dataBlockchain["id"].(string)))
+			if err != nil {
+				fmt.Println(err)
+				return err
+			}
+
+			if checkType {
+				fmt.Printf("\nType %s was added to the blockchain\n\n", dataBlockchain["id"].(string))
+				break
+			}
+
+			secondsPassed := time.Now().Sub(currentTime)
+			if secondsPassed > 15*time.Second {
+				fmt.Println("Could not check whether the data was introduced in the Blockchain")
+				return errors.New("Could not check whether the data was introduced in the Blockchain")
 			}
 		}
-		return nil, errors.New("Not match found")
-
-	case "responseNotify":
-	default:
-		return nil, errors.New("Wrong name of the event")
+		return nil
 	}
 
-	return nil, nil
+	// Get all the account that are subscribed to the event
+	addresses, err := ethclient.BalanceCon.GetSubsToType(&bind.CallOpts{From: common.HexToAddress(ADMINACCOUNT)}, String2Bytes32(dataBlockchain["id"].(string)))
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	// Check whether there is somenone subscribed
+	if len(addresses) == 0 {
+		fmt.Printf("\nNo customers subscribed to %s\n", dataBlockchain["id"].(string))
+		return nil
+	}
+
+	fmt.Printf("\nAddress subscribed to %s:", dataBlockchain["id"].(string))
+	fmt.Println(addresses)
+
+	// Send token to those clients that are subscribed to the event
+	for _, address := range addresses {
+		fmt.Printf("Sending %s token to %s", dataBlockchain["id"], fmt.Sprintln(address))
+		err = sendTokenToClient(dataBlockchain, ethclient, address)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	return nil
 }
 
 //InteractBlockchain stores the measurement in the blockchain
@@ -213,43 +283,11 @@ func InteractBlockchain(
 		}
 	}
 
-	// Set the parameters of the transaction to set the price of the event
-	auth = bind.NewKeyedTransactor(ethclient.AdminPrivKey)
-	auth.Value = big.NewInt(0)
-	auth.GasLimit = uint64(400000)
-	auth.GasPrice = big.NewInt(0)
-
-	// Send the transaction with the price of the product
-	price := big.NewInt(2)
-	_, err = ethclient.BalanceCon.SetPriceData(auth, hash32Byte, price)
+	// Process the subscriptions associated with the event
+	err = MangeSubscriptions(dataBlockchain, ethclient)
 	if err != nil {
 		fmt.Println(err)
 		return err
-	}
-
-	// Check whether the price has been set properly or the funciton has been in the
-	// loop for more than 15 seconds
-	currentTime = time.Now()
-	for {
-		var priceObtained *big.Int
-		priceObtained, err = ethclient.BalanceCon.GetPriceData(nil, hash32Byte)
-		if err != nil {
-			return err
-		}
-
-		if priceObtained.Int64() != 0 {
-			if priceObtained.Int64() != price.Int64() {
-				return errors.New("Price not set poperly")
-			}
-			fmt.Printf("\nPrice set to %d\n\n", price)
-			break
-		}
-
-		secondsPassed := time.Now().Sub(currentTime)
-		if secondsPassed > 15*time.Second {
-			fmt.Println("Could not check whether the price was set properly")
-			return errors.New("Could not check whether the price was set properly")
-		}
 	}
 
 	return nil
