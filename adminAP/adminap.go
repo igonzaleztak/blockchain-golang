@@ -65,26 +65,6 @@ func removeProducer(b BodyStruct, ethClient *libs.Ethereum) error {
 	return nil
 }
 
-<<<<<<< HEAD
-=======
-/*
-// setPrice sets the price of a measurement
-func setPrice(b BodyStruct, ethClient *libs.Ethereum) error {
-	// Convert the arguments to the proper format
-	hash := libs.ByteToByte32(common.Hex2Bytes(b.Hash[2:]))
-	price := big.NewInt(int64(b.Price))
-
-	// Set the price of the measurement in the blockchain
-	auth := setParamsTransactions(ethClient.AdminPrivKey)
-	_, err := ethClient.BalanceCon.SetPriceData(auth, hash, price)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-*/
-
->>>>>>> c596b8087f983583ad67605a3306c2f1dd772653
 // ProcessRequest processes the request of the admin
 func ProcessRequest(req *http.Request, ethClient *libs.Ethereum) error {
 
@@ -112,18 +92,6 @@ func ProcessRequest(req *http.Request, ethClient *libs.Ethereum) error {
 			fmt.Println(err)
 			return errors.New("Could not remove the producer from the blockchain")
 		}
-<<<<<<< HEAD
-=======
-	/*
-		case "setPrice":
-			// Set the price of a product
-			err := setPrice(body, ethClient)
-			if err != nil {
-				fmt.Println(err)
-				return errors.New("Could not set the price of the measurement")
-			}
-	*/
->>>>>>> c596b8087f983583ad67605a3306c2f1dd772653
 	default:
 		return errors.New("Wrong action")
 	}

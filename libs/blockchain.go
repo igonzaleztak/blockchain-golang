@@ -24,7 +24,6 @@ import (
 /**************************** Contract Addresses *********************************/
 
 // DataContractAddress Address of the contract that holds the event
-<<<<<<< HEAD
 var DataContractAddress common.Address = common.HexToAddress("0x0bC69772b9E98B17a14f72C9c05fA9F843087dA5")
 
 // AccessControlContractAddress address of the contract that controls the access to the blockchain
@@ -32,15 +31,6 @@ var AccessControlContractAddress common.Address = common.HexToAddress("0x167c455
 
 // BalanceContractAddress address of the contract that holds the purchases
 var BalanceContractAddress common.Address = common.HexToAddress("0x31cc58564958508f834DAF6a09444d81e72f7B81")
-=======
-var DataContractAddress common.Address = common.HexToAddress("0x3c7592697a284E3F9F06Cc1F85bf2216279E1d36")
-
-// AccessControlContractAddress address of the contract that controls the access to the blockchain
-var AccessControlContractAddress common.Address = common.HexToAddress("0xD2577E43bAd82FDB894012Fdf7Bf0caDe73e65Ef")
-
-// BalanceContractAddress address of the contract that holds the purchases
-var BalanceContractAddress common.Address = common.HexToAddress("0x48c029C2896C0B3b27bCb714c55203294Db7AdA3")
->>>>>>> c596b8087f983583ad67605a3306c2f1dd772653
 
 /********************************************************************************/
 
@@ -233,6 +223,10 @@ func MangeSubscriptions(
 		}
 	}
 
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -293,20 +287,12 @@ func InteractBlockchain(
 		}
 	}
 
-<<<<<<< HEAD
 	// Process the subscriptions associated with the event
 	err = MangeSubscriptions(dataBlockchain, ethclient)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
-=======
-	// Set the parameters of the transaction to set the price of the event
-	auth = bind.NewKeyedTransactor(ethclient.AdminPrivKey)
-	auth.Value = big.NewInt(0)
-	auth.GasLimit = uint64(400000)
-	auth.GasPrice = big.NewInt(0)
->>>>>>> c596b8087f983583ad67605a3306c2f1dd772653
 
 	return nil
 }

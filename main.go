@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
-	"os"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -99,27 +98,25 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 		logger.Log.Printf("Request received from %s\n", req.Host)
 
 		// Create a map with body of the message
-		var body map[string]interface{}
+		var auxBody map[string]interface{}
 
 		// Create a map with the header of the message
 		header := req.Header
 
 		// Read the body of the message
-		err := json.NewDecoder(req.Body).Decode(&body)
+		err := json.NewDecoder(req.Body).Decode(&auxBody)
 		if err != nil {
 			fmt.Println(err)
 		}
 
 		logger.Log.Printf("Header of the request: \n%s \n", fmt.Sprintln(header))
-		logger.Log.Printf("Body of the request: \n%s \n", fmt.Sprintln(body))
+		logger.Log.Printf("Body of the request: \n%s \n", fmt.Sprintln(auxBody))
 
 		// Insert all the measurements into a field
 		// called "attributes"
-		//	body := libs.PrepareInputData(auxBody)
+		body := libs.PrepareInputData(auxBody)
 
 		logger.Log.Printf("Formatted Body:\n%s \n", fmt.Sprintln(body))
-		libs.PrettyPint(body)
-		os.Exit(0)
 
 		// Get the ID of the producer from the body
 		producerID := body["attributes"].(map[string]interface{})["value"].(map[string]interface{})["sensorID"].(map[string]interface{})["value"].(string)
@@ -267,11 +264,7 @@ func main() {
 		AdminPrivKey:   myEthereumClient.AdminPrivKey,
 	}
 	_ = ethClientArg
-<<<<<<< HEAD
 	//go clientap.ListenToCustomerPurchases(ethClientArg)
-=======
-	//	go clientap.ListenToCustomerPurchases(ethClientArg)
->>>>>>> c596b8087f983583ad67605a3306c2f1dd772653
 
 	// HTTP interface in a new subroutine
 	go func() {
