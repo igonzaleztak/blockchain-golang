@@ -7,10 +7,276 @@ Header of the request:
 map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
  
 Body of the request: 
-map[cipher:map[type:String value:0x04f17576952b7ae80232b8cd735584f1a37623d1c1b83390472cda3bccc1814959daaf99d960cfa62b85a57c54d6c0a7c1800ff0998bd93f86ca20ee7827aab6692e6b12b421deeb26c8538c3f376139489a9678dc1ec73056c5a5902fad9a1665fc] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+map[cipher:map[type:String value:0x045c5611ef6fac2994adf3e19ed03924c08ac66dbc270c88afc33135eaa6c0bf71b2aaaadab55a38bac0231aa37c1f84265de921b6bb1759edb2c9e182346e9e4049f274bed87a3a6574db5eb3cbad3778d011d6d1d4053437125c52eeccc2499f32] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
  
 Formatted Body:
-map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x04f17576952b7ae80232b8cd735584f1a37623d1c1b83390472cda3bccc1814959daaf99d960cfa62b85a57c54d6c0a7c1800ff0998bd93f86ca20ee7827aab6692e6b12b421deeb26c8538c3f376139489a9678dc1ec73056c5a5902fad9a1665fc] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x045c5611ef6fac2994adf3e19ed03924c08ac66dbc270c88afc33135eaa6c0bf71b2aaaadab55a38bac0231aa37c1f84265de921b6bb1759edb2c9e182346e9e4049f274bed87a3a6574db5eb3cbad3778d011d6d1d4053437125c52eeccc2499f32] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x049646cc61f7f90919bcd739f3dab890ce2f5c5a32bfa13b6ca2ae8045dbb2031d803883863ecd66de5c3a4bdfa916a7264a31a6cd6e2d7146432bb3ed05e6a417459de492234afaf7b2192d732479d51a49a6120a11dff16ae1b69dabf7fc0f89cf] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x049646cc61f7f90919bcd739f3dab890ce2f5c5a32bfa13b6ca2ae8045dbb2031d803883863ecd66de5c3a4bdfa916a7264a31a6cd6e2d7146432bb3ed05e6a417459de492234afaf7b2192d732479d51a49a6120a11dff16ae1b69dabf7fc0f89cf] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x0472dc18e32077562dabd6b00e3c31600878bb23cea6acd41971527e63e78d17eedff3012e2fdecf72011e0fd82b9299386db49a9eba21d6c29caaaa86b68e8219f6a1211428c4efb674300b03391dc882234b8dacdbcc978d8eb942745236819f2a] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x0472dc18e32077562dabd6b00e3c31600878bb23cea6acd41971527e63e78d17eedff3012e2fdecf72011e0fd82b9299386db49a9eba21d6c29caaaa86b68e8219f6a1211428c4efb674300b03391dc882234b8dacdbcc978d8eb942745236819f2a] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x0478ee4f14cfb0502178501cab6fb7df07a4f808090ed6aa6d81e0f82ec647e6b5409ff79ea2cb4683b9d6c83a60ecb21b4b684c5cb40d9f25ba347538d5a1a59400763c74e3a310d8cff66788c243a3d6968693b02a3593f824d51bf986aec3dd3f] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x0478ee4f14cfb0502178501cab6fb7df07a4f808090ed6aa6d81e0f82ec647e6b5409ff79ea2cb4683b9d6c83a60ecb21b4b684c5cb40d9f25ba347538d5a1a59400763c74e3a310d8cff66788c243a3d6968693b02a3593f824d51bf986aec3dd3f] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x04b7d02bb188bfe68e925c9d4623981330559e70931353418b27ccfe1a32b3df2847ebed01046f451dfcdcf05603fe86b6f0b41b2eb4664aaf26ed2d6c569d9eee084ba6896aed62bed0d3c2fe459d472dba8dde042da8bf6f367b7632f4543d0477] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x04b7d02bb188bfe68e925c9d4623981330559e70931353418b27ccfe1a32b3df2847ebed01046f451dfcdcf05603fe86b6f0b41b2eb4664aaf26ed2d6c569d9eee084ba6896aed62bed0d3c2fe459d472dba8dde042da8bf6f367b7632f4543d0477] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x04be73cb4afba80178160b149076cf3bd2099c97e92335512065178578355c08f8c581f9a723920168042500f005fd8324bd5de80276222061e55b21412d991797f5b91fd008d325b5bd1d4f845fd80f2de8e5eeaf22faae59d97a3bba17e3b5cda5] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x04be73cb4afba80178160b149076cf3bd2099c97e92335512065178578355c08f8c581f9a723920168042500f005fd8324bd5de80276222061e55b21412d991797f5b91fd008d325b5bd1d4f845fd80f2de8e5eeaf22faae59d97a3bba17e3b5cda5] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x0447d0d16bf667be29202bf3d5093270c4444b3b20494fd0412d1b21df04f77edf83a80fea20b5a8ea88e7e48a27838bdbfcf552867551ec60054b20fdeecdfb0a361f1f88eb93c80a2b86696307f0cb63a829f58fb56cc8e5a41b6fbddd711ab658] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x0447d0d16bf667be29202bf3d5093270c4444b3b20494fd0412d1b21df04f77edf83a80fea20b5a8ea88e7e48a27838bdbfcf552867551ec60054b20fdeecdfb0a361f1f88eb93c80a2b86696307f0cb63a829f58fb56cc8e5a41b6fbddd711ab658] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x0485ae52ba853c272c81146554ea188bf98dbb02ea3ab6cced77262a8a2e69bce748a6d566f7b6d5623a8124006fcb209b4c0049c643d3cf386fa32b43315bb65c1f1f09152e25b83b5759b6a0bc5c3512086ee912bbf947193b8301703c496cd6fa] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x0485ae52ba853c272c81146554ea188bf98dbb02ea3ab6cced77262a8a2e69bce748a6d566f7b6d5623a8124006fcb209b4c0049c643d3cf386fa32b43315bb65c1f1f09152e25b83b5759b6a0bc5c3512086ee912bbf947193b8301703c496cd6fa] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x04aa071d6545ac0c0ee4e21506b158d8fe91c4c8eb0b73d0c598bd487058087e2048fa9716931d4ae18fd021126a197149d483a153c1649743d8322e2bdfc37a19de9366d200f9f221f768c4293b5f5cb2cd9a2489575e2f764cf2527f5bcbbfe0f9] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x04aa071d6545ac0c0ee4e21506b158d8fe91c4c8eb0b73d0c598bd487058087e2048fa9716931d4ae18fd021126a197149d483a153c1649743d8322e2bdfc37a19de9366d200f9f221f768c4293b5f5cb2cd9a2489575e2f764cf2527f5bcbbfe0f9] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x041571da3a747625736d93c721122c123d57e503a41cd54d75c793692738fea14f9a65dbab57fe5fd0d74019e7adb7d97a6e26e4f583588c173fb1280f819ef90ce136ab4017553f929aff5a5604291751f9ecb8e1f98ebffa9f4c5a2a4b0bd40585] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x041571da3a747625736d93c721122c123d57e503a41cd54d75c793692738fea14f9a65dbab57fe5fd0d74019e7adb7d97a6e26e4f583588c173fb1280f819ef90ce136ab4017553f929aff5a5604291751f9ecb8e1f98ebffa9f4c5a2a4b0bd40585] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x0434daa64c26bd3c13b28c32333854695e4e7ff1fe9cb1ce3f90f00acf511a50d23ad2b4d047ecd714688ff14ca3ee287a9adcae214f67d7f33eacf59e8c89233cb4df16947a16d847858d735a44d71b5d2949024af54180ad6226b74f574e1856c9] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x0434daa64c26bd3c13b28c32333854695e4e7ff1fe9cb1ce3f90f00acf511a50d23ad2b4d047ecd714688ff14ca3ee287a9adcae214f67d7f33eacf59e8c89233cb4df16947a16d847858d735a44d71b5d2949024af54180ad6226b74f574e1856c9] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x04cad3665b31dd5063d88198d4b092bbed2773d5d6f8d0e00d7c736f7df5a29d4e1fa5a4f517b61e20737c664959ba64320017f54a437b8b9fe9f297acab13e17c21ba5a3987ac5d75d0230c8a8519f0728ab49bb29d6000dacf25cf5febd1fd4aff] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x04cad3665b31dd5063d88198d4b092bbed2773d5d6f8d0e00d7c736f7df5a29d4e1fa5a4f517b61e20737c664959ba64320017f54a437b8b9fe9f297acab13e17c21ba5a3987ac5d75d0230c8a8519f0728ab49bb29d6000dacf25cf5febd1fd4aff] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x04411352a076b598740179cf0aec5cfe3920967309a30cbe4ac4ce0025e8349386e70b2900a1119f7bf8532e296faf04704d011c4b0c10814d81f7b805eb623fb6fe5da2fcd4e674bb5e09164f66cf01616c3a9e71ded41ec9bf828f11864c499b23] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x04411352a076b598740179cf0aec5cfe3920967309a30cbe4ac4ce0025e8349386e70b2900a1119f7bf8532e296faf04704d011c4b0c10814d81f7b805eb623fb6fe5da2fcd4e674bb5e09164f66cf01616c3a9e71ded41ec9bf828f11864c499b23] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x042cee0a0a0f7b0015687bddde28b57e0a1e8758e60af903ea0c2e21e36aea6096f2627b618bf581cdc98875ef3724f2684e3270a77145f36a499ff6bc44e370176a3792113d8d11267915ecf83eed3d6f9c3c279f7a80aa232427d1d0266e114dcb] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x042cee0a0a0f7b0015687bddde28b57e0a1e8758e60af903ea0c2e21e36aea6096f2627b618bf581cdc98875ef3724f2684e3270a77145f36a499ff6bc44e370176a3792113d8d11267915ecf83eed3d6f9c3c279f7a80aa232427d1d0266e114dcb] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+ 
+Data that will be stored in the Blockchain: 
+map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]
+
+Request sent to Orion
+map[attributes:map[metadata:map[hash:map[type:String value:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]] type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
+
+Orion Response(403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b)
+204
+
+Request received from 127.0.0.1:8051
+Header of the request: 
+map[Accept:[application/json] Accept-Encoding:[gzip] Content-Length:[723] Content-Type:[application/json] Fiware-Service:[smartsantander] Fiware-Servicepath:[/trafficflowobserved] User-Agent:[curl/7.58.0]]
+ 
+Body of the request: 
+map[cipher:map[type:String value:0x04cd5ad1dc2120620c40cef04a5586e3254f088514e7f7260c3c2a02111e4e2e73dd13d763da187b1f294cff4eb7057dfe6ef5f5e651bcffeecc242e148beb403a0b002e7a85ec457bed888f9ba4f2d3a09a9fb5037998e51654ce11c18634390c0d] dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1] type:TrafficFlowObserved]
+ 
+Formatted Body:
+map[attributes:map[type:Object value:map[dateModified:2020-09-23T10:14:55.00Z dateObserved:2020-09-23T10:22:00.00Z intensity:1080 laneId:0 location:map[coordinates:[-3.8270564 43.4559892] type:Point] occupancy:0.1 roadLoad:51 sensorID:map[type:String value:iot-smartsantander1]]] cipher:map[type:String value:0x04cd5ad1dc2120620c40cef04a5586e3254f088514e7f7260c3c2a02111e4e2e73dd13d763da187b1f294cff4eb7057dfe6ef5f5e651bcffeecc242e148beb403a0b002e7a85ec457bed888f9ba4f2d3a09a9fb5037998e51654ce11c18634390c0d] description:map[type:String value:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1] id:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 type:TrafficFlowObserved]
  
 Data that will be stored in the Blockchain: 
 map[description:urn:ngsi-ld:TrafficFlowObserved:santander:traffic:flow:2901 by iot-smartsantander1 hash:403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b id:iot-smartsantander1 url:https://localhost:8052/smartsantander/trafficflowobserved/403ebc218964014111465b5060c1f07f4c47b0d7198751e2608d49ce15e38b9b]

@@ -77,10 +77,10 @@ contract balanceContract
     event notifyRemoveCategory(address indexed _addr, bytes32 indexed _name);
     
     // Event to notify the sending of the tokens
-    event sendTokenEvent(address indexed _addr, bytes32 indexed _hash, bytes32 indexed _txhahs);
+    event sendTokenEvent(address indexed _addr, bytes32 indexed _hash, bytes32 indexed _txHash);
     
     // Event to awnser the token sent by the platform
-    event anwserTokenEvent(bytes32 indexed _hash, bytes32 indexed _txhash);
+    event anwserTokenEvent(bytes32 indexed _hash, bytes32 indexed _txHash);
     
     
     /****************** Greeting ****************************/
@@ -96,6 +96,14 @@ contract balanceContract
     {
         // Check whether the requested subscription category exists
         require(subs.allSubs[subName] == true, "The requested category does not exist");
+        
+        // Check if the subscription has expired.
+        //  - True: subscription has expired. Therefore, delete the existing subscription
+        //  - False: Subscription has not expired or does not exist
+        if (usersSubs[msg.sender].subscriptions[subName] > now)
+        {
+            deleteSub(subName, msg.sender);
+        }
         
         // Check whether the user is already subscribed
         require(usersSubs[msg.sender].allSubs[subName] == false, "The user is already subscribe to that type");
@@ -149,8 +157,35 @@ contract balanceContract
     
     
     // Endpoint used by costumer to delete subscriptions
-    function deleteSub(bytes32 subName) public 
+    function deleteSub(bytes32 subName, address clientAddr) public 
     {
+        // The admin can delete subscriptions if they have expired
+        if (msg.sender == admin)
+        {
+            // Check whether the user is subscribed
+            require(usersSubs[clientAddr].allSubs[subName] == true, "The user is not suscribed to the requeste type");
+            
+            // Check whether the susbcription has expired
+            require(now > usersSubs[msg.sender].subscriptions[subName], "Subscription is still active");
+            
+            // Get index of Subscription
+            uint _index = usersSubs[clientAddr].indexArraySubs[subName];
+            
+            // remove sub from userStruct
+            delete usersSubs[clientAddr].allSubs[subName];
+            delete usersSubs[clientAddr].arraySubs[_index];
+            
+            // Remove sub from subs
+            delete subs.allSubs[subName];
+            uint _indexSub2 = subs.userSubscriptionsIndex[subName][clientAddr];
+            subs.freeIndexes[subName].push(_indexSub2);
+            delete subs.userSubscriptions[subName][_indexSub2];
+            delete subs.userSubscriptionsIndex[subName][clientAddr];
+            
+            // emit event
+            emit notifyRemove(clientAddr, subName);
+        }
+        
         // Check whether the user is subscribed
         require(usersSubs[msg.sender].allSubs[subName] == true, "The user is not suscribed to the requeste type");
         
@@ -158,11 +193,11 @@ contract balanceContract
         require(now < usersSubs[msg.sender].subscriptions[subName], "Subscription is not active");
         
         // Get index of Subscription
-        uint _index = usersSubs[msg.sender].indexArraySubs[subName];
+        uint _index2 = usersSubs[msg.sender].indexArraySubs[subName];
         
         // remove sub from userStruct
         delete usersSubs[msg.sender].allSubs[subName];
-        delete usersSubs[msg.sender].arraySubs[_index];
+        delete usersSubs[msg.sender].arraySubs[_index2];
         
         // Remove sub from subs
         delete subs.allSubs[subName];
@@ -173,6 +208,8 @@ contract balanceContract
         
         // emit event
         emit notifyRemove(msg.sender, subName);
+        
+        return;
     }
     
     
@@ -226,12 +263,23 @@ contract balanceContract
     
     
     // Check subscription status
-    function checkSubStatus(bytes32 subName, address clientAddr) public view returns (bool, uint)
+    function checkSubStatus(bytes32 subName, address clientAddr) public returns (bool, uint)
     {
         // Only admin user and the customer who originated the subscription can see its status
         if (msg.sender == admin)
         {
+            // If the subscription has expired delete it
+            if (usersSubs[clientAddr].subscriptions[subName] > now)
+            {
+                deleteSub(subName, clientAddr);
+            }
             return (usersSubs[clientAddr].allSubs[subName], usersSubs[clientAddr].subscriptions[subName]);
+        }
+        
+        // If the subscription has expired delete it
+        if (usersSubs[msg.sender].subscriptions[subName] > now)
+        {
+            deleteSub(subName, msg.sender);
         }
         return (usersSubs[msg.sender].allSubs[subName], usersSubs[msg.sender].subscriptions[subName]);
     }

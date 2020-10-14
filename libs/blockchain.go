@@ -24,13 +24,13 @@ import (
 /**************************** Contract Addresses *********************************/
 
 // DataContractAddress Address of the contract that holds the event
-var DataContractAddress common.Address = common.HexToAddress("0x0bC69772b9E98B17a14f72C9c05fA9F843087dA5")
+var DataContractAddress common.Address = common.HexToAddress("0x77fd0aFF9117621d315D37b9966696fdDc49c007")
 
 // AccessControlContractAddress address of the contract that controls the access to the blockchain
-var AccessControlContractAddress common.Address = common.HexToAddress("0x167c455924ceD648fd94CCfcFBDb706FbdC21616")
+var AccessControlContractAddress common.Address = common.HexToAddress("0xDCDfe07b2a024B80637FD9FA2d23391d78880D23")
 
 // BalanceContractAddress address of the contract that holds the purchases
-var BalanceContractAddress common.Address = common.HexToAddress("0x31cc58564958508f834DAF6a09444d81e72f7B81")
+var BalanceContractAddress common.Address = common.HexToAddress("0xB7124629A5f892a4E53D7C7399A881fb73aB3314")
 
 /********************************************************************************/
 
@@ -90,7 +90,7 @@ func ByteToByte32(bytes []byte) [32]byte {
 func sendTokenToClient(dataBlockchain map[string]interface{},
 	ethclient *Ethereum, clientAddr common.Address,
 ) error {
-	var token map[string]interface{}
+	token := make(map[string]interface{})
 
 	// Get the expiration date stored in the Balance Contract
 	_, expirationDate, err := ethclient.BalanceCon.CheckSubStatus(&bind.CallOpts{From: common.HexToAddress(ADMINACCOUNT)},
@@ -102,10 +102,10 @@ func sendTokenToClient(dataBlockchain map[string]interface{},
 	}
 
 	// Fill the fields of the Token
-	token["topic"] = dataBlockchain["id"]
-	token["address"] = clientAddr
+	token["topic"] = dataBlockchain["id"].(string)
+	token["address"] = clientAddr.Hex()
 	token["expiration"] = expirationDate
-	token["url"] = dataBlockchain["url"]
+	token["url"] = dataBlockchain["url"].(string)
 
 	// Create JSON token
 	tokenJSON, err := json.Marshal(token)
@@ -211,16 +211,17 @@ func MangeSubscriptions(
 		return nil
 	}
 
-	fmt.Printf("\nAddress subscribed to %s:", dataBlockchain["id"].(string))
+	fmt.Printf("\nAddresses subscribed to %s:", dataBlockchain["id"].(string))
 	fmt.Println(addresses)
 
 	// Send token to those clients that are subscribed to the event
 	for _, address := range addresses {
-		fmt.Printf("Sending %s token to %s", dataBlockchain["id"], fmt.Sprintln(address))
+		fmt.Printf("Sending %s token to %s", dataBlockchain["id"], fmt.Sprintln(address.Hex()))
 		err = sendTokenToClient(dataBlockchain, ethclient, address)
 		if err != nil {
 			fmt.Println(err)
 		}
+		fmt.Printf("\nToken was sent successfully\n")
 	}
 
 	if err != nil {

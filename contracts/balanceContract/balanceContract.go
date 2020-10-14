@@ -27,7 +27,7 @@ var (
 )
 
 // BalanceContractABI is the input ABI used to generate the binding from.
-const BalanceContractABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"getSubsToType\",\"outputs\":[{\"name\":\"\",\"type\":\"address[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getAllTypes\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"addNewType\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"deleteType\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"hash\",\"type\":\"bytes32\"},{\"name\":\"txHash\",\"type\":\"bytes32\"}],\"name\":\"anwserToken\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"},{\"name\":\"clientAddr\",\"type\":\"address\"}],\"name\":\"checkSubStatus\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"},{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"typeName\",\"type\":\"bytes32\"}],\"name\":\"checkType\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"txHash\",\"type\":\"bytes32\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"hash\",\"type\":\"bytes32\"}],\"name\":\"sendToken\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"subscribeTo\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"greet\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"deleteSub\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_subID\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"_endTime\",\"type\":\"uint256\"}],\"name\":\"notifyNew\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_subID\",\"type\":\"bytes32\"}],\"name\":\"notifyRemove\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_name\",\"type\":\"bytes32\"}],\"name\":\"notifyNewCategory\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_name\",\"type\":\"bytes32\"}],\"name\":\"notifyRemoveCategory\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_hash\",\"type\":\"bytes32\"},{\"indexed\":true,\"name\":\"_txhahs\",\"type\":\"bytes32\"}],\"name\":\"sendTokenEvent\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_hash\",\"type\":\"bytes32\"},{\"indexed\":true,\"name\":\"_txhash\",\"type\":\"bytes32\"}],\"name\":\"anwserTokenEvent\",\"type\":\"event\"}]"
+const BalanceContractABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"getSubsToType\",\"outputs\":[{\"name\":\"\",\"type\":\"address[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getAllTypes\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"addNewType\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"}],\"name\":\"deleteType\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"hash\",\"type\":\"bytes32\"},{\"name\":\"txHash\",\"type\":\"bytes32\"}],\"name\":\"anwserToken\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"},{\"name\":\"clientAddr\",\"type\":\"address\"}],\"name\":\"deleteSub\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"},{\"name\":\"clientAddr\",\"type\":\"address\"}],\"name\":\"checkSubStatus\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"},{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"typeName\",\"type\":\"bytes32\"}],\"name\":\"checkType\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"txHash\",\"type\":\"bytes32\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"hash\",\"type\":\"bytes32\"}],\"name\":\"sendToken\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"subName\",\"type\":\"bytes32\"},{\"name\":\"time\",\"type\":\"uint256\"}],\"name\":\"subscribeTo\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"greet\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_subID\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"_endTime\",\"type\":\"uint256\"}],\"name\":\"notifyNew\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_subID\",\"type\":\"bytes32\"}],\"name\":\"notifyRemove\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_name\",\"type\":\"bytes32\"}],\"name\":\"notifyNewCategory\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_name\",\"type\":\"bytes32\"}],\"name\":\"notifyRemoveCategory\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_addr\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_hash\",\"type\":\"bytes32\"},{\"indexed\":true,\"name\":\"_txHash\",\"type\":\"bytes32\"}],\"name\":\"sendTokenEvent\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_hash\",\"type\":\"bytes32\"},{\"indexed\":true,\"name\":\"_txHash\",\"type\":\"bytes32\"}],\"name\":\"anwserTokenEvent\",\"type\":\"event\"}]"
 
 // BalanceContractFuncSigs maps the 4-byte function signature to its string representation.
 var BalanceContractFuncSigs = map[string]string{
@@ -35,7 +35,7 @@ var BalanceContractFuncSigs = map[string]string{
 	"2236067f": "anwserToken(bytes32,bytes32)",
 	"7dfde040": "checkSubStatus(bytes32,address)",
 	"99a50b42": "checkType(bytes32)",
-	"f356cc79": "deleteSub(bytes32)",
+	"42007c86": "deleteSub(bytes32,address)",
 	"1d9de32c": "deleteType(bytes32)",
 	"09dddcf0": "getAllTypes()",
 	"097796fd": "getSubsToType(bytes32)",
@@ -45,7 +45,7 @@ var BalanceContractFuncSigs = map[string]string{
 }
 
 // BalanceContractBin is the compiled bytecode used for deploying new contracts.
-var BalanceContractBin = "0x608060405260008054600160a060020a0319167321a018606490c031a8c02bb6b992d8ae44add37f17905534801561003657600080fd5b50610de5806100466000396000f3006080604052600436106100ae5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663097796fd81146100b357806309dddcf01461011b578063149cde75146101305780631d9de32c1461014a5780632236067f146101625780637dfde0401461017d57806399a50b42146101bc578063b074233a146101e8578063c990824d1461020f578063cfae32171461022a578063f356cc79146102b4575b600080fd5b3480156100bf57600080fd5b506100cb6004356102cc565b60408051602080825283518183015283519192839290830191858101910280838360005b838110156101075781810151838201526020016100ef565b505050509050019250505060405180910390f35b34801561012757600080fd5b506100cb6103c1565b34801561013c57600080fd5b5061014860043561041d565b005b34801561015657600080fd5b506101486004356105ce565b34801561016e57600080fd5b50610148600435602435610702565b34801561018957600080fd5b506101a1600435600160a060020a0360243516610733565b60408051921515835260208301919091528051918290030190f35b3480156101c857600080fd5b506101d46004356107b9565b604080519115158252519081900360200190f35b3480156101f457600080fd5b50610148600435600160a060020a03602435166044356107ce565b34801561021b57600080fd5b50610148600435602435610893565b34801561023657600080fd5b5061023f610b2b565b6040805160208082528351818301528351919283929083019185019080838360005b83811015610279578181015183820152602001610261565b50505050905090810190601f1680156102a65780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b3480156102c057600080fd5b50610148600435610b8a565b600054606090600160a060020a03163314610357576040805160e560020a62461bcd02815260206004820152603360248201527f596f7520646f206e6f74206861766520656e6f7567682070726976696c65676560448201527f7320746f20646f207468697320616374696f6e00000000000000000000000000606482015290519081900360840190fd5b600082815260036020908152604091829020805483518184028101840190945280845290918301828280156103b557602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610397575b50505050509050919050565b6060600260040180548060200260200160405190810160405280929190818152602001828054801561041357602002820191906000526020600020905b815481526001909101906020018083116103fe575b5050505050905090565b60008054600160a060020a031633146104a5576040805160e560020a62461bcd028152602060048201526024808201527f5573657220646f6573206e6f74206861766520656e6f7567682070726976696c60448201527f6567657300000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008281526002602052604090205460ff1615610531576040805160e560020a62461bcd028152602060048201526024808201527f546865207265717565737465642063617465676f727920616c7261647920657860448201527f6973747300000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b6000828152600260205260409020805460ff19166001179055600754151561059757600680546001810182557ff652222313e28459528d920b65115c16c04f3efc82aaedc97be59f3f377c0d3f018390555460008381526008602052604090205561059d565b60078054fe5b604051829033907fde3cd713f10754ba21eabefe59d58e9251b68f9ff9016fc20324b4e261f1d59890600090a35050565b600054600160a060020a03163314610655576040805160e560020a62461bcd028152602060048201526024808201527f5573657220646f6573206e6f74206861766520656e6f7567682070726976696c60448201527f6567657300000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008181526002602052604090205460ff1615156001146106e6576040805160e560020a62461bcd02815260206004820152602560248201527f546865207265717565737465642063617465676f727920646f6573206e6f742060448201527f6578697374000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b6000818152600260205260409020805460ff1916905560068054fe5b604051819083907f48585d03016d8be31bb329d396ec74ded946f7e152eaccce1445939fb7e4214790600090a35050565b600080548190600160a060020a0316331415610784575050600160a060020a03811660009081526001602081815260408084208685528083528185205493019091529091205460ff909116906107b2565b50503360009081526001602081815260408084208685528083528185205493019091529091205460ff909116905b9250929050565b60009081526002602052604090205460ff1690565b600054600160a060020a03163314610856576040805160e560020a62461bcd02815260206004820152603360248201527f596f7520646f206e6f74206861766520656e6f7567682070726976696c65676560448201527f7320746f20646f207468697320616374696f6e00000000000000000000000000606482015290519081900360840190fd5b60405183908290600160a060020a038516907f026171e27f75693d971e6674100c15eae4e974c1cf862fe68f053af6ea9ff50b90600090a4505050565b600082815260026020526040812054819060ff161515600114610926576040805160e560020a62461bcd02815260206004820152602560248201527f546865207265717565737465642063617465676f727920646f6573206e6f742060448201527f6578697374000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b33600090815260016020908152604080832087845290915290205460ff16156109bf576040805160e560020a62461bcd02815260206004820152602a60248201527f546865207573657220697320616c72656164792073756273637269626520746f60448201527f2074686174207479706500000000000000000000000000000000000000000000606482015290519081900360840190fd5b336000818152600160208181526040808420898552808352818520805460ff19168517905580840183529084204289019055939092529052600401541515610a405733600090815260016020818152604080842060028101805494850181558086528386209094018990559254888552600390930190915290912055610a56565b3360009081526001602052604090206004018054fe5b6000848152600260209081526040808320805460ff1916600117905560059091529020541515610ada576000848152600360209081526040808320805460018101825581855283852001805473ffffffffffffffffffffffffffffffffffffffff191633908117909155888552905460048452828520918552925290912055610aec565b60008481526005602052604090208054fe5b6040805142850181529051859133917fc7c18d7fd8f2b08630c0d4f0bcf252583ff50a5cf2c5d8811f8a4347191679d49181900360200190a350505050565b60408051606081018252603381527f48656c6c6f20796f7520686176652063616c6c65642074686520636f6e74726160208201527f63742062616c616e63652d737562732e736f6c000000000000000000000000009181019190915290565b336000908152600160208181526040808420858552909152822054829160ff909116151514610c29576040805160e560020a62461bcd02815260206004820152602e60248201527f5468652075736572206973206e6f742073757363726962656420746f2074686560448201527f2072657175657374652074797065000000000000000000000000000000000000606482015290519081900360840190fd5b33600090815260016020818152604080842087855290920190529020544210610c9c576040805160e560020a62461bcd02815260206004820152601a60248201527f537562736372697074696f6e206973206e6f7420616374697665000000000000604482015290519081900360640190fd5b33600081815260016020818152604080842088855260038101835281852054818452918520805460ff191690559490935252600290910180549193509083908110610ce357fe5b60009182526020808320909101829055848252600281526040808320805460ff191690556004825280832033845282528083205486845260058352818420805460018101825590855283852001819055868452600390925290912080549192509082908110610d4e57fe5b60009182526020808320909101805473ffffffffffffffffffffffffffffffffffffffff191690558482526004815260408083203380855292528083208390555185927fab7ba7d234105b15e41e97f548ae644ed346089e33e01f8f03a862bfaebacb9191a35050505600a165627a7a723058204eb2e2db28f0a94cd37b913442cda734be56bf6b4a65a47de96bfd21199bd9ed0029"
+var BalanceContractBin = "0x608060405260008054600160a060020a0319167321a018606490c031a8c02bb6b992d8ae44add37f17905534801561003657600080fd5b506110ea806100466000396000f3006080604052600436106100ae5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663097796fd81146100b357806309dddcf01461011b578063149cde75146101305780631d9de32c1461014a5780632236067f1461016257806342007c861461017d5780637dfde040146101a157806399a50b42146101e0578063b074233a1461020c578063c990824d14610233578063cfae32171461024e575b600080fd5b3480156100bf57600080fd5b506100cb6004356102d8565b60408051602080825283518183015283519192839290830191858101910280838360005b838110156101075781810151838201526020016100ef565b505050509050019250505060405180910390f35b34801561012757600080fd5b506100cb6103cd565b34801561013c57600080fd5b50610148600435610429565b005b34801561015657600080fd5b506101486004356105da565b34801561016e57600080fd5b5061014860043560243561070e565b34801561018957600080fd5b50610148600435600160a060020a036024351661073f565b3480156101ad57600080fd5b506101c5600435600160a060020a0360243516610bd4565b60408051921515835260208301919091528051918290030190f35b3480156101ec57600080fd5b506101f8600435610cbf565b604080519115158252519081900360200190f35b34801561021857600080fd5b50610148600435600160a060020a0360243516604435610cd4565b34801561023f57600080fd5b50610148600435602435610d99565b34801561025a57600080fd5b5061026361105f565b6040805160208082528351818301528351919283929083019185019080838360005b8381101561029d578181015183820152602001610285565b50505050905090810190601f1680156102ca5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b600054606090600160a060020a03163314610363576040805160e560020a62461bcd02815260206004820152603360248201527f596f7520646f206e6f74206861766520656e6f7567682070726976696c65676560448201527f7320746f20646f207468697320616374696f6e00000000000000000000000000606482015290519081900360840190fd5b600082815260036020908152604091829020805483518184028101840190945280845290918301828280156103c157602002820191906000526020600020905b8154600160a060020a031681526001909101906020018083116103a3575b50505050509050919050565b6060600260040180548060200260200160405190810160405280929190818152602001828054801561041f57602002820191906000526020600020905b8154815260019091019060200180831161040a575b5050505050905090565b60008054600160a060020a031633146104b1576040805160e560020a62461bcd028152602060048201526024808201527f5573657220646f6573206e6f74206861766520656e6f7567682070726976696c60448201527f6567657300000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008281526002602052604090205460ff161561053d576040805160e560020a62461bcd028152602060048201526024808201527f546865207265717565737465642063617465676f727920616c7261647920657860448201527f6973747300000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b6000828152600260205260409020805460ff1916600117905560075415156105a357600680546001810182557ff652222313e28459528d920b65115c16c04f3efc82aaedc97be59f3f377c0d3f01839055546000838152600860205260409020556105a9565b60078054fe5b604051829033907fde3cd713f10754ba21eabefe59d58e9251b68f9ff9016fc20324b4e261f1d59890600090a35050565b600054600160a060020a03163314610661576040805160e560020a62461bcd028152602060048201526024808201527f5573657220646f6573206e6f74206861766520656e6f7567682070726976696c60448201527f6567657300000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b60008181526002602052604090205460ff1615156001146106f2576040805160e560020a62461bcd02815260206004820152602560248201527f546865207265717565737465642063617465676f727920646f6573206e6f742060448201527f6578697374000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b6000818152600260205260409020805460ff1916905560068054fe5b604051819083907f48585d03016d8be31bb329d396ec74ded946f7e152eaccce1445939fb7e4214790600090a35050565b60008054819081908190600160a060020a03163314156109a557600160a060020a03851660009081526001602081815260408084208a85529091529091205460ff161515146107fe576040805160e560020a62461bcd02815260206004820152602e60248201527f5468652075736572206973206e6f742073757363726962656420746f2074686560448201527f2072657175657374652074797065000000000000000000000000000000000000606482015290519081900360840190fd5b3360009081526001602081815260408084208a855290920190529020544211610871576040805160e560020a62461bcd02815260206004820152601c60248201527f537562736372697074696f6e206973207374696c6c2061637469766500000000604482015290519081900360640190fd5b600160a060020a03851660008181526001602081815260408084208b855260038101835281852054818452918520805460ff1916905594909352526002909101805491955090859081106108c157fe5b60009182526020808320909101829055878252600281526040808320805460ff1916905560048252808320600160a060020a03891684528252808320548984526005835281842080546001810182559085528385200181905589845260039092529091208054919450908490811061093557fe5b60009182526020808320909101805473ffffffffffffffffffffffffffffffffffffffff19169055878252600481526040808320600160a060020a03891680855292528083208390555188927fab7ba7d234105b15e41e97f548ae644ed346089e33e01f8f03a862bfaebacb9191a35b3360009081526001602081815260408084208a85529091529091205460ff16151514610a41576040805160e560020a62461bcd02815260206004820152602e60248201527f5468652075736572206973206e6f742073757363726962656420746f2074686560448201527f2072657175657374652074797065000000000000000000000000000000000000606482015290519081900360840190fd5b3360009081526001602081815260408084208a855290920190529020544210610ab4576040805160e560020a62461bcd02815260206004820152601a60248201527f537562736372697074696f6e206973206e6f7420616374697665000000000000604482015290519081900360640190fd5b3360008181526001602081815260408084208b855260038101835281852054818452918520805460ff191690559490935252600290910180549193509083908110610afb57fe5b60009182526020808320909101829055878252600281526040808320805460ff191690556004825280832033845282528083205489845260058352818420805460018101825590855283852001819055898452600390925290912080549192509082908110610b6657fe5b60009182526020808320909101805473ffffffffffffffffffffffffffffffffffffffff191690558782526004815260408083203380855292528083208390555188927fab7ba7d234105b15e41e97f548ae644ed346089e33e01f8f03a862bfaebacb9191a3505050505050565b600080548190600160a060020a0316331415610c5c57600160a060020a03831660009081526001602081815260408084208885529092019052902054421015610c2157610c21848461073f565b5050600160a060020a03811660009081526001602081815260408084208685528083528185205493019091529091205460ff90911690610cb8565b3360009081526001602081815260408084208885529092019052902054421015610c8a57610c8a843361073f565b50503360009081526001602081815260408084208685528083528185205493019091529091205460ff909116905b9250929050565b60009081526002602052604090205460ff1690565b600054600160a060020a03163314610d5c576040805160e560020a62461bcd02815260206004820152603360248201527f596f7520646f206e6f74206861766520656e6f7567682070726976696c65676560448201527f7320746f20646f207468697320616374696f6e00000000000000000000000000606482015290519081900360840190fd5b60405183908290600160a060020a038516907f026171e27f75693d971e6674100c15eae4e974c1cf862fe68f053af6ea9ff50b90600090a4505050565b600082815260026020526040812054819060ff161515600114610e2c576040805160e560020a62461bcd02815260206004820152602560248201527f546865207265717565737465642063617465676f727920646f6573206e6f742060448201527f6578697374000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b3360009081526001602081815260408084208885529092019052902054421015610e5a57610e5a843361073f565b33600090815260016020908152604080832087845290915290205460ff1615610ef3576040805160e560020a62461bcd02815260206004820152602a60248201527f546865207573657220697320616c72656164792073756273637269626520746f60448201527f2074686174207479706500000000000000000000000000000000000000000000606482015290519081900360840190fd5b336000818152600160208181526040808420898552808352818520805460ff19168517905580840183529084204289019055939092529052600401541515610f745733600090815260016020818152604080842060028101805494850181558086528386209094018990559254888552600390930190915290912055610f8a565b3360009081526001602052604090206004018054fe5b6000848152600260209081526040808320805460ff191660011790556005909152902054151561100e576000848152600360209081526040808320805460018101825581855283852001805473ffffffffffffffffffffffffffffffffffffffff191633908117909155888552905460048452828520918552925290912055611020565b60008481526005602052604090208054fe5b6040805142850181529051859133917fc7c18d7fd8f2b08630c0d4f0bcf252583ff50a5cf2c5d8811f8a4347191679d49181900360200190a350505050565b60408051606081018252603381527f48656c6c6f20796f7520686176652063616c6c65642074686520636f6e74726160208201527f63742062616c616e63652d737562732e736f6c0000000000000000000000000091810191909152905600a165627a7a723058208d4acb2164b3a87a792515a7a7831987e32b87ed7fabe11944c8f0f4d69569800029"
 
 // DeployBalanceContract deploys a new Ethereum contract, binding an instance of BalanceContract to it.
 func DeployBalanceContract(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *BalanceContract, error) {
@@ -203,36 +203,6 @@ func (_BalanceContract *BalanceContractTransactorRaw) Transact(opts *bind.Transa
 	return _BalanceContract.Contract.contract.Transact(opts, method, params...)
 }
 
-// CheckSubStatus is a free data retrieval call binding the contract method 0x7dfde040.
-//
-// Solidity: function checkSubStatus(bytes32 subName, address clientAddr) view returns(bool, uint256)
-func (_BalanceContract *BalanceContractCaller) CheckSubStatus(opts *bind.CallOpts, subName [32]byte, clientAddr common.Address) (bool, *big.Int, error) {
-	var (
-		ret0 = new(bool)
-		ret1 = new(*big.Int)
-	)
-	out := &[]interface{}{
-		ret0,
-		ret1,
-	}
-	err := _BalanceContract.contract.Call(opts, out, "checkSubStatus", subName, clientAddr)
-	return *ret0, *ret1, err
-}
-
-// CheckSubStatus is a free data retrieval call binding the contract method 0x7dfde040.
-//
-// Solidity: function checkSubStatus(bytes32 subName, address clientAddr) view returns(bool, uint256)
-func (_BalanceContract *BalanceContractSession) CheckSubStatus(subName [32]byte, clientAddr common.Address) (bool, *big.Int, error) {
-	return _BalanceContract.Contract.CheckSubStatus(&_BalanceContract.CallOpts, subName, clientAddr)
-}
-
-// CheckSubStatus is a free data retrieval call binding the contract method 0x7dfde040.
-//
-// Solidity: function checkSubStatus(bytes32 subName, address clientAddr) view returns(bool, uint256)
-func (_BalanceContract *BalanceContractCallerSession) CheckSubStatus(subName [32]byte, clientAddr common.Address) (bool, *big.Int, error) {
-	return _BalanceContract.Contract.CheckSubStatus(&_BalanceContract.CallOpts, subName, clientAddr)
-}
-
 // CheckType is a free data retrieval call binding the contract method 0x99a50b42.
 //
 // Solidity: function checkType(bytes32 typeName) view returns(bool)
@@ -379,25 +349,46 @@ func (_BalanceContract *BalanceContractTransactorSession) AnwserToken(hash [32]b
 	return _BalanceContract.Contract.AnwserToken(&_BalanceContract.TransactOpts, hash, txHash)
 }
 
-// DeleteSub is a paid mutator transaction binding the contract method 0xf356cc79.
+// CheckSubStatus is a paid mutator transaction binding the contract method 0x7dfde040.
 //
-// Solidity: function deleteSub(bytes32 subName) returns()
-func (_BalanceContract *BalanceContractTransactor) DeleteSub(opts *bind.TransactOpts, subName [32]byte) (*types.Transaction, error) {
-	return _BalanceContract.contract.Transact(opts, "deleteSub", subName)
+// Solidity: function checkSubStatus(bytes32 subName, address clientAddr) returns(bool, uint256)
+func (_BalanceContract *BalanceContractTransactor) CheckSubStatus(opts *bind.TransactOpts, subName [32]byte, clientAddr common.Address) (*types.Transaction, error) {
+	return _BalanceContract.contract.Transact(opts, "checkSubStatus", subName, clientAddr)
 }
 
-// DeleteSub is a paid mutator transaction binding the contract method 0xf356cc79.
+// CheckSubStatus is a paid mutator transaction binding the contract method 0x7dfde040.
 //
-// Solidity: function deleteSub(bytes32 subName) returns()
-func (_BalanceContract *BalanceContractSession) DeleteSub(subName [32]byte) (*types.Transaction, error) {
-	return _BalanceContract.Contract.DeleteSub(&_BalanceContract.TransactOpts, subName)
+// Solidity: function checkSubStatus(bytes32 subName, address clientAddr) returns(bool, uint256)
+func (_BalanceContract *BalanceContractSession) CheckSubStatus(subName [32]byte, clientAddr common.Address) (*types.Transaction, error) {
+	return _BalanceContract.Contract.CheckSubStatus(&_BalanceContract.TransactOpts, subName, clientAddr)
 }
 
-// DeleteSub is a paid mutator transaction binding the contract method 0xf356cc79.
+// CheckSubStatus is a paid mutator transaction binding the contract method 0x7dfde040.
 //
-// Solidity: function deleteSub(bytes32 subName) returns()
-func (_BalanceContract *BalanceContractTransactorSession) DeleteSub(subName [32]byte) (*types.Transaction, error) {
-	return _BalanceContract.Contract.DeleteSub(&_BalanceContract.TransactOpts, subName)
+// Solidity: function checkSubStatus(bytes32 subName, address clientAddr) returns(bool, uint256)
+func (_BalanceContract *BalanceContractTransactorSession) CheckSubStatus(subName [32]byte, clientAddr common.Address) (*types.Transaction, error) {
+	return _BalanceContract.Contract.CheckSubStatus(&_BalanceContract.TransactOpts, subName, clientAddr)
+}
+
+// DeleteSub is a paid mutator transaction binding the contract method 0x42007c86.
+//
+// Solidity: function deleteSub(bytes32 subName, address clientAddr) returns()
+func (_BalanceContract *BalanceContractTransactor) DeleteSub(opts *bind.TransactOpts, subName [32]byte, clientAddr common.Address) (*types.Transaction, error) {
+	return _BalanceContract.contract.Transact(opts, "deleteSub", subName, clientAddr)
+}
+
+// DeleteSub is a paid mutator transaction binding the contract method 0x42007c86.
+//
+// Solidity: function deleteSub(bytes32 subName, address clientAddr) returns()
+func (_BalanceContract *BalanceContractSession) DeleteSub(subName [32]byte, clientAddr common.Address) (*types.Transaction, error) {
+	return _BalanceContract.Contract.DeleteSub(&_BalanceContract.TransactOpts, subName, clientAddr)
+}
+
+// DeleteSub is a paid mutator transaction binding the contract method 0x42007c86.
+//
+// Solidity: function deleteSub(bytes32 subName, address clientAddr) returns()
+func (_BalanceContract *BalanceContractTransactorSession) DeleteSub(subName [32]byte, clientAddr common.Address) (*types.Transaction, error) {
+	return _BalanceContract.Contract.DeleteSub(&_BalanceContract.TransactOpts, subName, clientAddr)
 }
 
 // DeleteType is a paid mutator transaction binding the contract method 0x1d9de32c.
@@ -533,25 +524,25 @@ func (it *BalanceContractAnwserTokenEventIterator) Close() error {
 // BalanceContractAnwserTokenEvent represents a AnwserTokenEvent event raised by the BalanceContract contract.
 type BalanceContractAnwserTokenEvent struct {
 	Hash   [32]byte
-	Txhash [32]byte
+	TxHash [32]byte
 	Raw    types.Log // Blockchain specific contextual infos
 }
 
 // FilterAnwserTokenEvent is a free log retrieval operation binding the contract event 0x48585d03016d8be31bb329d396ec74ded946f7e152eaccce1445939fb7e42147.
 //
-// Solidity: event anwserTokenEvent(bytes32 indexed _hash, bytes32 indexed _txhash)
-func (_BalanceContract *BalanceContractFilterer) FilterAnwserTokenEvent(opts *bind.FilterOpts, _hash [][32]byte, _txhash [][32]byte) (*BalanceContractAnwserTokenEventIterator, error) {
+// Solidity: event anwserTokenEvent(bytes32 indexed _hash, bytes32 indexed _txHash)
+func (_BalanceContract *BalanceContractFilterer) FilterAnwserTokenEvent(opts *bind.FilterOpts, _hash [][32]byte, _txHash [][32]byte) (*BalanceContractAnwserTokenEventIterator, error) {
 
 	var _hashRule []interface{}
 	for _, _hashItem := range _hash {
 		_hashRule = append(_hashRule, _hashItem)
 	}
-	var _txhashRule []interface{}
-	for _, _txhashItem := range _txhash {
-		_txhashRule = append(_txhashRule, _txhashItem)
+	var _txHashRule []interface{}
+	for _, _txHashItem := range _txHash {
+		_txHashRule = append(_txHashRule, _txHashItem)
 	}
 
-	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "anwserTokenEvent", _hashRule, _txhashRule)
+	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "anwserTokenEvent", _hashRule, _txHashRule)
 	if err != nil {
 		return nil, err
 	}
@@ -560,19 +551,19 @@ func (_BalanceContract *BalanceContractFilterer) FilterAnwserTokenEvent(opts *bi
 
 // WatchAnwserTokenEvent is a free log subscription operation binding the contract event 0x48585d03016d8be31bb329d396ec74ded946f7e152eaccce1445939fb7e42147.
 //
-// Solidity: event anwserTokenEvent(bytes32 indexed _hash, bytes32 indexed _txhash)
-func (_BalanceContract *BalanceContractFilterer) WatchAnwserTokenEvent(opts *bind.WatchOpts, sink chan<- *BalanceContractAnwserTokenEvent, _hash [][32]byte, _txhash [][32]byte) (event.Subscription, error) {
+// Solidity: event anwserTokenEvent(bytes32 indexed _hash, bytes32 indexed _txHash)
+func (_BalanceContract *BalanceContractFilterer) WatchAnwserTokenEvent(opts *bind.WatchOpts, sink chan<- *BalanceContractAnwserTokenEvent, _hash [][32]byte, _txHash [][32]byte) (event.Subscription, error) {
 
 	var _hashRule []interface{}
 	for _, _hashItem := range _hash {
 		_hashRule = append(_hashRule, _hashItem)
 	}
-	var _txhashRule []interface{}
-	for _, _txhashItem := range _txhash {
-		_txhashRule = append(_txhashRule, _txhashItem)
+	var _txHashRule []interface{}
+	for _, _txHashItem := range _txHash {
+		_txHashRule = append(_txHashRule, _txHashItem)
 	}
 
-	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "anwserTokenEvent", _hashRule, _txhashRule)
+	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "anwserTokenEvent", _hashRule, _txHashRule)
 	if err != nil {
 		return nil, err
 	}
@@ -606,7 +597,7 @@ func (_BalanceContract *BalanceContractFilterer) WatchAnwserTokenEvent(opts *bin
 
 // ParseAnwserTokenEvent is a log parse operation binding the contract event 0x48585d03016d8be31bb329d396ec74ded946f7e152eaccce1445939fb7e42147.
 //
-// Solidity: event anwserTokenEvent(bytes32 indexed _hash, bytes32 indexed _txhash)
+// Solidity: event anwserTokenEvent(bytes32 indexed _hash, bytes32 indexed _txHash)
 func (_BalanceContract *BalanceContractFilterer) ParseAnwserTokenEvent(log types.Log) (*BalanceContractAnwserTokenEvent, error) {
 	event := new(BalanceContractAnwserTokenEvent)
 	if err := _BalanceContract.contract.UnpackLog(event, "anwserTokenEvent", log); err != nil {
@@ -1295,14 +1286,14 @@ func (it *BalanceContractSendTokenEventIterator) Close() error {
 type BalanceContractSendTokenEvent struct {
 	Addr   common.Address
 	Hash   [32]byte
-	Txhahs [32]byte
+	TxHash [32]byte
 	Raw    types.Log // Blockchain specific contextual infos
 }
 
 // FilterSendTokenEvent is a free log retrieval operation binding the contract event 0x026171e27f75693d971e6674100c15eae4e974c1cf862fe68f053af6ea9ff50b.
 //
-// Solidity: event sendTokenEvent(address indexed _addr, bytes32 indexed _hash, bytes32 indexed _txhahs)
-func (_BalanceContract *BalanceContractFilterer) FilterSendTokenEvent(opts *bind.FilterOpts, _addr []common.Address, _hash [][32]byte, _txhahs [][32]byte) (*BalanceContractSendTokenEventIterator, error) {
+// Solidity: event sendTokenEvent(address indexed _addr, bytes32 indexed _hash, bytes32 indexed _txHash)
+func (_BalanceContract *BalanceContractFilterer) FilterSendTokenEvent(opts *bind.FilterOpts, _addr []common.Address, _hash [][32]byte, _txHash [][32]byte) (*BalanceContractSendTokenEventIterator, error) {
 
 	var _addrRule []interface{}
 	for _, _addrItem := range _addr {
@@ -1312,12 +1303,12 @@ func (_BalanceContract *BalanceContractFilterer) FilterSendTokenEvent(opts *bind
 	for _, _hashItem := range _hash {
 		_hashRule = append(_hashRule, _hashItem)
 	}
-	var _txhahsRule []interface{}
-	for _, _txhahsItem := range _txhahs {
-		_txhahsRule = append(_txhahsRule, _txhahsItem)
+	var _txHashRule []interface{}
+	for _, _txHashItem := range _txHash {
+		_txHashRule = append(_txHashRule, _txHashItem)
 	}
 
-	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "sendTokenEvent", _addrRule, _hashRule, _txhahsRule)
+	logs, sub, err := _BalanceContract.contract.FilterLogs(opts, "sendTokenEvent", _addrRule, _hashRule, _txHashRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1326,8 +1317,8 @@ func (_BalanceContract *BalanceContractFilterer) FilterSendTokenEvent(opts *bind
 
 // WatchSendTokenEvent is a free log subscription operation binding the contract event 0x026171e27f75693d971e6674100c15eae4e974c1cf862fe68f053af6ea9ff50b.
 //
-// Solidity: event sendTokenEvent(address indexed _addr, bytes32 indexed _hash, bytes32 indexed _txhahs)
-func (_BalanceContract *BalanceContractFilterer) WatchSendTokenEvent(opts *bind.WatchOpts, sink chan<- *BalanceContractSendTokenEvent, _addr []common.Address, _hash [][32]byte, _txhahs [][32]byte) (event.Subscription, error) {
+// Solidity: event sendTokenEvent(address indexed _addr, bytes32 indexed _hash, bytes32 indexed _txHash)
+func (_BalanceContract *BalanceContractFilterer) WatchSendTokenEvent(opts *bind.WatchOpts, sink chan<- *BalanceContractSendTokenEvent, _addr []common.Address, _hash [][32]byte, _txHash [][32]byte) (event.Subscription, error) {
 
 	var _addrRule []interface{}
 	for _, _addrItem := range _addr {
@@ -1337,12 +1328,12 @@ func (_BalanceContract *BalanceContractFilterer) WatchSendTokenEvent(opts *bind.
 	for _, _hashItem := range _hash {
 		_hashRule = append(_hashRule, _hashItem)
 	}
-	var _txhahsRule []interface{}
-	for _, _txhahsItem := range _txhahs {
-		_txhahsRule = append(_txhahsRule, _txhahsItem)
+	var _txHashRule []interface{}
+	for _, _txHashItem := range _txHash {
+		_txHashRule = append(_txHashRule, _txHashItem)
 	}
 
-	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "sendTokenEvent", _addrRule, _hashRule, _txhahsRule)
+	logs, sub, err := _BalanceContract.contract.WatchLogs(opts, "sendTokenEvent", _addrRule, _hashRule, _txHashRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1376,7 +1367,7 @@ func (_BalanceContract *BalanceContractFilterer) WatchSendTokenEvent(opts *bind.
 
 // ParseSendTokenEvent is a log parse operation binding the contract event 0x026171e27f75693d971e6674100c15eae4e974c1cf862fe68f053af6ea9ff50b.
 //
-// Solidity: event sendTokenEvent(address indexed _addr, bytes32 indexed _hash, bytes32 indexed _txhahs)
+// Solidity: event sendTokenEvent(address indexed _addr, bytes32 indexed _hash, bytes32 indexed _txHash)
 func (_BalanceContract *BalanceContractFilterer) ParseSendTokenEvent(log types.Log) (*BalanceContractSendTokenEvent, error) {
 	event := new(BalanceContractSendTokenEvent)
 	if err := _BalanceContract.contract.UnpackLog(event, "sendTokenEvent", log); err != nil {
@@ -1394,7 +1385,7 @@ var DataLedgerContractFuncSigs = map[string]string{
 }
 
 // DataLedgerContractBin is the compiled bytecode used for deploying new contracts.
-var DataLedgerContractBin = "0x608060405234801561001057600080fd5b5061016f806100206000396000f3006080604052600436106100405763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663c9776a6d8114610045575b600080fd5b34801561005157600080fd5b5061005d60043561013b565b604051808060200180602001838103835285818151815260200191508051906020019080838360005b8381101561009e578181015183820152602001610086565b50505050905090810190601f1680156100cb5780820380516001836020036101000a031916815260200191505b50838103825284518152845160209182019186019080838360005b838110156100fe5781810151838201526020016100e6565b50505050905090810190601f16801561012b5780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b6060809150915600a165627a7a72305820ee08d9796005b5a0e6b88e9d98f455e4404196df989d5fad9152c27fd5cb52170029"
+var DataLedgerContractBin = "0x608060405234801561001057600080fd5b5061016f806100206000396000f3006080604052600436106100405763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663c9776a6d8114610045575b600080fd5b34801561005157600080fd5b5061005d60043561013b565b604051808060200180602001838103835285818151815260200191508051906020019080838360005b8381101561009e578181015183820152602001610086565b50505050905090810190601f1680156100cb5780820380516001836020036101000a031916815260200191505b50838103825284518152845160209182019186019080838360005b838110156100fe5781810151838201526020016100e6565b50505050905090810190601f16801561012b5780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b6060809150915600a165627a7a723058203d3790d1f7672e532c6c67b3f52453aeaeef1305b01e18559497b548f82c25600029"
 
 // DeployDataLedgerContract deploys a new Ethereum contract, binding an instance of DataLedgerContract to it.
 func DeployDataLedgerContract(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *DataLedgerContract, error) {

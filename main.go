@@ -162,7 +162,6 @@ func (ethclient *EthereumLocal) EventListener(w http.ResponseWriter, req *http.R
 			}
 
 			// Store type and data in Blockchain
-
 			err = libs.InteractBlockchain(dataBlockchain, producerPrivKey, ethClientArg)
 			if err != nil {
 				fmt.Printf("\n")
